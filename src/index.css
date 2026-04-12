@@ -188,9 +188,37 @@ html, body, #root { height: 100%; }
 ::-webkit-scrollbar-thumb { background: hsl(215, 27.9%, 25%); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: hsl(215, 27.9%, 35%); }
 
-/* ─── Mobile ────────────────────────────────────────────────── */
+/* ─── Mobile Native Feel ────────────────────────────────────── */
 @media (max-width: 640px) {
   html { font-size: 14px; }
   .reader-prose { font-size: 1rem; line-height: 1.8; }
   input, select, textarea { font-size: 16px; }
+}
+
+/* Safe area insets for notch devices */
+.safe-area-top { padding-top: env(safe-area-inset-top, 0px); }
+.safe-area-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pb-safe { padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px)); }
+
+@media (min-width: 1024px) {
+  .pb-safe { padding-bottom: 0; }
+}
+
+/* Native touch feedback */
+@media (hover: none) {
+  * { -webkit-tap-highlight-color: transparent; }
+  .touch-manipulation { touch-action: manipulation; }
+}
+
+/* Smooth momentum scrolling */
+.overscroll-contain {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Active press effect for mobile buttons */
+@media (hover: none) {
+  button:active, a:active {
+    transition-duration: 50ms;
+  }
 }

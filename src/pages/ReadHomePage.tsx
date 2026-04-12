@@ -47,37 +47,26 @@ export default function ReadHomePage() {
   };
 
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-10 backdrop-blur bg-black/40 border-b border-slate-800">
+    <div className="min-h-screen pb-safe">
+      {/* Header — simplified on mobile since bottom nav handles navigation */}
+      <header className="sticky top-0 z-10 backdrop-blur-xl bg-background/90 border-b border-border/40">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link 
             to="/" 
-            className="font-semibold text-slate-100 hover:text-brand transition-colors flex items-center gap-2"
+            className="font-semibold hover:text-primary transition-colors flex items-center gap-2"
             data-testid="link-home"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={16} className="lg:block hidden" />
             The Money Tree of Life
           </Link>
-          <div className="flex items-center gap-3">
-            <Link 
-              to="/characters" 
-              className="text-slate-300 hover:text-brand transition-colors"
-              data-testid="link-characters"
-            >
+          <div className="hidden lg:flex items-center gap-3">
+            <Link to="/characters" className="text-muted-foreground hover:text-primary transition-colors">
               Characters
             </Link>
-            <Link 
-              to="/read/glossary" 
-              className="text-slate-300 hover:text-brand transition-colors"
-              data-testid="link-glossary"
-            >
+            <Link to="/read/glossary" className="text-muted-foreground hover:text-primary transition-colors">
               Glossary
             </Link>
-            <Link 
-              to="/read/search" 
-              className="text-slate-300 hover:text-brand transition-colors"
-              data-testid="link-search"
-            >
+            <Link to="/read/search" className="text-muted-foreground hover:text-primary transition-colors">
               <Search size={16} />
             </Link>
           </div>
