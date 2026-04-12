@@ -10,7 +10,7 @@ const CHARACTER_VOICES: Record<string, string> = {
   liam: 'TX3LPaxmHKxFdv7VOQHJ',    // Liam voice
   emma: 'EXAVITQu4vr4xnSDxMaL',     // Sarah (warm female)
   mateo: 'onwK4e9ZLuTAKqWW03F9',     // Daniel (calm male)
-  aisha: '3COuDHG7grQwcKc66V4K',     // Aisha (custom voice)
+  aisha: 'vZzlAds9NzvLsFSWp0qk',     // Aisha (free voice)
 };
 
 const CHARACTER_SETTINGS: Record<string, { stability: number; similarity_boost: number; style: number; speed: number }> = {
