@@ -18,6 +18,7 @@ import DashboardPage from "@/pages/DashboardPage";
 import EnhancedFeaturesPage from "@/pages/EnhancedFeaturesPage";
 import MockLoginScreen from "@/components/MockLoginScreen";
 import NotFound from "@/pages/NotFound";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 function ThemeInitializer() {
   const { theme } = useReadingStore();
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/read/:slug" element={<ChapterPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <MobileBottomNav />
         </BrowserRouter>
       </ErrorBoundary>
     </TooltipProvider>
