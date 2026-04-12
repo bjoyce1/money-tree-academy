@@ -27,139 +27,112 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
 
   useEffect(() => {
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+      voiceService.stopCurrent();
+      if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
       onSentenceChange?.(null, null);
     };
   }, []);
 
+  const speakWithBrowserFallback = useCallback(async (sentenceText: string, characterId: string): Promise<void> => {
+    // Try browser SpeechSynthesis
+    const synth = window.speechSynthesis;
+    if (!synth) throw new Error('No TTS available');
+
+    return new Promise<void>((resolve, reject) => {
+      synth.cancel();
+      const utterance = new SpeechSynthesisUtterance(sentenceText);
+      const voices = synth.getVoices();
+      const english = voices.filter(v => v.lang.startsWith('en'));
+      if (english.length) utterance.voice = english[0];
+      utterance.rate = 1.0;
+      utterance.volume = volume;
+      utterance.onend = () => resolve();
+      utterance.onerror = (e) => {
+        if (e.error === 'canceled' || e.error === 'interrupted') resolve();
+        else reject(new Error(e.error));
+      };
+      synth.speak(utterance);
+    });
+  }, [volume]);
+
   const speakSentence = useCallback(async (index: number) => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    voiceService.stopCurrent();
 
     if (index >= totalSentences) {
-      setIsPlaying(false);
-      setIsPaused(false);
-      setIsLoading(false);
-      setCurrentPosition(0);
-      currentPosRef.current = 0;
-      isPlayingRef.current = false;
+      setIsPlaying(false); setIsPaused(false); setIsLoading(false);
+      setCurrentPosition(0); currentPosRef.current = 0; isPlayingRef.current = false;
       onSentenceChange?.(null, null);
       return;
     }
 
     const sentenceText = sentences[index].trim();
-    setCurrentPosition(index);
-    currentPosRef.current = index;
+    setCurrentPosition(index); currentPosRef.current = index;
     setIsLoading(true);
     onSentenceChange?.(index, sentenceText);
 
     try {
       const character = getSelectedCharacter();
       const audioUrl = await voiceService.generateSentenceAudio(sentenceText, character?.id);
-      
-      const audio = new Audio(audioUrl);
-      audio.volume = volume;
-      audioRef.current = audio;
 
-      audio.onplay = () => {
-        setIsPlaying(true);
-        setIsPaused(false);
-        setIsLoading(false);
-        isPlayingRef.current = true;
-      };
+      if (audioUrl) {
+        // ElevenLabs audio available
+        const audio = new Audio(audioUrl);
+        audio.volume = volume;
+        audioRef.current = audio;
 
-      audio.onended = () => {
-        const nextPos = currentPosRef.current + 1;
-        if (nextPos < totalSentences && isPlayingRef.current) {
-          speakSentence(nextPos);
-        } else {
-          setIsPlaying(false);
-          setIsPaused(false);
-          setCurrentPosition(0);
-          currentPosRef.current = 0;
-          isPlayingRef.current = false;
-          audioRef.current = null;
-          onSentenceChange?.(null, null);
-        }
-      };
-
-      audio.onerror = () => {
-        setIsPlaying(false);
-        setIsPaused(false);
-        setIsLoading(false);
-        isPlayingRef.current = false;
-        audioRef.current = null;
-        onSentenceChange?.(null, null);
-      };
-
-      await audio.play();
+        audio.onplay = () => { setIsPlaying(true); setIsPaused(false); setIsLoading(false); isPlayingRef.current = true; };
+        audio.onended = () => {
+          const next = currentPosRef.current + 1;
+          if (next < totalSentences && isPlayingRef.current) speakSentence(next);
+          else { setIsPlaying(false); setIsPaused(false); setCurrentPosition(0); currentPosRef.current = 0; isPlayingRef.current = false; audioRef.current = null; onSentenceChange?.(null, null); }
+        };
+        audio.onerror = () => { setIsPlaying(false); setIsPaused(false); setIsLoading(false); isPlayingRef.current = false; audioRef.current = null; onSentenceChange?.(null, null); };
+        await audio.play();
+      } else {
+        // Browser TTS fallback
+        setIsPlaying(true); setIsPaused(false); setIsLoading(false); isPlayingRef.current = true;
+        await speakWithBrowserFallback(sentenceText, getSelectedCharacter()?.id || 'emma');
+        const next = currentPosRef.current + 1;
+        if (next < totalSentences && isPlayingRef.current) speakSentence(next);
+        else { setIsPlaying(false); setIsPaused(false); setCurrentPosition(0); currentPosRef.current = 0; isPlayingRef.current = false; onSentenceChange?.(null, null); }
+      }
     } catch (err) {
       console.error('TTS error:', err);
-      setIsPlaying(false);
-      setIsLoading(false);
-      isPlayingRef.current = false;
+      setIsPlaying(false); setIsLoading(false); isPlayingRef.current = false;
       onSentenceChange?.(null, null);
     }
-  }, [sentences, totalSentences, volume, onSentenceChange, getSelectedCharacter]);
+  }, [sentences, totalSentences, volume, onSentenceChange, getSelectedCharacter, speakWithBrowserFallback]);
 
   const handlePlay = () => {
     if (isPaused && audioRef.current) {
-      audioRef.current.play();
-      setIsPaused(false);
-      setIsPlaying(true);
-      isPlayingRef.current = true;
+      audioRef.current.play(); setIsPaused(false); setIsPlaying(true); isPlayingRef.current = true;
+    } else if (isPaused) {
+      window.speechSynthesis?.resume(); setIsPaused(false); setIsPlaying(true); isPlayingRef.current = true;
     } else {
       speakSentence(currentPosition);
     }
   };
 
   const handlePause = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    setIsPaused(true);
-    setIsPlaying(false);
-    isPlayingRef.current = false;
+    if (audioRef.current) audioRef.current.pause();
+    else window.speechSynthesis?.pause();
+    setIsPaused(true); setIsPlaying(false); isPlayingRef.current = false;
   };
 
   const handleStop = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-    setIsPlaying(false);
-    setIsPaused(false);
-    setIsLoading(false);
-    isPlayingRef.current = false;
-    setCurrentPosition(0);
-    currentPosRef.current = 0;
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    window.speechSynthesis?.cancel();
+    voiceService.stopCurrent();
+    setIsPlaying(false); setIsPaused(false); setIsLoading(false); isPlayingRef.current = false;
+    setCurrentPosition(0); currentPosRef.current = 0;
     onSentenceChange?.(null, null);
   };
 
-  const handleSkipBack = () => {
-    const newPos = Math.max(0, currentPosition - 1);
-    setCurrentPosition(newPos);
-    currentPosRef.current = newPos;
-    if (isPlaying || isPaused) speakSentence(newPos);
-  };
+  const handleSkipBack = () => { const p = Math.max(0, currentPosition - 1); setCurrentPosition(p); currentPosRef.current = p; if (isPlaying || isPaused) speakSentence(p); };
+  const handleSkipForward = () => { const p = Math.min(totalSentences - 1, currentPosition + 1); setCurrentPosition(p); currentPosRef.current = p; if (isPlaying || isPaused) speakSentence(p); };
 
-  const handleSkipForward = () => {
-    const newPos = Math.min(totalSentences - 1, currentPosition + 1);
-    setCurrentPosition(newPos);
-    currentPosRef.current = newPos;
-    if (isPlaying || isPaused) speakSentence(newPos);
-  };
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  }, [volume]);
+  useEffect(() => { if (audioRef.current) audioRef.current.volume = volume; }, [volume]);
 
   return (
     <div className="glass-card rounded-xl p-4 mb-6">
@@ -167,38 +140,24 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
         <div className="flex items-center gap-2">
           <Volume2 className="text-primary" size={20} />
           <h3 className="font-bold text-foreground">Audio Narration</h3>
-          {chapterTitle && (
-            <span className="text-sm text-muted-foreground">• {chapterTitle}</span>
-          )}
+          {chapterTitle && <span className="text-sm text-muted-foreground">• {chapterTitle}</span>}
         </div>
-        <button
-          onClick={() => setShowSettings(!showSettings)}
-          className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-          data-testid="button-tts-settings"
-        >
+        <button onClick={() => setShowSettings(!showSettings)} className="p-2 rounded-lg hover:bg-white/10 transition-colors" data-testid="button-tts-settings">
           <Settings className="text-muted-foreground" size={16} />
         </button>
       </div>
 
       <div className="flex items-center justify-center gap-4 mb-4">
-        <button onClick={handleSkipBack} disabled={currentPosition === 0 || isLoading}
-          className="p-2 rounded-lg hover:bg-white/10 transition-colors disabled:opacity-30" data-testid="button-skip-back">
+        <button onClick={handleSkipBack} disabled={currentPosition === 0 || isLoading} className="p-2 rounded-lg hover:bg-white/10 transition-colors disabled:opacity-30" data-testid="button-skip-back">
           <SkipBack className="text-foreground" size={20} />
         </button>
-
-        <button onClick={isPlaying ? handlePause : handlePlay} disabled={isLoading}
-          className="p-3 rounded-full bg-primary hover:bg-primary/90 transition-colors disabled:opacity-60" data-testid="button-play-pause"
-          title={isPlaying ? 'Pause' : 'Play'}>
-          {isLoading ? <Loader2 className="text-primary-foreground animate-spin" size={24} /> :
-           isPlaying ? <Pause className="text-primary-foreground" size={24} /> : <Play className="text-primary-foreground ml-1" size={24} />}
+        <button onClick={isPlaying ? handlePause : handlePlay} disabled={isLoading} className="p-3 rounded-full bg-primary hover:bg-primary/90 transition-colors disabled:opacity-60" data-testid="button-play-pause" title={isPlaying ? 'Pause' : 'Play'}>
+          {isLoading ? <Loader2 className="text-primary-foreground animate-spin" size={24} /> : isPlaying ? <Pause className="text-primary-foreground" size={24} /> : <Play className="text-primary-foreground ml-1" size={24} />}
         </button>
-
         <button onClick={handleStop} className="p-2 rounded-lg hover:bg-white/10 transition-colors" data-testid="button-stop">
           <Square className="text-foreground" size={20} />
         </button>
-
-        <button onClick={handleSkipForward} disabled={currentPosition >= totalSentences - 1 || isLoading}
-          className="p-2 rounded-lg hover:bg-white/10 transition-colors disabled:opacity-30" data-testid="button-skip-forward">
+        <button onClick={handleSkipForward} disabled={currentPosition >= totalSentences - 1 || isLoading} className="p-2 rounded-lg hover:bg-white/10 transition-colors disabled:opacity-30" data-testid="button-skip-forward">
           <SkipForward className="text-foreground" size={20} />
         </button>
       </div>
@@ -209,8 +168,7 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
           <span>{isLoading ? '⏳ Loading...' : isPlaying ? '🔊 Playing' : isPaused ? '⏸ Paused' : 'Stopped'}</span>
         </div>
         <div className="w-full bg-white/10 rounded-full h-2">
-          <div className="bg-primary h-full rounded-full transition-all duration-300"
-            style={{ width: `${((currentPosition + 1) / totalSentences) * 100}%` }} />
+          <div className="bg-primary h-full rounded-full transition-all duration-300" style={{ width: `${((currentPosition + 1) / totalSentences) * 100}%` }} />
         </div>
       </div>
 
@@ -218,14 +176,13 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
         <div className="border-t border-white/10 pt-3 space-y-3">
           <div>
             <label className="block text-sm font-medium text-foreground mb-2">Volume: {Math.round(volume * 100)}%</label>
-            <input type="range" min="0" max="1" step="0.1" value={volume}
-              onChange={(e) => setVolume(Number(e.target.value))} className="w-full accent-primary" data-testid="slider-volume" />
+            <input type="range" min="0" max="1" step="0.1" value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="w-full accent-primary" data-testid="slider-volume" />
           </div>
         </div>
       )}
 
       <div className="text-xs text-muted-foreground mt-3 text-center">
-        🎙️ Premium AI voices powered by ElevenLabs
+        🎙️ AI voices with browser fallback
       </div>
     </div>
   );
