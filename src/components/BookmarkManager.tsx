@@ -30,7 +30,7 @@ export default function BookmarkManager({ chapterId, chapterTitle, currentScroll
   const [filterFavorites, setFilterFavorites] = useState(false);
 
   // Get bookmarks from API
-  const { data: apiBookmarks = [] } = useQuery({
+  const { data: apiBookmarks = [] } = useQuery<any[]>({
     queryKey: ['/api/bookmarks'],
     enabled: isAuthenticated,
   });

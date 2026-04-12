@@ -61,11 +61,11 @@ export default function DashboardPage() {
       currentStreak: streakData.currentStreak || 0,
       longestStreak: streakData.longestStreak || 0,
       totalCoins: coinsData.total || 0,
-      totalReadingTime: Math.round(totalReadingTime / 60), // Convert to minutes
+      totalReadingTime: Math.round((totalReadingTime as number) / 60), // Convert to minutes
       achievementsUnlocked: Object.keys(achievementStats).length,
       lastReadingDate: streakData.lastReadingDate || null,
       averageQuizScore: Math.round(averageQuizScore),
-      notesCreated
+      notesCreated: notesCreated as number
     };
   }, []);
 

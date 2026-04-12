@@ -20,6 +20,7 @@ interface CoinsData {
   transactions: CoinTransaction[];
   lastDailyBonus: string;
   streakMultiplier: number;
+  lastActivity?: number;
 }
 
 export default function CoinsSystem() {

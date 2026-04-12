@@ -38,7 +38,7 @@ export default function HighlightManager({ chapterId, contentRef }: HighlightMan
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(-1);
 
   // Get highlights from API
-  const { data: apiHighlights = [] } = useQuery({
+  const { data: apiHighlights = [] } = useQuery<any[]>({
     queryKey: ['/api/highlights', chapterId],
     enabled: isAuthenticated,
   });
