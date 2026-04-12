@@ -33,28 +33,6 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
     };
   }, []);
 
-  const speakWithBrowserFallback = useCallback(async (sentenceText: string, characterId: string): Promise<void> => {
-    // Try browser SpeechSynthesis
-    const synth = window.speechSynthesis;
-    if (!synth) throw new Error('No TTS available');
-
-    return new Promise<void>((resolve, reject) => {
-      synth.cancel();
-      const utterance = new SpeechSynthesisUtterance(sentenceText);
-      const voices = synth.getVoices();
-      const english = voices.filter(v => v.lang.startsWith('en'));
-      if (english.length) utterance.voice = english[0];
-      utterance.rate = 1.0;
-      utterance.volume = volume;
-      utterance.onend = () => resolve();
-      utterance.onerror = (e) => {
-        if (e.error === 'canceled' || e.error === 'interrupted') resolve();
-        else reject(new Error(e.error));
-      };
-      synth.speak(utterance);
-    });
-  }, [volume]);
-
   const speakSentence = useCallback(async (index: number) => {
     if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
     voiceService.stopCurrent();
@@ -75,40 +53,35 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
       const character = getSelectedCharacter();
       const audioUrl = await voiceService.generateSentenceAudio(sentenceText, character?.id);
 
-      if (audioUrl) {
-        // ElevenLabs audio available
-        const audio = new Audio(audioUrl);
-        audio.volume = volume;
-        audioRef.current = audio;
+      if (!audioUrl) {
+        // No TTS available at all
+        setIsPlaying(false); setIsLoading(false); isPlayingRef.current = false;
+        onSentenceChange?.(null, null);
+        return;
+      }
 
-        audio.onplay = () => { setIsPlaying(true); setIsPaused(false); setIsLoading(false); isPlayingRef.current = true; };
-        audio.onended = () => {
-          const next = currentPosRef.current + 1;
-          if (next < totalSentences && isPlayingRef.current) speakSentence(next);
-          else { setIsPlaying(false); setIsPaused(false); setCurrentPosition(0); currentPosRef.current = 0; isPlayingRef.current = false; audioRef.current = null; onSentenceChange?.(null, null); }
-        };
-        audio.onerror = () => { setIsPlaying(false); setIsPaused(false); setIsLoading(false); isPlayingRef.current = false; audioRef.current = null; onSentenceChange?.(null, null); };
-        await audio.play();
-      } else {
-        // Browser TTS fallback
-        setIsPlaying(true); setIsPaused(false); setIsLoading(false); isPlayingRef.current = true;
-        await speakWithBrowserFallback(sentenceText, getSelectedCharacter()?.id || 'emma');
+      const audio = new Audio(audioUrl);
+      audio.volume = volume;
+      audioRef.current = audio;
+
+      audio.onplay = () => { setIsPlaying(true); setIsPaused(false); setIsLoading(false); isPlayingRef.current = true; };
+      audio.onended = () => {
         const next = currentPosRef.current + 1;
         if (next < totalSentences && isPlayingRef.current) speakSentence(next);
-        else { setIsPlaying(false); setIsPaused(false); setCurrentPosition(0); currentPosRef.current = 0; isPlayingRef.current = false; onSentenceChange?.(null, null); }
-      }
+        else { setIsPlaying(false); setIsPaused(false); setCurrentPosition(0); currentPosRef.current = 0; isPlayingRef.current = false; audioRef.current = null; onSentenceChange?.(null, null); }
+      };
+      audio.onerror = () => { setIsPlaying(false); setIsPaused(false); setIsLoading(false); isPlayingRef.current = false; audioRef.current = null; onSentenceChange?.(null, null); };
+      await audio.play();
     } catch (err) {
       console.error('TTS error:', err);
       setIsPlaying(false); setIsLoading(false); isPlayingRef.current = false;
       onSentenceChange?.(null, null);
     }
-  }, [sentences, totalSentences, volume, onSentenceChange, getSelectedCharacter, speakWithBrowserFallback]);
+  }, [sentences, totalSentences, volume, onSentenceChange, getSelectedCharacter]);
 
   const handlePlay = () => {
     if (isPaused && audioRef.current) {
       audioRef.current.play(); setIsPaused(false); setIsPlaying(true); isPlayingRef.current = true;
-    } else if (isPaused) {
-      window.speechSynthesis?.resume(); setIsPaused(false); setIsPlaying(true); isPlayingRef.current = true;
     } else {
       speakSentence(currentPosition);
     }
@@ -116,13 +89,11 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
 
   const handlePause = () => {
     if (audioRef.current) audioRef.current.pause();
-    else window.speechSynthesis?.pause();
     setIsPaused(true); setIsPlaying(false); isPlayingRef.current = false;
   };
 
   const handleStop = () => {
     if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
-    window.speechSynthesis?.cancel();
     voiceService.stopCurrent();
     setIsPlaying(false); setIsPaused(false); setIsLoading(false); isPlayingRef.current = false;
     setCurrentPosition(0); currentPosRef.current = 0;
@@ -182,7 +153,7 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
       )}
 
       <div className="text-xs text-muted-foreground mt-3 text-center">
-        🎙️ AI voices with browser fallback
+        🎙️ AI-powered narration
       </div>
     </div>
   );
