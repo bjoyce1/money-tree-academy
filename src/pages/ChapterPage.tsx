@@ -157,6 +157,22 @@ export default function ChapterPage() {
     return () => clearInterval(interval);
   }, [wordCount]);
 
+  const bodyWithGlossary = chapter
+    ? chapter.sections.map(s => s.htmlBody).join('').replace(/\[\[(.+?)\]\]/g, (_m, term) => `<span data-popover="${term}">${term}</span>`)
+    : '';
+
+  const highlightedContent = useHighlights(chapter?.id || '', bodyWithGlossary);
+
+  const { highlightSentence, clearHighlights } = useTTSHighlight(contentRef);
+
+  const handleSentenceChange = useCallback((_index: number | null, sentenceText: string | null) => {
+    if (sentenceText) {
+      highlightSentence(sentenceText);
+    } else {
+      clearHighlights();
+    }
+  }, [highlightSentence, clearHighlights]);
+
   if (!chapter) {
     return (
       <ReaderShell>
@@ -172,21 +188,6 @@ export default function ChapterPage() {
 
   const prev = chapters.find(c => c.order === chapter.order - 1);
   const next = chapters.find(c => c.order === chapter.order + 1);
-
-  const bodyWithGlossary = chapter.sections.map(s => s.htmlBody).join('')
-    .replace(/\[\[(.+?)\]\]/g, (_m, term) => `<span data-popover="${term}">${term}</span>`);
-
-  const highlightedContent = useHighlights(chapter.id, bodyWithGlossary);
-
-  const { highlightSentence, clearHighlights } = useTTSHighlight(contentRef);
-
-  const handleSentenceChange = useCallback((_index: number | null, sentenceText: string | null) => {
-    if (sentenceText) {
-      highlightSentence(sentenceText);
-    } else {
-      clearHighlights();
-    }
-  }, [highlightSentence, clearHighlights]);
 
   return (
     <ReaderShell currentSlug={chapter.slug}>
