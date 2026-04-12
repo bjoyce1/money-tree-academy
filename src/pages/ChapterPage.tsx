@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTTSHighlight } from '@/hooks/useTTSHighlight';
 import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
@@ -226,7 +227,7 @@ export default function ChapterPage() {
 
         <CharacterCompanion showSelection={true} />
 
-        <TextToSpeechPlayer text={bodyWithGlossary} chapterTitle={chapter.title} />
+        <TextToSpeechPlayer text={bodyWithGlossary} chapterTitle={chapter.title} onSentenceChange={handleSentenceChange} />
 
         <ChapterRecap chapterId={chapter.id} />
 
