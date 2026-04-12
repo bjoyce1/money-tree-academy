@@ -18,7 +18,7 @@ export default function ProgressReport() {
         completedChapters: Object.keys(progress.chaptersCompleted).filter(k => progress.chaptersCompleted[k]),
         quizResults: progress.quizResults,
         streakDays: progress.streakDays || 0,
-        longestStreak: progress.longestStreak || 0,
+        longestStreak: (progress as any).longestStreak || 0,
         coins: progress.coins,
         notesCount: 0,
         achievementsUnlocked: Object.keys(progress.achievementsUnlocked).length,

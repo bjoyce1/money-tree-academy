@@ -44,6 +44,60 @@ export type Database = {
         }
         Relationships: []
       }
+      harness_runs: {
+        Row: {
+          chapter_id: string | null
+          config_used: string
+          created_at: string
+          guide_id: string | null
+          id: string
+          prompt_length: number | null
+          user_message: string | null
+        }
+        Insert: {
+          chapter_id?: string | null
+          config_used?: string
+          created_at?: string
+          guide_id?: string | null
+          id?: string
+          prompt_length?: number | null
+          user_message?: string | null
+        }
+        Update: {
+          chapter_id?: string | null
+          config_used?: string
+          created_at?: string
+          guide_id?: string | null
+          id?: string
+          prompt_length?: number | null
+          user_message?: string | null
+        }
+        Relationships: []
+      }
+      harness_scores: {
+        Row: {
+          config_used: string
+          created_at: string
+          id: string
+          positive: boolean
+          score: number
+        }
+        Insert: {
+          config_used: string
+          created_at?: string
+          id?: string
+          positive?: boolean
+          score?: number
+        }
+        Update: {
+          config_used?: string
+          created_at?: string
+          id?: string
+          positive?: boolean
+          score?: number
+        }
+        Relationships: []
+      }
       highlights: {
         Row: {
           chapter_id: string
