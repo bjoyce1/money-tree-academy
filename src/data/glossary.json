@@ -1,0 +1,152 @@
+[
+  {
+    "id": "g1",
+    "term": "saving",
+    "shortDefinition": "Keeping some of your money for later instead of spending it all right now. Like planting seeds that grow into future opportunities."
+  },
+  {
+    "id": "g2",
+    "term": "budget",
+    "shortDefinition": "A plan for where your money goes, like giving every dollar a job. It helps you spend on needs first, then wants, while still saving for the future."
+  },
+  {
+    "id": "g3",
+    "term": "fixed expense",
+    "shortDefinition": "Costs that stay the same each month, like rent, phone bills, or insurance. These are predictable expenses you can plan for."
+  },
+  {
+    "id": "g4",
+    "term": "variable expense",
+    "shortDefinition": "Costs that change from month to month, like groceries, gas, or entertainment. You have more control over these expenses."
+  },
+  {
+    "id": "g5",
+    "term": "investment",
+    "shortDefinition": "Planting money seeds that can grow into more money over time. Instead of your money sitting still, it works for you by growing and multiplying."
+  },
+  {
+    "id": "g6",
+    "term": "compound interest",
+    "shortDefinition": "When your money grows, and then the growth grows too! It's like planting a seed that becomes a tree, and that tree drops more seeds."
+  },
+  {
+    "id": "g7",
+    "term": "diversification",
+    "shortDefinition": "Not putting all your money in one place. Like a smart gardener plants different types of seeds in different spots, so if one fails, others keep growing."
+  },
+  {
+    "id": "g8",
+    "term": "value",
+    "shortDefinition": "Something useful or beneficial you provide to others. When you create value by solving problems or helping people, they're willing to pay you for it."
+  },
+  {
+    "id": "g9",
+    "term": "emergency fund",
+    "shortDefinition": "Money saved specifically for unexpected problems, like when your bike breaks or you need something urgently. It's your financial safety net."
+  },
+  {
+    "id": "g10",
+    "term": "charitable giving",
+    "shortDefinition": "Sharing your money, time, or skills to help others or support causes you believe in. It's about using your resources to make the world better."
+  },
+  {
+    "id": "g11",
+    "term": "needs vs wants",
+    "shortDefinition": "Needs are things you must have to be safe and healthy (food, shelter, clothes). Wants are things that would be nice to have but aren't necessary."
+  },
+  {
+    "id": "g12",
+    "term": "entrepreneur",
+    "shortDefinition": "Someone who starts their own business or finds creative ways to earn money by solving problems for others. They turn ideas into income."
+  },
+  {
+    "id": "g13",
+    "term": "50-30-20 rule",
+    "shortDefinition": "A simple budgeting guideline: spend 50% on needs, 30% on wants, and save 20%. It helps you balance enjoying money today while building for tomorrow."
+  },
+  {
+    "id": "g14",
+    "term": "allowance",
+    "shortDefinition": "Regular money given by parents or guardians, often in exchange for chores or just for being part of the family. It's a great way to practice money skills."
+  },
+  {
+    "id": "g15",
+    "term": "income",
+    "shortDefinition": "All the money you receive, whether from allowance, gifts, jobs, or other sources. It's the money flowing into your life."
+  },
+  {
+    "id": "g16",
+    "term": "expense",
+    "shortDefinition": "Money you spend on things. Every time you buy something or pay for a service, that's an expense - money flowing out of your life."
+  },
+  {
+    "id": "g17",
+    "term": "interest",
+    "shortDefinition": "Extra money you earn for saving (or pay for borrowing). When you save money in a bank, they pay you interest for letting them use your money."
+  },
+  {
+    "id": "g18",
+    "term": "bank account",
+    "shortDefinition": "A safe place to keep your money at a bank. The bank protects your money and often pays you interest for keeping it there."
+  },
+  {
+    "id": "g19",
+    "term": "goal",
+    "shortDefinition": "Something specific you want to achieve with your money, like saving $50 for a new game or $500 for a bike. Goals give your money a purpose."
+  },
+  {
+    "id": "g20",
+    "term": "debt",
+    "shortDefinition": "Money you owe to someone else. If you borrow money, you have debt until you pay it back, usually with extra money called interest."
+  },
+  {
+    "id": "g21",
+    "term": "credit",
+    "shortDefinition": "The ability to borrow money based on trust that you'll pay it back. Good credit means people trust you with money; bad credit means they don't."
+  },
+  {
+    "id": "g22",
+    "term": "insurance",
+    "shortDefinition": "Protection you pay for that helps cover big, unexpected costs. Like a safety net - if something bad happens, insurance helps pay for it."
+  },
+  {
+    "id": "g23",
+    "term": "risk",
+    "shortDefinition": "The chance that something might not go as planned with your money. Higher risk investments might make more money but could also lose more."
+  },
+  {
+    "id": "g24",
+    "term": "profit",
+    "shortDefinition": "Money you make after subtracting all your costs. If you sell lemonade for $10 but only spent $3 on supplies, your profit is $7."
+  },
+  {
+    "id": "g25",
+    "term": "loss",
+    "shortDefinition": "When you end up with less money than you started with, either from a bad investment or spending more than you earn."
+  },
+  {
+    "id": "g26",
+    "term": "scam",
+    "shortDefinition": "A dishonest trick designed to steal your money or personal information. If something sounds too good to be true, it probably is."
+  },
+  {
+    "id": "g27",
+    "term": "financial planning",
+    "shortDefinition": "Thinking ahead about your money - setting goals, making budgets, and preparing for the future. Like making a roadmap for your financial journey."
+  },
+  {
+    "id": "g28",
+    "term": "opportunity cost",
+    "shortDefinition": "What you give up when you choose one thing over another. If you spend $10 on candy, the opportunity cost is the book you could have bought instead."
+  },
+  {
+    "id": "g29",
+    "term": "financial literacy",
+    "shortDefinition": "Understanding how money works and how to manage it wisely. It's like learning to read, but for money - a skill that helps you throughout life."
+  },
+  {
+    "id": "g30",
+    "term": "inflation",
+    "shortDefinition": "When things gradually become more expensive over time. A candy bar that costs $1 today might cost $1.50 in the future due to inflation."
+  }
+]

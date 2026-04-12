@@ -1,0 +1,284 @@
+[
+  {
+    "id": "qz-01",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "single",
+        "prompt": "What did the Money Tree compare money to?",
+        "choices": [
+          "A rock that stays the same",
+          "A seed that can grow",
+          "A toy to play with",
+          "A treasure to hide"
+        ],
+        "answerKey": [1],
+        "explanation": "The Money Tree taught that money is like a seed - plant it wisely and it grows into something wonderful!"
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "What promise did the four friends make?",
+        "choices": [
+          "To spend all their money quickly",
+          "To never buy anything fun",
+          "To fill their jars with wise choices",
+          "To hide their money forever"
+        ],
+        "answerKey": [2],
+        "explanation": "Each friend promised to fill their magical jar with wise money choices, starting their journey to financial wisdom."
+      }
+    ]
+  },
+  {
+    "id": "qz-02",
+    "questions": [
+      {
+        "id": "q1", 
+        "type": "single",
+        "prompt": "What does the 50-30-20 rule suggest?",
+        "choices": [
+          "50% save, 30% spend, 20% give away",
+          "50% needs, 30% wants, 20% saving",
+          "50% fun, 30% food, 20% clothes",
+          "50% today, 30% tomorrow, 20% never"
+        ],
+        "answerKey": [1],
+        "explanation": "The 50-30-20 rule helps you balance your money: 50% for things you need, 30% for things you want, and 20% for saving!"
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "What did the Money Tree say strong roots represent?",
+        "choices": [
+          "How tall you can grow",
+          "Your savings that help you weather storms",
+          "The friends you make",
+          "How much you can spend"
+        ],
+        "answerKey": [1], 
+        "explanation": "Just like tree roots anchor and nourish the tree, your savings create a strong foundation for your financial future."
+      }
+    ]
+  },
+  {
+    "id": "qz-03",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "single",
+        "prompt": "What are the four branches in the Branch System?",
+        "choices": [
+          "FOOD, GAMES, TOYS, BOOKS",
+          "NEEDS, WANTS, SAVE, SHARE",
+          "TODAY, TOMORROW, LATER, NEVER", 
+          "SMALL, MEDIUM, LARGE, HUGE"
+        ],
+        "answerKey": [1],
+        "explanation": "The Branch System organizes your money into four purposes: NEEDS (must-haves), WANTS (nice-to-haves), SAVE (future goals), and SHARE (helping others)."
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "When money is tight, which branch should you feed first?",
+        "choices": [
+          "WANTS - because they're fun",
+          "SAVE - because it grows",
+          "NEEDS - because they're essential",
+          "SHARE - because it helps others"
+        ],
+        "answerKey": [2],
+        "explanation": "NEEDS always come first because they keep you safe, healthy, and able to learn and grow!"
+      }
+    ]
+  },
+  {
+    "id": "qz-04",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multi",
+        "prompt": "Which are examples of 'earning leaves' mentioned in the chapter?",
+        "choices": [
+          "Allowance from family",
+          "Money from doing chores",
+          "Using skills to help others", 
+          "Gift money for birthdays",
+          "Finding money on the ground"
+        ],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "All of these except finding money are ways to earn! The key is providing value through work, skills, or being part of a family."
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "What makes someone an entrepreneur according to the Money Tree?",
+        "choices": [
+          "Having lots of money to start with",
+          "Being older than 18",
+          "Solving problems for other people",
+          "Working for a big company"
+        ],
+        "answerKey": [2],
+        "explanation": "An entrepreneur finds creative ways to solve problems for others - and people gladly pay for solutions to their problems!"
+      }
+    ]
+  },
+  {
+    "id": "qz-05",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "single",
+        "prompt": "What did the Money Tree compare flashy flowers to?",
+        "choices": [
+          "Things you need for survival",
+          "Wants that are beautiful but don't last long",
+          "Money that grows over time",
+          "Seeds that create more trees"
+        ],
+        "answerKey": [1],
+        "explanation": "Flashy flowers are like wants - they catch your eye and bring joy, but they don't produce the fruit (long-term value) that sustains you."
+      },
+      {
+        "id": "q2",
+        "type": "single", 
+        "prompt": "What is the 24-hour rule?",
+        "choices": [
+          "Wait 24 hours before eating anything",
+          "Save money for 24 hours straight",
+          "Wait a full day before buying something you want but don't need",
+          "Exercise for 24 hours before spending money"
+        ],
+        "answerKey": [2],
+        "explanation": "The 24-hour rule helps you avoid impulse buying. Often after waiting a day, you realize you didn't really need that want-item after all!"
+      }
+    ]
+  },
+  {
+    "id": "qz-06",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "single",
+        "prompt": "What is the main difference between saving and investing?",
+        "choices": [
+          "Saving is for rich people, investing is for poor people",
+          "Saving keeps money still like a rock, investing makes money work and grow",
+          "Saving is dangerous, investing is safe",
+          "There is no difference"
+        ],
+        "answerKey": [1],
+        "explanation": "When you save, your money sits safely but doesn't grow much. When you invest, your money works for you, growing and multiplying over time!"
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "What is diversification?",
+        "choices": [
+          "Putting all your money in one investment",
+          "Never investing any money",
+          "Planting many different types of seeds in different places", 
+          "Only investing in things your friends invest in"
+        ],
+        "answerKey": [2],
+        "explanation": "Diversification means spreading your investments around. If one investment fails, the others can keep growing - just like a smart gardener plants different seeds!"
+      }
+    ]
+  },
+  {
+    "id": "qz-07",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multi",
+        "prompt": "What are the Four Shields of Protection?",
+        "choices": [
+          "Emergency Fund Shield",
+          "Insurance Shield", 
+          "Knowledge Shield",
+          "Diversification Shield",
+          "Friendship Shield"
+        ],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "The four shields protect your money tree: Emergency funds for surprises, insurance for big disasters, knowledge to spot scams, and diversification to spread risk."
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "Why should young people care about protection?",
+        "choices": [
+          "They have the most money to lose",
+          "Protection habits built young become armor when older",
+          "Young people face the most financial dangers",
+          "It's required by law"
+        ],
+        "answerKey": [1],
+        "explanation": "Starting protection habits when you're young helps them become automatic. By the time you have more money to protect, you'll already know how to do it!"
+      }
+    ]
+  },
+  {
+    "id": "qz-08",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "single",
+        "prompt": "According to the Money Tree, what happens when you share wisely?",
+        "choices": [
+          "You lose money and become poor",
+          "Nothing changes in your life",
+          "More comes back to you in various forms",
+          "You only help other people"
+        ],
+        "answerKey": [2],
+        "explanation": "The tree taught that sharing wisely creates a positive cycle - you receive connections, opportunities, and satisfaction that enriches your life in many ways!"
+      },
+      {
+        "id": "q2", 
+        "type": "multi",
+        "prompt": "What are different ways to share according to the chapter?",
+        "choices": [
+          "Giving money to those in need",
+          "Sharing your time and skills",
+          "Supporting causes you believe in",
+          "Helping others grow their own money trees",
+          "Keeping everything for yourself"
+        ],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "Sharing isn't just about money! You can share time, skills, support causes, and help others learn - all of these create more 'shade' for everyone."
+      }
+    ]
+  },
+  {
+    "id": "qz-09",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "single",
+        "prompt": "What did the Money Tree say was the most important truth?",
+        "choices": [
+          "You need to be perfect with money",
+          "You should never make mistakes",
+          "You don't need to be perfect, just intentional",
+          "Money is the most important thing in life"
+        ],
+        "answerKey": [2],
+        "explanation": "The tree's wisdom: you don't need to be perfect with money. You just need to be intentional - making thoughtful choices that compound over time."
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "What is true wealth according to the Money Tree's final lesson?",
+        "choices": [
+          "Having more money than anyone else",
+          "Never spending any money",
+          "Using money wisely to create the life you want and help others",
+          "Buying everything you've ever wanted"
+        ],
+        "answerKey": [2],
+        "explanation": "True wealth isn't about having money - it's about using money as a tool to build the life you want while helping others do the same!"
+      }
+    ]
+  }
+]
