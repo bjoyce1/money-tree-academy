@@ -1,105 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* ─── CSS Variables ──────────────────────────────────────────── */
+:root {
+  --background: 224 71.4% 4.1%;
+  --foreground: 210 20% 98%;
+  --card: 224 71.4% 4.1%;
+  --card-foreground: 210 20% 98%;
+  --popover: 224 71.4% 4.1%;
+  --popover-foreground: 210 20% 98%;
+  --primary: 174.7 60.8% 52.5%;
+  --primary-foreground: 220 18% 20%;
+  --secondary: 215 27.9% 16.9%;
+  --secondary-foreground: 210 20% 98%;
+  --muted: 215 27.9% 16.9%;
+  --muted-foreground: 217.9 10.6% 64.9%;
+  --accent: 215 27.9% 16.9%;
+  --accent-foreground: 210 20% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 20% 98%;
+  --border: 215 27.9% 16.9%;
+  --input: 215 27.9% 16.9%;
+  --ring: 174.7 60.8% 52.5%;
+  --radius: 1.3rem;
 
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+/* ─── Base ──────────────────────────────────────────────────── */
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+html, body, #root { height: 100%; }
 
-  body {
-    @apply bg-background text-foreground;
-  }
+/* ─── Global Theme Transitions ──────────────────────────────── */
+* {
+  transition:
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s ease;
+}
+
+/* ─── Brand Colors (used in components via CSS vars) ─────── */
+:root {
+  --brand: 174.7 60.8% 52.5%;
+  --brand2: 47.9 95.8% 53.1%;
+}
+
+/* ─── Themes ─────────────────────────────────────────────────── */
+.theme-night {
+  background: hsl(224, 71%, 4%);
+  color: hsl(210, 20%, 95%);
+}
+
+.theme-day {
+  background: hsl(42, 14%, 96%);
+  color: hsl(0, 0%, 13%);
+}
+.theme-day .text-slate-100,
+.theme-day .text-slate-200,
+.theme-day .text-slate-300 { color: hsl(0, 0%, 13%) !important; }
+.theme-day .text-slate-400,
+.theme-day .text-slate-500 { color: hsl(0, 0%, 35%) !important; }
+.theme-day .bg-slate-900,
+.theme-day .bg-slate-800 {
+  background-color: hsl(0, 0%, 98%) !important;
+  border-color: hsl(0, 0%, 85%) !important;
+}
+.theme-day .bg-slate-900\/50 { background-color: hsl(0, 0%, 95%) !important; }
+.theme-day .border-slate-700,
+.theme-day .border-slate-800,
+.theme-day .border-slate-600 { border-color: hsl(0, 0%, 80%) !important; }
+.theme-day .bg-black\/40 { background-color: rgba(255, 255, 255, 0.95) !important; }
+.theme-day input, .theme-day select {
+  background-color: hsl(0, 0%, 100%) !important;
+  color: hsl(0, 0%, 13%) !important;
+}
+.theme-day .bg-slate-950 { background-color: hsl(0, 0%, 92%) !important; }
+
+.theme-sepia {
+  background: hsl(42, 55%, 91%);
+  color: hsl(42, 30%, 15%);
+}
+.theme-sepia .text-slate-100,
+.theme-sepia .text-slate-200,
+.theme-sepia .text-slate-300 { color: hsl(42, 30%, 15%) !important; }
+.theme-sepia .text-slate-400 { color: hsl(42, 20%, 35%) !important; }
+.theme-sepia .bg-slate-900,
+.theme-sepia .bg-slate-800 {
+  background-color: hsl(42, 35%, 96%) !important;
+  border-color: hsl(42, 25%, 80%) !important;
+}
+.theme-sepia .border-slate-700,
+.theme-sepia .border-slate-600 { border-color: hsl(42, 25%, 75%) !important; }
+
+.theme-contrast {
+  background: hsl(0, 0%, 0%);
+  color: hsl(0, 0%, 100%);
+}
+.theme-contrast .bg-slate-900,
+.theme-contrast .bg-slate-800 {
+  background-color: #111 !important;
+  border-color: #fff !important;
+}
+
+/* ─── Kid Themes ────────────────────────────────────────────── */
+.theme-pink {
+  background: hsl(340, 100%, 97%);
+  color: hsl(340, 30%, 10%);
+  --brand: 340 90% 60%;
+}
+
+.theme-blue {
+  background: hsl(210, 100%, 97%);
+  color: hsl(210, 30%, 10%);
+  --brand: 210 90% 50%;
+}
+
+/* ─── Reader Prose ──────────────────────────────────────────── */
+.reader-prose p { margin: 1rem 0; line-height: 1.85; }
+.reader-prose h2 { margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; font-size: 1.25rem; }
+.reader-prose h3 { margin-top: 1.25rem; margin-bottom: 0.4rem; font-weight: 600; }
+.reader-prose ul { margin: 0.75rem 0; padding-left: 1.5rem; list-style: disc; }
+.reader-prose li { margin: 0.4rem 0; line-height: 1.7; }
+.reader-prose a { text-decoration: underline; }
+.reader-prose strong { font-weight: 600; }
+.reader-prose em { font-style: italic; }
+
+/* ─── Glossary ──────────────────────────────────────────────── */
+.glossary-term {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+  color: hsl(var(--brand));
+}
+.glossary-term:hover { background-color: hsla(174.7, 60.8%, 52.5%, 0.12); border-radius: 2px; }
+
+/* ─── Animations ────────────────────────────────────────────── */
+.fade-in { animation: fadeIn 0.35s ease-in; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.slide-up { animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.theme-transition-glow { animation: themeGlow 0.8s ease-in-out; }
+@keyframes themeGlow {
+  0%   { box-shadow: 0 0 0 rgba(168, 85, 247, 0); }
+  50%  { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
+  100% { box-shadow: 0 0 0 rgba(168, 85, 247, 0); }
+}
+
+/* ─── Quiz ──────────────────────────────────────────────────── */
+.quiz-choice { transition: all 0.2s ease; }
+.quiz-choice:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+
+/* ─── Progress Bar ──────────────────────────────────────────── */
+.progress-bar {
+  background: linear-gradient(90deg, hsl(var(--brand)), hsl(var(--brand2)));
+  height: 4px;
+  border-radius: 2px;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: hsl(215, 27.9%, 25%); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(215, 27.9%, 35%); }
+
+/* ─── Mobile ────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  html { font-size: 14px; }
+  .reader-prose { font-size: 1rem; line-height: 1.8; }
+  input, select, textarea { font-size: 16px; }
 }

@@ -44,3 +44,19 @@ export interface ShopItem {
   icon: string;
   description: string;
 }
+// AI Chat types (stub for now)
+export interface AiChatConversation {
+  id: string;
+  title: string;
+  chapterId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AiChatMessage {
+  id: string;
+  conversationId: string;
+  role: 'user' | 'assistant';
+  content: string;
+  createdAt: string;
+}
