@@ -25,17 +25,9 @@ type Theme = typeof themes[number];
 export default function HomePage() {
   const { user, isAuthenticated } = useAuth();
   const [theme, setTheme] = useState<Theme>(() => {
-    if (user?.theme) return user.theme as Theme;
     return (localStorage.getItem('theme') as Theme) || 'night';
   });
   const [scrollY, setScrollY] = useState(0);
-
-  // Sync theme with user data
-  useEffect(() => {
-    if (user?.theme && user.theme !== theme) {
-      setTheme(user.theme as Theme);
-    }
-  }, [user]);
 
   useEffect(() => {
     document.body.classList.remove('theme-day', 'theme-sepia', 'theme-night', 'theme-contrast');
