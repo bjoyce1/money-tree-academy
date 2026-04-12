@@ -1,12 +1,12 @@
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import { BookOpen, GraduationCap, Lightbulb, StickyNote, Search, Sun, Moon, Eye, Contrast } from "lucide-react";
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { userAPI } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import book from "../data/book.json";
-import bookCoverImage from "@assets/book-cover.png";
-import moneyTreeLogo from "@assets/logo.png";
+import bookCoverImage from "@/assets/book-cover.png";
+import moneyTreeLogo from "@/assets/logo.png";
 import Footer from "../components/Footer";
 import ReadingStreaks from '../components/ReadingStreaks';
 import AchievementSystem from '../components/AchievementSystem';

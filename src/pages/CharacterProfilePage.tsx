@@ -1,4 +1,4 @@
-import { useRoute, Link } from 'wouter';
+import { useRoute, Link } from 'react-router-dom';
 import { ArrowLeft, Heart, Star, Award, BookOpen, Lightbulb, Target, TrendingUp, Volume2, VolumeX } from 'lucide-react';
 import { CHARACTERS, Character, useCharacterCompanion } from '../components/CharacterCompanion';
 import CharacterIntroduction from '../components/CharacterIntroduction';
@@ -32,7 +32,7 @@ export default function CharacterProfilePage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-slate-100 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Character Not Found</h1>
-          <Link href="/characters" className="text-purple-400 hover:text-purple-300">
+          <Link to="/characters" className="text-purple-400 hover:text-purple-300">
             ← Back to Characters
           </Link>
         </div>
@@ -101,7 +101,7 @@ Ready to start this adventure? Let's grow your money tree together!`;
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-slate-700">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/characters" className="flex items-center gap-2 text-slate-300 hover:text-slate-100 transition-colors">
+          <Link to="/characters" className="flex items-center gap-2 text-slate-300 hover:text-slate-100 transition-colors">
             <ArrowLeft size={20} />
             Back to Characters
           </Link>

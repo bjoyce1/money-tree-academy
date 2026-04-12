@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Play, CheckCircle, ArrowRight, BookOpen, Users, Award, Coins, Volume2, Sparkles } from 'lucide-react';
-import { Link } from 'wouter';
+import { Link } from 'react-router-dom';
 
 interface DemoStep {
   id: string;

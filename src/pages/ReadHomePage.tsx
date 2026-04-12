@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Play, Sprout, Home, Search, Book, Lock, Heart, Award } from "lucide-react";
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';

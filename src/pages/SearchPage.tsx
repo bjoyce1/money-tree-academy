@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'wouter';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, Search, ExternalLink, Book } from 'lucide-react';
 import chapters from '../data/chapters.json';
 import Footer from '../components/Footer';

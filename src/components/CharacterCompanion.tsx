@@ -4,10 +4,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { companionAPI } from '@/lib/api';
 import CharacterIntroduction from './CharacterIntroduction';
-import aishaImage from '@assets/aisha.png';
-import emmaImage from '@assets/emma.png';
-import liamImage from '@assets/liam.png';
-import mateoImage from '@assets/mateo.png';
+import aishaImage from '@/assets/aisha.png';
+import emmaImage from '@/assets/emma.png';
+import liamImage from '@/assets/liam.png';
+import mateoImage from '@/assets/mateo.png';
 import voiceService from '../services/voiceService';
 
 export interface Character {

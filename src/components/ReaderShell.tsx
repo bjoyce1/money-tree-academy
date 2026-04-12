@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { Link } from 'wouter'
+import { Link } from 'react-router-dom'
 import { Menu, X, Search, Home, BarChart3 } from 'lucide-react'
 import chapters from '../data/chapters.json'
 
@@ -42,7 +42,7 @@ export default function ReaderShell({ children, currentSlug }: Props) {
               >
                 {open ? <X size={20} /> : <Menu size={20} />}
               </button>
-              <Link href="/" className="font-semibold text-sm sm:text-base truncate">
+              <Link to="/" className="font-semibold text-sm sm:text-base truncate">
                 The Money Tree of Life
               </Link>
             </div>
@@ -76,7 +76,7 @@ export default function ReaderShell({ children, currentSlug }: Props) {
               >
                 {open ? 'Hide Chapters' : 'Show Chapters'}
               </button>
-              <Link href="/" className="font-semibold">The Money Tree of Life</Link>
+              <Link to="/" className="font-semibold">The Money Tree of Life</Link>
             </div>
             <div className="flex items-center gap-3">
               <Link 

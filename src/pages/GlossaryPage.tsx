@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'wouter';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, Search, Book } from 'lucide-react';
 import terms from '../data/glossary.json';
 import Footer from '../components/Footer';

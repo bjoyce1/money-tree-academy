@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import { BookOpen, Sprout, Heart, GraduationCap, Target, Users } from "lucide-react";
 import book from "../data/book.json";
 

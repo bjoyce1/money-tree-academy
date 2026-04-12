@@ -1,4 +1,4 @@
-import { Link } from 'wouter';
+import { Link } from 'react-router-dom';
 import { Heart, ArrowLeft, Star, Award, Users, BookOpen } from 'lucide-react';
 import { CHARACTERS, Character, useCharacterCompanion } from '../components/CharacterCompanion';
 import CharacterIntroduction from '../components/CharacterIntroduction';
@@ -44,7 +44,7 @@ export default function CharacterSelectionPage() {
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-slate-700">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-slate-300 hover:text-slate-100 transition-colors">
+          <Link to="/" className="flex items-center gap-2 text-slate-300 hover:text-slate-100 transition-colors">
             <ArrowLeft size={20} />
             Back to Home
           </Link>

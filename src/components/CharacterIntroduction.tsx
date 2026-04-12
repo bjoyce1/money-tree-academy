@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Volume2, VolumeX, Sparkles } from 'lucide-react';
-import { useLocation } from 'wouter';
+import { useLocation } from 'react-router-dom';
 import { Character } from './CharacterCompanion';
 import voiceService from '../services/voiceService';
 

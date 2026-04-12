@@ -9,7 +9,7 @@ import BudgetBuilder from "@/games/BudgetBuilder";
 import MoneyMatch from "@/games/MoneyMatch";
 import { useAppStore } from "@/state/store";
 import { ArrowLeft } from "lucide-react";
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 
 export default function EnhancedFeaturesPage() {
   const ensureFirstLogin = useAppStore(s=>s.ensureFirstLogin);
@@ -26,7 +26,7 @@ export default function EnhancedFeaturesPage() {
       <div className="p-6 max-w-7xl mx-auto space-y-10">
         {/* Header with Back Button */}
         <div className="flex items-center justify-between mb-8">
-          <Link href="/">
+          <Link to="/">
             <button className="flex items-center gap-2 text-green-700 dark:text-green-300 hover:text-green-800 dark:hover:text-green-200">
               <ArrowLeft size={20} />
               Back to Home
