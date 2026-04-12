@@ -35,7 +35,6 @@ class VoiceService {
 
     if (!response.ok) {
       this.useElevenLabs = false;
-      console.warn('ElevenLabs unavailable, falling back to Google Cloud TTS');
       throw new Error('elevenlabs-unavailable');
     }
 
@@ -43,9 +42,9 @@ class VoiceService {
       const payload = await response.json().catch(() => null);
       if (payload?.fallback) {
         this.useElevenLabs = false;
-        console.warn('ElevenLabs quota/service fallback triggered, switching to Google Cloud TTS');
         throw new Error(payload.error || 'elevenlabs-fallback');
       }
+      this.useElevenLabs = false;
       throw new Error('invalid-elevenlabs-response');
     }
 
@@ -72,8 +71,9 @@ class VoiceService {
       body: JSON.stringify({ text, characterId }),
     });
 
-    if (!response.ok) {
-      const err = await response.text();
+    const contentType = response.headers.get('content-type') || '';
+    if (!response.ok || !contentType.includes('audio')) {
+      const err = await response.text().catch(() => '');
       console.error('Google Cloud TTS error:', err);
       throw new Error('google-tts-unavailable');
     }

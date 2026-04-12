@@ -114,8 +114,6 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error('TTS error:', error);
-    return fallbackResponse(
-      error instanceof Error ? error.message : 'Unknown error'
-    );
+    return fallbackResponse(error instanceof Error ? error.message : 'Unknown error');
   }
 });
