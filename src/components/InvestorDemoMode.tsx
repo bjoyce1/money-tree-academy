@@ -162,7 +162,7 @@ export default function InvestorDemoMode({ isActive, onToggle }: InvestorDemoMod
               </div>
               
               <div className="flex flex-col gap-2">
-                <Link href={currentDemoStep.path}>
+                <Link to={currentDemoStep.path}>
                   <Button 
                     className="w-full bg-purple-600 hover:bg-purple-700 text-white"
                     onClick={() => markStepCompleted(currentDemoStep.id)}
