@@ -1,18 +1,8 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  BookOpen, 
-  Trophy, 
-  Clock, 
-  TrendingUp, 
-  Star, 
-  Coins, 
-  Calendar,
-  Target,
-  Users,
-  ArrowLeft,
-  BarChart3,
-  Award
+  BookOpen, Trophy, Clock, TrendingUp, Star, Coins, Calendar,
+  Target, Users, ArrowLeft, BarChart3, Award
 } from 'lucide-react';
 import ReaderShell from '../components/ReaderShell';
 import chapters from '../data/chapters.json';
@@ -32,8 +22,34 @@ interface ProgressStats {
   notesCreated: number;
 }
 
+function ProgressRing({ value, max, size = 80, strokeWidth = 6, color = 'stroke-primary', label, sublabel }: { 
+  value: number; max: number; size?: number; strokeWidth?: number; color?: string; label: string; sublabel: string 
+}) {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const progress = max > 0 ? (value / max) * 100 : 0;
+  const offset = circumference - (progress / 100) * circumference;
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative">
+        <svg width={size} height={size} className="transform -rotate-90">
+          <circle cx={size/2} cy={size/2} r={radius} stroke="currentColor" strokeWidth={strokeWidth} fill="none" className="text-white/10" />
+          <circle cx={size/2} cy={size/2} r={radius} strokeWidth={strokeWidth} fill="none"
+            className={color} strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round"
+            style={{ transition: 'stroke-dashoffset 0.5s ease' }} />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-lg font-extrabold">{value}</span>
+        </div>
+      </div>
+      <span className="text-sm font-bold mt-2">{label}</span>
+      <span className="text-xs text-muted-foreground">{sublabel}</span>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
-  // Calculate progress stats from localStorage
   const stats = useMemo((): ProgressStats => {
     const completedChapters = JSON.parse(localStorage.getItem('completed_chapters') || '[]');
     const streakData = JSON.parse(localStorage.getItem('reading_streaks') || '{}');
@@ -43,16 +59,13 @@ export default function DashboardPage() {
     const quizResults = JSON.parse(localStorage.getItem('quiz_results') || '{}');
     const notesData = JSON.parse(localStorage.getItem('notes_data') || '{}');
 
-    // Calculate total reading time from reading speed data
     const totalReadingTime = Object.values(readingSpeedData).reduce((total: number, chapterData: any) => {
       return total + (chapterData?.totalTime || 0);
     }, 0);
 
-    // Calculate average quiz score
     const quizScores = Object.values(quizResults).map((result: any) => result?.score || 0).filter(score => score > 0);
     const averageQuizScore = quizScores.length > 0 ? quizScores.reduce((a, b) => a + b, 0) / quizScores.length : 0;
 
-    // Count total notes
     const notesCreated = Object.values(notesData).reduce((total: number, chapterNotes: any) => {
       return total + (Array.isArray(chapterNotes) ? chapterNotes.length : 0);
     }, 0);
@@ -63,7 +76,7 @@ export default function DashboardPage() {
       currentStreak: streakData.currentStreak || 0,
       longestStreak: streakData.longestStreak || 0,
       totalCoins: coinsData.total || 0,
-      totalReadingTime: Math.round((totalReadingTime as number) / 60), // Convert to minutes
+      totalReadingTime: Math.round((totalReadingTime as number) / 60),
       achievementsUnlocked: Object.keys(achievementStats).length,
       lastReadingDate: streakData.lastReadingDate || null,
       averageQuizScore: Math.round(averageQuizScore),
@@ -79,14 +92,14 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 leading-tight" data-testid="dashboard-title">
-              Learning Progress Dashboard
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground leading-tight" data-testid="dashboard-title">
+              📊 Learning Progress
             </h1>
-            <p className="text-slate-400 mt-1 text-sm sm:text-base">Track reading progress and achievements</p>
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base font-bold">Track your reading journey and achievements</p>
           </div>
           <Link 
             to="/read" 
-            className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors touch-manipulation self-start"
+            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet to-purple-500 text-white rounded-full font-bold transition-all hover:scale-105 touch-manipulation self-start"
             data-testid="link-back-to-reading"
           >
             <ArrowLeft size={16} />
@@ -94,74 +107,25 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* Overview Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-gradient-to-br from-green-950/50 to-green-900/30 border border-green-500/30 rounded-xl p-6">
-            <div className="flex items-center justify-between mb-2">
-              <BookOpen className="text-green-400" size={24} />
-              <span className="text-2xl font-bold text-green-300">{stats.chaptersCompleted}</span>
-            </div>
-            <h3 className="font-semibold text-slate-100 mb-1">Chapters Read</h3>
-            <p className="text-slate-400 text-sm">out of {stats.totalChapters} total</p>
-            <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
-              <div 
-                className="bg-green-500 h-full rounded-full transition-all duration-500" 
-                style={{ width: `${progressPercentage}%` }}
-              ></div>
-            </div>
-            <p className="text-xs text-slate-500 mt-1">{progressPercentage}% complete</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-950/50 to-blue-900/30 border border-blue-500/30 rounded-xl p-6">
-            <div className="flex items-center justify-between mb-2">
-              <Calendar className="text-blue-400" size={24} />
-              <span className="text-2xl font-bold text-blue-300">{stats.currentStreak}</span>
-            </div>
-            <h3 className="font-semibold text-slate-100 mb-1">Reading Streak</h3>
-            <p className="text-slate-400 text-sm">days in a row</p>
-            <div className="flex items-center gap-2 mt-3">
-              <Target className="text-blue-400" size={14} />
-              <span className="text-xs text-slate-400">Best: {stats.longestStreak} days</span>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-yellow-950/50 to-yellow-900/30 border border-yellow-500/30 rounded-xl p-6">
-            <div className="flex items-center justify-between mb-2">
-              <Coins className="text-yellow-400" size={24} />
-              <span className="text-2xl font-bold text-yellow-300">{stats.totalCoins}</span>
-            </div>
-            <h3 className="font-semibold text-slate-100 mb-1">Coins Earned</h3>
-            <p className="text-slate-400 text-sm">from learning activities</p>
-            <div className="flex items-center gap-2 mt-3">
-              <TrendingUp className="text-yellow-400" size={14} />
-              <span className="text-xs text-slate-400">Keep earning!</span>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-purple-950/50 to-purple-900/30 border border-purple-500/30 rounded-xl p-6">
-            <div className="flex items-center justify-between mb-2">
-              <Trophy className="text-purple-400" size={24} />
-              <span className="text-2xl font-bold text-purple-300">{stats.achievementsUnlocked}</span>
-            </div>
-            <h3 className="font-semibold text-slate-100 mb-1">Achievements</h3>
-            <p className="text-slate-400 text-sm">unlocked so far</p>
-            <div className="flex items-center gap-2 mt-3">
-              <Award className="text-purple-400" size={14} />
-              <span className="text-xs text-slate-400">Keep going!</span>
-            </div>
+        {/* Progress Rings Overview */}
+        <div className="glass-card rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 justify-items-center">
+            <ProgressRing value={stats.chaptersCompleted} max={stats.totalChapters} color="stroke-emerald-400" label="Chapters" sublabel={`of ${stats.totalChapters}`} />
+            <ProgressRing value={stats.currentStreak} max={30} color="stroke-blue-400" label="Streak" sublabel="days" />
+            <ProgressRing value={stats.totalCoins} max={1000} size={80} color="stroke-amber-400" label="Coins" sublabel="earned" />
+            <ProgressRing value={stats.achievementsUnlocked} max={20} color="stroke-violet" label="Awards" sublabel="unlocked" />
           </div>
         </div>
 
         {/* Detailed Progress Section */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid lg:grid-cols-2 gap-6 mb-8">
           {/* Chapter Progress */}
-          <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-              <BarChart3 className="text-blue-400" size={20} />
+          <div className="glass-card rounded-2xl p-6">
+            <h2 className="text-xl font-extrabold text-foreground mb-4 flex items-center gap-2">
+              <BarChart3 className="text-violet" size={20} />
               Chapter Progress
             </h2>
-            
-            <div className="space-y-3">
+            <div className="space-y-2">
               {chapters.map((chapter) => {
                 const isCompleted = JSON.parse(localStorage.getItem('completed_chapters') || '[]').includes(chapter.id);
                 const isCurrentlyReading = localStorage.getItem('resumeSlug') === chapter.slug;
@@ -169,27 +133,27 @@ export default function DashboardPage() {
                 return (
                   <div 
                     key={chapter.id} 
-                    className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                      isCompleted ? 'bg-green-950/30 border border-green-500/20' : 
-                      isCurrentlyReading ? 'bg-blue-950/30 border border-blue-500/20' : 
-                      'bg-slate-800/30'
+                    className={`flex items-center gap-3 p-3 rounded-xl transition-colors ${
+                      isCompleted ? 'bg-primary/10 border border-primary/20' : 
+                      isCurrentlyReading ? 'bg-golden/10 border border-golden/20' : 
+                      'bg-white/5'
                     }`}
                     data-testid={`chapter-progress-${chapter.slug}`}
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                      isCompleted ? 'bg-green-500 text-white' :
-                      isCurrentlyReading ? 'bg-blue-500 text-white' :
-                      'bg-slate-600 text-slate-300'
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-extrabold ${
+                      isCompleted ? 'bg-primary text-primary-foreground' :
+                      isCurrentlyReading ? 'bg-golden text-primary-foreground' :
+                      'bg-white/10 text-muted-foreground'
                     }`}>
                       {isCompleted ? '✓' : chapter.order}
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-slate-200">{chapter.title}</p>
-                      <p className="text-xs text-slate-400">{chapter.estReadMinutes} min read</p>
+                      <p className="font-bold text-foreground text-sm">{chapter.title}</p>
+                      <p className="text-xs text-muted-foreground">{chapter.estReadMinutes} min read</p>
                     </div>
                     {isCurrentlyReading && (
-                      <span className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded">
-                        Currently Reading
+                      <span className="px-2 py-1 bg-golden/20 text-golden text-xs rounded-full font-bold">
+                        Reading
                       </span>
                     )}
                   </div>
@@ -199,50 +163,32 @@ export default function DashboardPage() {
           </div>
 
           {/* Reading Analytics */}
-          <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-              <Clock className="text-green-400" size={20} />
+          <div className="glass-card rounded-2xl p-6">
+            <h2 className="text-xl font-extrabold text-foreground mb-4 flex items-center gap-2">
+              <Clock className="text-primary" size={20} />
               Reading Analytics
             </h2>
-            
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <Clock className="text-blue-400" size={16} />
-                  <span className="text-slate-300">Total Reading Time</span>
-                </div>
-                <span className="font-bold text-slate-100" data-testid="total-reading-time">
-                  {stats.totalReadingTime} minutes
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <Star className="text-yellow-400" size={16} />
-                  <span className="text-slate-300">Average Quiz Score</span>
-                </div>
-                <span className="font-bold text-slate-100" data-testid="average-quiz-score">
-                  {stats.averageQuizScore}%
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <Users className="text-purple-400" size={16} />
-                  <span className="text-slate-300">Notes Created</span>
-                </div>
-                <span className="font-bold text-slate-100" data-testid="notes-created">
-                  {stats.notesCreated}
-                </span>
-              </div>
-
-              {stats.lastReadingDate && (
-                <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+            <div className="space-y-3">
+              {[
+                { icon: Clock, color: 'text-blue-400', label: 'Total Reading Time', value: `${stats.totalReadingTime} min`, testId: 'total-reading-time' },
+                { icon: Star, color: 'text-golden', label: 'Average Quiz Score', value: `${stats.averageQuizScore}%`, testId: 'average-quiz-score' },
+                { icon: Users, color: 'text-violet', label: 'Notes Created', value: String(stats.notesCreated), testId: 'notes-created' },
+              ].map(item => (
+                <div key={item.label} className="flex items-center justify-between p-3 bg-white/5 rounded-xl">
                   <div className="flex items-center gap-2">
-                    <Calendar className="text-indigo-400" size={16} />
-                    <span className="text-slate-300">Last Reading Session</span>
+                    <item.icon className={item.color} size={16} />
+                    <span className="text-foreground/80 text-sm font-bold">{item.label}</span>
                   </div>
-                  <span className="font-bold text-slate-100" data-testid="last-reading-date">
+                  <span className="font-extrabold text-foreground" data-testid={item.testId}>{item.value}</span>
+                </div>
+              ))}
+              {stats.lastReadingDate && (
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="text-coral" size={16} />
+                    <span className="text-foreground/80 text-sm font-bold">Last Session</span>
+                  </div>
+                  <span className="font-extrabold text-foreground" data-testid="last-reading-date">
                     {new Date(stats.lastReadingDate).toLocaleDateString()}
                   </span>
                 </div>
@@ -252,135 +198,85 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
-          <h2 className="text-xl font-bold text-slate-100 mb-4">Quick Actions</h2>
-          
+        <div className="glass-card rounded-2xl p-6">
+          <h2 className="text-xl font-extrabold text-foreground mb-4">Quick Actions</h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <Link 
-              to="/read"
-              className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-950/50 to-blue-900/30 border border-blue-500/30 rounded-lg hover:from-blue-900/50 hover:to-blue-800/30 transition-all"
-              data-testid="link-continue-reading"
-            >
-              <BookOpen className="text-blue-400" size={20} />
-              <div>
-                <p className="font-semibold text-slate-100">Continue Reading</p>
-                <p className="text-slate-400 text-sm">Resume learning journey</p>
-              </div>
-            </Link>
-
-            <Link 
-              to="/glossary"
-              className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-950/50 to-purple-900/30 border border-purple-500/30 rounded-lg hover:from-purple-900/50 hover:to-purple-800/30 transition-all"
-              data-testid="link-glossary"
-            >
-              <Star className="text-purple-400" size={20} />
-              <div>
-                <p className="font-semibold text-slate-100">Study Glossary</p>
-                <p className="text-slate-400 text-sm">Review key terms</p>
-              </div>
-            </Link>
-
-            <Link 
-              to="/search"
-              className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-950/50 to-green-900/30 border border-green-500/30 rounded-lg hover:from-green-900/50 hover:to-green-800/30 transition-all"
-              data-testid="link-search"
-            >
-              <TrendingUp className="text-green-400" size={20} />
-              <div>
-                <p className="font-semibold text-slate-100">Search Content</p>
-                <p className="text-slate-400 text-sm">Find specific topics</p>
-              </div>
-            </Link>
+            {[
+              { to: '/read', icon: BookOpen, color: 'text-primary', bg: 'bg-primary/10', title: 'Continue Reading', desc: 'Resume learning journey', testId: 'link-continue-reading' },
+              { to: '/glossary', icon: Star, color: 'text-violet', bg: 'bg-violet/10', title: 'Study Glossary', desc: 'Review key terms', testId: 'link-glossary' },
+              { to: '/search', icon: TrendingUp, color: 'text-golden', bg: 'bg-golden/10', title: 'Search Content', desc: 'Find specific topics', testId: 'link-search' },
+            ].map(action => (
+              <Link key={action.to} to={action.to}
+                className="flex items-center gap-3 p-4 glass-card rounded-2xl hover:scale-105 transition-all"
+                data-testid={action.testId}
+              >
+                <div className={`w-10 h-10 ${action.bg} rounded-xl flex items-center justify-center`}>
+                  <action.icon className={action.color} size={20} />
+                </div>
+                <div>
+                  <p className="font-bold text-foreground">{action.title}</p>
+                  <p className="text-muted-foreground text-sm">{action.desc}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
 
-        {/* AI Harness Intelligence */}
-        <div className="mt-8 bg-gradient-to-r from-emerald-950/50 to-teal-950/50 border border-emerald-500/30 rounded-xl p-6">
-          <h2 className="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-            <TrendingUp className="text-emerald-400" size={20} />
+        {/* AI Harness */}
+        <div className="mt-8 glass-card rounded-2xl p-6 border-primary/20">
+          <h2 className="text-xl font-extrabold text-foreground mb-4 flex items-center gap-2">
+            <TrendingUp className="text-primary" size={20} />
             AI Harness Intelligence
           </h2>
-          <p className="text-slate-400 text-sm mb-4">Your AI tutor adapts to how you learn.</p>
+          <p className="text-muted-foreground text-sm mb-4 font-bold">Your AI tutor adapts to how you learn.</p>
           <HarnessStatsPanel />
         </div>
 
         {/* Progress Insights */}
-        <div className="mt-8 bg-gradient-to-r from-indigo-950/50 to-purple-950/50 border border-indigo-500/30 rounded-xl p-6">
-          <h2 className="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-            <TrendingUp className="text-indigo-400" size={20} />
+        <div className="mt-8 glass-card rounded-2xl p-6 border-violet/20">
+          <h2 className="text-xl font-extrabold text-foreground mb-4 flex items-center gap-2">
+            <TrendingUp className="text-violet" size={20} />
             Progress Insights
           </h2>
-          
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h3 className="font-semibold text-slate-200 mb-3">Learning Milestones</h3>
+              <h3 className="font-bold text-foreground mb-3">Learning Milestones</h3>
               <div className="space-y-2">
-                <div className={`flex items-center gap-2 ${stats.chaptersCompleted >= 1 ? 'text-green-300' : 'text-slate-500'}`}>
-                  {stats.chaptersCompleted >= 1 ? '✅' : '⏳'} First chapter completed
-                </div>
-                <div className={`flex items-center gap-2 ${stats.chaptersCompleted >= 3 ? 'text-green-300' : 'text-slate-500'}`}>
-                  {stats.chaptersCompleted >= 3 ? '✅' : '⏳'} Getting started (3 chapters)
-                </div>
-                <div className={`flex items-center gap-2 ${stats.chaptersCompleted >= 5 ? 'text-green-300' : 'text-slate-500'}`}>
-                  {stats.chaptersCompleted >= 5 ? '✅' : '⏳'} Halfway point (5 chapters)
-                </div>
-                <div className={`flex items-center gap-2 ${stats.chaptersCompleted >= 8 ? 'text-green-300' : 'text-slate-500'}`}>
-                  {stats.chaptersCompleted >= 8 ? '✅' : '⏳'} Almost finished (8 chapters)
-                </div>
-                <div className={`flex items-center gap-2 ${stats.chaptersCompleted >= 10 ? 'text-green-300' : 'text-slate-500'}`}>
-                  {stats.chaptersCompleted >= 10 ? '✅' : '⏳'} Book completed!
-                </div>
+                {[
+                  { threshold: 1, label: 'First chapter completed' },
+                  { threshold: 3, label: 'Getting started (3 chapters)' },
+                  { threshold: 5, label: 'Halfway point (5 chapters)' },
+                  { threshold: 8, label: 'Almost finished (8 chapters)' },
+                  { threshold: 10, label: 'Book completed!' },
+                ].map(milestone => (
+                  <div key={milestone.threshold} className={`flex items-center gap-2 text-sm font-bold ${stats.chaptersCompleted >= milestone.threshold ? 'text-primary' : 'text-muted-foreground/50'}`}>
+                    {stats.chaptersCompleted >= milestone.threshold ? '✅' : '⏳'} {milestone.label}
+                  </div>
+                ))}
               </div>
             </div>
-
             <div>
-              <h3 className="font-semibold text-slate-200 mb-3">Engagement Metrics</h3>
+              <h3 className="font-bold text-foreground mb-3">Engagement</h3>
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Reading Consistency</span>
-                  <span className={`font-semibold ${
-                    stats.currentStreak >= 7 ? 'text-green-300' :
-                    stats.currentStreak >= 3 ? 'text-yellow-300' :
-                    'text-slate-400'
-                  }`}>
-                    {stats.currentStreak >= 7 ? 'Excellent' :
-                     stats.currentStreak >= 3 ? 'Good' :
-                     'Building'}
-                  </span>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Quiz Performance</span>
-                  <span className={`font-semibold ${
-                    stats.averageQuizScore >= 80 ? 'text-green-300' :
-                    stats.averageQuizScore >= 60 ? 'text-yellow-300' :
-                    'text-slate-400'
-                  }`}>
-                    {stats.averageQuizScore >= 80 ? 'Excellent' :
-                     stats.averageQuizScore >= 60 ? 'Good' :
-                     stats.averageQuizScore > 0 ? 'Improving' : 'Not Started'}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Note Taking</span>
-                  <span className={`font-semibold ${
-                    stats.notesCreated >= 10 ? 'text-green-300' :
-                    stats.notesCreated >= 5 ? 'text-yellow-300' :
-                    'text-slate-400'
-                  }`}>
-                    {stats.notesCreated >= 10 ? 'Active' :
-                     stats.notesCreated >= 5 ? 'Moderate' :
-                     stats.notesCreated > 0 ? 'Getting Started' : 'Not Started'}
-                  </span>
-                </div>
+                {[
+                  { label: 'Reading Consistency', value: stats.currentStreak >= 7 ? 'Excellent' : stats.currentStreak >= 3 ? 'Good' : 'Building',
+                    color: stats.currentStreak >= 7 ? 'text-primary' : stats.currentStreak >= 3 ? 'text-golden' : 'text-muted-foreground' },
+                  { label: 'Quiz Performance', value: stats.averageQuizScore >= 80 ? 'Excellent' : stats.averageQuizScore >= 60 ? 'Good' : stats.averageQuizScore > 0 ? 'Improving' : 'Not Started',
+                    color: stats.averageQuizScore >= 80 ? 'text-primary' : stats.averageQuizScore >= 60 ? 'text-golden' : 'text-muted-foreground' },
+                  { label: 'Note Taking', value: stats.notesCreated >= 10 ? 'Active' : stats.notesCreated >= 5 ? 'Good' : stats.notesCreated > 0 ? 'Starting' : 'Not Started',
+                    color: stats.notesCreated >= 10 ? 'text-primary' : stats.notesCreated >= 5 ? 'text-golden' : 'text-muted-foreground' },
+                ].map(metric => (
+                  <div key={metric.label} className="flex items-center justify-between">
+                    <span className="text-foreground/80 font-bold text-sm">{metric.label}</span>
+                    <span className={`font-extrabold ${metric.color}`}>{metric.value}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Recommendations */}
-        {/* Parent/Teacher Report — harness-powered */}
+        {/* Parent/Teacher Report */}
         <div className="mt-8">
           <ProgressReport />
         </div>

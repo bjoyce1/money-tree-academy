@@ -14,14 +14,14 @@ export default function GuideSelect(){
 
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-semibold">Choose your learning guide</h2>
+      <h2 className="text-lg font-extrabold text-foreground">Choose your learning guide</h2>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {GUIDES.map(g=>(
           <button key={g.id} onClick={()=>select(g.id)} aria-pressed={selected===g.id}
-            className={`rounded-2xl p-4 border ${selected===g.id?"border-emerald-400 bg-emerald-500/10":"border-zinc-700 bg-zinc-800/40"}`}>
+            className={`glass-card rounded-2xl p-4 transition-all hover:scale-105 ${selected===g.id ? "pulse-glow !border-primary/40 !bg-primary/5" : ""}`}>
             <div className="text-3xl">{g.emoji}</div>
-            <div className="mt-2 font-semibold">{g.name}</div>
-            <div className="text-sm opacity-80">{g.focus}</div>
+            <div className="mt-2 font-extrabold text-foreground">{g.name}</div>
+            <div className="text-sm text-muted-foreground">{g.focus}</div>
           </button>
         ))}
       </div>
