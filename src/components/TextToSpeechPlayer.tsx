@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, Pause, Square, SkipBack, SkipForward, Volume2, Settings } from 'lucide-react';
+import { Play, Pause, Square, SkipBack, SkipForward, Volume2, Settings, Loader2 } from 'lucide-react';
 import { useCharacterCompanion } from './CharacterCompanion';
+import voiceService from '@/services/voiceService';
 
 interface TextToSpeechPlayerProps {
   text: string;
@@ -11,11 +12,11 @@ interface TextToSpeechPlayerProps {
 export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChange }: TextToSpeechPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [rate, setRate] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [currentPosition, setCurrentPosition] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const isPlayingRef = useRef(false);
   const currentPosRef = useRef(0);
   const { getSelectedCharacter } = useCharacterCompanion();
@@ -26,17 +27,24 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
 
   useEffect(() => {
     return () => {
-      window.speechSynthesis?.cancel();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
       onSentenceChange?.(null, null);
     };
   }, []);
 
-  const speakSentence = useCallback((index: number) => {
-    window.speechSynthesis?.cancel();
+  const speakSentence = useCallback(async (index: number) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
 
     if (index >= totalSentences) {
       setIsPlaying(false);
       setIsPaused(false);
+      setIsLoading(false);
       setCurrentPosition(0);
       currentPosRef.current = 0;
       isPlayingRef.current = false;
@@ -45,56 +53,63 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
     }
 
     const sentenceText = sentences[index].trim();
-    const utterance = new SpeechSynthesisUtterance(sentenceText);
+    setCurrentPosition(index);
+    currentPosRef.current = index;
+    setIsLoading(true);
+    onSentenceChange?.(index, sentenceText);
 
-    const voices = window.speechSynthesis.getVoices();
-    const englishVoice = voices.find(v => v.lang.startsWith('en'));
-    if (englishVoice) utterance.voice = englishVoice;
+    try {
+      const character = getSelectedCharacter();
+      const audioUrl = await voiceService.generateSentenceAudio(sentenceText, character?.id);
+      
+      const audio = new Audio(audioUrl);
+      audio.volume = volume;
+      audioRef.current = audio;
 
-    utterance.rate = rate;
-    utterance.volume = volume;
-    utterance.pitch = 1.0;
-    utteranceRef.current = utterance;
+      audio.onplay = () => {
+        setIsPlaying(true);
+        setIsPaused(false);
+        setIsLoading(false);
+        isPlayingRef.current = true;
+      };
 
-    utterance.onstart = () => {
-      setIsPlaying(true);
-      setIsPaused(false);
-      isPlayingRef.current = true;
-      setCurrentPosition(index);
-      currentPosRef.current = index;
-      onSentenceChange?.(index, sentenceText);
-    };
+      audio.onended = () => {
+        const nextPos = currentPosRef.current + 1;
+        if (nextPos < totalSentences && isPlayingRef.current) {
+          speakSentence(nextPos);
+        } else {
+          setIsPlaying(false);
+          setIsPaused(false);
+          setCurrentPosition(0);
+          currentPosRef.current = 0;
+          isPlayingRef.current = false;
+          audioRef.current = null;
+          onSentenceChange?.(null, null);
+        }
+      };
 
-    utterance.onend = () => {
-      // Auto-advance to next sentence
-      const nextPos = currentPosRef.current + 1;
-      if (nextPos < totalSentences && isPlayingRef.current) {
-        speakSentence(nextPos);
-      } else {
+      audio.onerror = () => {
         setIsPlaying(false);
         setIsPaused(false);
-        setCurrentPosition(0);
-        currentPosRef.current = 0;
+        setIsLoading(false);
         isPlayingRef.current = false;
-        utteranceRef.current = null;
+        audioRef.current = null;
         onSentenceChange?.(null, null);
-      }
-    };
+      };
 
-    utterance.onerror = () => {
+      await audio.play();
+    } catch (err) {
+      console.error('TTS error:', err);
       setIsPlaying(false);
-      setIsPaused(false);
+      setIsLoading(false);
       isPlayingRef.current = false;
-      utteranceRef.current = null;
       onSentenceChange?.(null, null);
-    };
-
-    window.speechSynthesis.speak(utterance);
-  }, [sentences, totalSentences, rate, volume, onSentenceChange]);
+    }
+  }, [sentences, totalSentences, volume, onSentenceChange, getSelectedCharacter]);
 
   const handlePlay = () => {
-    if (isPaused) {
-      window.speechSynthesis.resume();
+    if (isPaused && audioRef.current) {
+      audioRef.current.play();
       setIsPaused(false);
       setIsPlaying(true);
       isPlayingRef.current = true;
@@ -104,16 +119,22 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
   };
 
   const handlePause = () => {
-    window.speechSynthesis.pause();
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
     setIsPaused(true);
     setIsPlaying(false);
     isPlayingRef.current = false;
   };
 
   const handleStop = () => {
-    window.speechSynthesis.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
     setIsPlaying(false);
     setIsPaused(false);
+    setIsLoading(false);
     isPlayingRef.current = false;
     setCurrentPosition(0);
     currentPosRef.current = 0;
@@ -133,6 +154,12 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
     currentPosRef.current = newPos;
     if (isPlaying || isPaused) speakSentence(newPos);
   };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
 
   return (
     <div className="glass-card rounded-xl p-4 mb-6">
@@ -154,22 +181,23 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
       </div>
 
       <div className="flex items-center justify-center gap-4 mb-4">
-        <button onClick={handleSkipBack} disabled={currentPosition === 0}
+        <button onClick={handleSkipBack} disabled={currentPosition === 0 || isLoading}
           className="p-2 rounded-lg hover:bg-white/10 transition-colors disabled:opacity-30" data-testid="button-skip-back">
           <SkipBack className="text-foreground" size={20} />
         </button>
 
-        <button onClick={isPlaying ? handlePause : handlePlay}
-          className="p-3 rounded-full bg-primary hover:bg-primary/90 transition-colors" data-testid="button-play-pause"
+        <button onClick={isPlaying ? handlePause : handlePlay} disabled={isLoading}
+          className="p-3 rounded-full bg-primary hover:bg-primary/90 transition-colors disabled:opacity-60" data-testid="button-play-pause"
           title={isPlaying ? 'Pause' : 'Play'}>
-          {isPlaying ? <Pause className="text-primary-foreground" size={24} /> : <Play className="text-primary-foreground ml-1" size={24} />}
+          {isLoading ? <Loader2 className="text-primary-foreground animate-spin" size={24} /> :
+           isPlaying ? <Pause className="text-primary-foreground" size={24} /> : <Play className="text-primary-foreground ml-1" size={24} />}
         </button>
 
         <button onClick={handleStop} className="p-2 rounded-lg hover:bg-white/10 transition-colors" data-testid="button-stop">
           <Square className="text-foreground" size={20} />
         </button>
 
-        <button onClick={handleSkipForward} disabled={currentPosition >= totalSentences - 1}
+        <button onClick={handleSkipForward} disabled={currentPosition >= totalSentences - 1 || isLoading}
           className="p-2 rounded-lg hover:bg-white/10 transition-colors disabled:opacity-30" data-testid="button-skip-forward">
           <SkipForward className="text-foreground" size={20} />
         </button>
@@ -178,7 +206,7 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
       <div className="mb-3">
         <div className="flex justify-between text-sm text-muted-foreground mb-1">
           <span>Position: {currentPosition + 1} / {totalSentences}</span>
-          <span>{isPlaying ? '🔊 Playing' : isPaused ? '⏸ Paused' : 'Stopped'}</span>
+          <span>{isLoading ? '⏳ Loading...' : isPlaying ? '🔊 Playing' : isPaused ? '⏸ Paused' : 'Stopped'}</span>
         </div>
         <div className="w-full bg-white/10 rounded-full h-2">
           <div className="bg-primary h-full rounded-full transition-all duration-300"
@@ -189,11 +217,6 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
       {showSettings && (
         <div className="border-t border-white/10 pt-3 space-y-3">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Speed: {rate}x</label>
-            <input type="range" min="0.5" max="2" step="0.1" value={rate}
-              onChange={(e) => setRate(Number(e.target.value))} className="w-full accent-primary" data-testid="slider-speech-rate" />
-          </div>
-          <div>
             <label className="block text-sm font-medium text-foreground mb-2">Volume: {Math.round(volume * 100)}%</label>
             <input type="range" min="0" max="1" step="0.1" value={volume}
               onChange={(e) => setVolume(Number(e.target.value))} className="w-full accent-primary" data-testid="slider-volume" />
@@ -202,7 +225,7 @@ export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChang
       )}
 
       <div className="text-xs text-muted-foreground mt-3 text-center">
-        🔊 Uses your browser's built-in voices. Click play to listen!
+        🎙️ Premium AI voices powered by ElevenLabs
       </div>
     </div>
   );
