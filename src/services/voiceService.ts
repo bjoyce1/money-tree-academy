@@ -6,123 +6,147 @@ export interface VoiceOptions {
   volume?: number;
 }
 
-// Character voice preferences (mapped to browser voice selection heuristics)
-const CHARACTER_VOICE_PREFS: Record<string, { gender: string; pitch: number; rate: number }> = {
-  liam: { gender: 'male', pitch: 1.0, rate: 0.95 },
-  emma: { gender: 'female', pitch: 1.1, rate: 1.0 },
-  mateo: { gender: 'male', pitch: 0.9, rate: 0.9 },
-  aisha: { gender: 'female', pitch: 1.05, rate: 1.0 },
-};
-
 class VoiceService {
-  private currentUtterance: SpeechSynthesisUtterance | null = null;
+  private currentAudio: HTMLAudioElement | null = null;
   private isPlaying = false;
   private resolveCallback: (() => void) | null = null;
+  private audioCache = new Map<string, string>(); // text hash -> blob URL
 
-  /**
-   * Pick the best available browser voice for a character
-   */
-  private pickVoice(characterId: string): SpeechSynthesisVoice | null {
-    const voices = speechSynthesis.getVoices();
-    if (voices.length === 0) return null;
-
-    const prefs = CHARACTER_VOICE_PREFS[characterId] || { gender: 'female', pitch: 1.0, rate: 1.0 };
-
-    // Try to find an English voice matching the preferred gender
-    const englishVoices = voices.filter(v => v.lang.startsWith('en'));
-    const genderHint = prefs.gender === 'female'
-      ? (v: SpeechSynthesisVoice) => /female|woman|zira|samantha|karen|victoria|fiona/i.test(v.name)
-      : (v: SpeechSynthesisVoice) => /male|man|david|daniel|james|george|aaron/i.test(v.name);
-
-    const matched = englishVoices.find(genderHint);
-    if (matched) return matched;
-
-    // Fallback: any English voice, or first available
-    return englishVoices[0] || voices[0];
+  private getCacheKey(characterId: string, text: string): string {
+    return `${characterId}:${text.slice(0, 100)}`;
   }
 
   /**
-   * Play character speech using the browser's SpeechSynthesis API
+   * Play character speech using ElevenLabs via edge function
    */
   async playCharacterSpeech(characterId: string, text: string): Promise<void> {
-    // Cancel any ongoing speech first
     this.stopCurrent();
 
-    const synth = window.speechSynthesis;
-    if (!synth) {
-      throw new Error('Speech synthesis is not supported in this browser.');
+    const cacheKey = this.getCacheKey(characterId, text);
+    let audioUrl = this.audioCache.get(cacheKey);
+
+    if (!audioUrl) {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const response = await fetch(
+        `${supabaseUrl}/functions/v1/elevenlabs-tts`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+          },
+          body: JSON.stringify({ text, characterId }),
+        }
+      );
+
+      if (!response.ok) {
+        const err = await response.text();
+        throw new Error(`TTS request failed: ${response.status} - ${err}`);
+      }
+
+      const blob = await response.blob();
+      audioUrl = URL.createObjectURL(blob);
+      this.audioCache.set(cacheKey, audioUrl);
     }
 
-    // Ensure voices are loaded
-    let voices = synth.getVoices();
-    if (voices.length === 0) {
-      await new Promise<void>(resolve => {
-        synth.addEventListener('voiceschanged', () => resolve(), { once: true });
-        setTimeout(resolve, 1000); // fallback timeout
-      });
-      voices = synth.getVoices();
-    }
-
-    const prefs = CHARACTER_VOICE_PREFS[characterId] || { gender: 'female', pitch: 1.0, rate: 1.0 };
-
-    // Create utterance synchronously (important for mobile gesture context)
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voice = this.pickVoice(characterId);
-    if (voice) utterance.voice = voice;
-    utterance.pitch = prefs.pitch;
-    utterance.rate = prefs.rate;
-    utterance.volume = 0.9;
-
-    this.currentUtterance = utterance;
+    const audio = new Audio(audioUrl);
+    this.currentAudio = audio;
     this.isPlaying = true;
 
     return new Promise<void>((resolve, reject) => {
       this.resolveCallback = resolve;
 
-      utterance.onend = () => {
+      audio.onended = () => {
         this.isPlaying = false;
-        this.currentUtterance = null;
+        this.currentAudio = null;
         this.resolveCallback = null;
         resolve();
       };
 
-      utterance.onerror = (event) => {
+      audio.onerror = (e) => {
         this.isPlaying = false;
-        this.currentUtterance = null;
+        this.currentAudio = null;
         this.resolveCallback = null;
-        if (event.error === 'canceled' || event.error === 'interrupted') {
-          resolve(); // expected when stopping
-        } else {
-          reject(new Error(`Speech error: ${event.error}`));
-        }
+        reject(new Error(`Audio playback error: ${e}`));
       };
 
-      synth.speak(utterance);
+      audio.play().catch((err) => {
+        this.isPlaying = false;
+        this.currentAudio = null;
+        this.resolveCallback = null;
+        reject(err);
+      });
     });
   }
 
   /**
-   * Stop current speech
+   * Generate audio for TTS player (returns blob URL for sentence-by-sentence playback)
    */
+  async generateSentenceAudio(text: string, characterId?: string): Promise<string> {
+    const charId = characterId || 'emma';
+    const cacheKey = this.getCacheKey(charId, text);
+    const cached = this.audioCache.get(cacheKey);
+    if (cached) return cached;
+
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+    const response = await fetch(
+      `${supabaseUrl}/functions/v1/elevenlabs-tts`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': supabaseKey,
+          'Authorization': `Bearer ${supabaseKey}`,
+        },
+        body: JSON.stringify({ text, characterId: charId }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`TTS request failed: ${response.status}`);
+    }
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    this.audioCache.set(cacheKey, url);
+    return url;
+  }
+
   stopCurrent(): void {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
+      this.currentAudio = null;
     }
     this.isPlaying = false;
     if (this.resolveCallback) {
       this.resolveCallback();
       this.resolveCallback = null;
     }
-    this.currentUtterance = null;
   }
 
   getIsPlaying(): boolean {
     return this.isPlaying;
   }
 
-  /** No-op kept for API compatibility */
-  clearCache(): void {}
-  getCharacterVoices(): Record<string, string> { return {}; }
+  clearCache(): void {
+    this.audioCache.forEach(url => URL.revokeObjectURL(url));
+    this.audioCache.clear();
+  }
+
+  getCharacterVoices(): Record<string, string> {
+    return {
+      liam: 'Liam (Energetic Male)',
+      emma: 'Sarah (Warm Female)',
+      mateo: 'Daniel (Calm Male)',
+      aisha: 'Laura (Friendly Female)',
+    };
+  }
 }
 
 export const voiceService = new VoiceService();
