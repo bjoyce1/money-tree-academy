@@ -22,6 +22,7 @@ import ProgressTree from '../components/ProgressTree';
 import { MiniGamesLazy, RewardsShopLazy, AiChatInterfaceLazy } from '../components/LazyComponents';
 import CoinsSystem from '../components/CoinsSystem';
 import CharacterCompanion from '../components/CharacterCompanion';
+import ChapterRecap from '../components/ChapterRecap';
 import FloatingActions from '../components/FloatingActions';
 import TableOfContents from '../components/TableOfContents';
 
@@ -256,6 +257,8 @@ export default function ChapterPage() {
         <CharacterCompanion showSelection={true} />
 
         <TextToSpeechPlayer text={bodyWithGlossary} chapterTitle={chapter.title} />
+
+        <ChapterRecap chapterId={chapter.id} />
 
         <div 
           id="chapter-content"

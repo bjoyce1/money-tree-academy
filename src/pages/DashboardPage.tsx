@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import ReaderShell from '../components/ReaderShell';
 import chapters from '../data/chapters.json';
+import HarnessStatsPanel from '../components/HarnessStatsPanel';
+import ProgressReport from '../components/ProgressReport';
 
 interface ProgressStats {
   chaptersCompleted: number;
@@ -292,6 +294,16 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* AI Harness Intelligence */}
+        <div className="mt-8 bg-gradient-to-r from-emerald-950/50 to-teal-950/50 border border-emerald-500/30 rounded-xl p-6">
+          <h2 className="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
+            <TrendingUp className="text-emerald-400" size={20} />
+            AI Harness Intelligence
+          </h2>
+          <p className="text-slate-400 text-sm mb-4">Your AI tutor adapts to how you learn.</p>
+          <HarnessStatsPanel />
+        </div>
+
         {/* Progress Insights */}
         <div className="mt-8 bg-gradient-to-r from-indigo-950/50 to-purple-950/50 border border-indigo-500/30 rounded-xl p-6">
           <h2 className="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
@@ -368,52 +380,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Recommendations */}
-        {stats.chaptersCompleted > 0 && (
-          <div className="mt-8 bg-gradient-to-r from-amber-950/50 to-orange-950/50 border border-amber-500/30 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-              <Star className="text-amber-400" size={20} />
-              Parent/Teacher Recommendations
-            </h2>
-            
-            <div className="space-y-4">
-              {stats.currentStreak === 0 && (
-                <div className="p-4 bg-blue-950/30 border border-blue-500/30 rounded-lg">
-                  <p className="text-blue-200 font-medium mb-2">📅 Build a Reading Routine</p>
-                  <p className="text-slate-300 text-sm">
-                    Encourage daily reading sessions, even if just 10-15 minutes. Consistency builds strong financial literacy habits.
-                  </p>
-                </div>
-              )}
-
-              {stats.averageQuizScore > 0 && stats.averageQuizScore < 70 && (
-                <div className="p-4 bg-yellow-950/30 border border-yellow-500/30 rounded-lg">
-                  <p className="text-yellow-200 font-medium mb-2">🎯 Quiz Review Suggested</p>
-                  <p className="text-slate-300 text-sm">
-                    Consider reviewing quiz questions together. This helps reinforce key concepts and improves understanding.
-                  </p>
-                </div>
-              )}
-
-              {stats.notesCreated === 0 && stats.chaptersCompleted >= 2 && (
-                <div className="p-4 bg-purple-950/30 border border-purple-500/30 rounded-lg">
-                  <p className="text-purple-200 font-medium mb-2">📝 Encourage Note-Taking</p>
-                  <p className="text-slate-300 text-sm">
-                    Notes help children process and remember what they learn. Encourage writing down thoughts and questions.
-                  </p>
-                </div>
-              )}
-
-              {stats.chaptersCompleted >= 5 && (
-                <div className="p-4 bg-green-950/30 border border-green-500/30 rounded-lg">
-                  <p className="text-green-200 font-medium mb-2">🎉 Great Progress!</p>
-                  <p className="text-slate-300 text-sm">
-                    Excellent work! Consider discussing real-world applications of the concepts learned so far.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        {/* Parent/Teacher Report — harness-powered */}
+        <div className="mt-8">
+          <ProgressReport />
+        </div>
       </div>
     </ReaderShell>
   );

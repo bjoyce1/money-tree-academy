@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { progressAPI, companionAPI } from '@/lib/api';
 import chapters from "../data/chapters.json";
 import Footer from "../components/Footer";
+import SmartRecommendations from "../components/SmartRecommendations";
 import { CHARACTERS, Character, useCharacterCompanion } from "../components/CharacterCompanion";
 import { useState, useEffect } from "react";
 
@@ -234,6 +235,10 @@ export default function ReadHomePage() {
               Go to Chapter 1
             </Link>
           </div>
+        </div>
+
+        <div className="mb-8">
+          <SmartRecommendations />
         </div>
 
         <div>

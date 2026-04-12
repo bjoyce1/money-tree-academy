@@ -1,16 +1,23 @@
 import { useState, useRef, useEffect } from "react";
 import { useAppStore } from "@/state/store";
-import { Send, Bot, User, Sparkles, BookOpen } from "lucide-react";
+import { Send, Bot, User, Sparkles, BookOpen, ThumbsUp, ThumbsDown } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { scoreResponse } from "@/services/harnessService";
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string; scored?: boolean };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
-export default function AIChat() {
+interface AIChartProps {
+  chapterContext?: { id: string; title: string; order: number; summary?: string };
+}
+
+export default function AIChat({ chapterContext }: AIChartProps = {}) {
   const guide = useAppStore((s) => s.progress.selectedGuide);
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "Hi! 🌟 I'm your Money Tree companion. Ask me anything about saving, budgeting, earning, or investing!" },
+    { role: "assistant", content: guide
+      ? `Hi! I'm ${guide.charAt(0).toUpperCase() + guide.slice(1)}, your Money Tree companion. Ask me anything about this chapter or financial literacy!`
+      : "Hi! I'm your Money Tree companion. Ask me anything about saving, budgeting, earning, or investing!" },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +26,11 @@ export default function AIChat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const handleScore = async (idx: number, positive: boolean) => {
+    setMessages(prev => prev.map((m, i) => i === idx ? { ...m, scored: true } : m));
+    try { await scoreResponse(positive, "chat"); } catch {}
+  };
 
   const streamResponse = async (allMessages: Msg[]) => {
     const resp = await fetch(CHAT_URL, {
@@ -30,6 +42,7 @@ export default function AIChat() {
       body: JSON.stringify({
         messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
         characterId: guide,
+        chapterContext: chapterContext || null,
       }),
     });
 
@@ -127,7 +140,8 @@ export default function AIChat() {
 
       <div className="flex-1 overflow-y-auto space-y-3 p-4">
         {messages.map((m, i) => (
-          <div key={i} className={`flex gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+          <div key={i} className="group">
+            <div className={`flex gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
             {m.role === "assistant" && (
               <div className="w-7 h-7 rounded-full bg-emerald-600/30 flex items-center justify-center flex-shrink-0 mt-1">
                 <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -146,6 +160,20 @@ export default function AIChat() {
               <div className="w-7 h-7 rounded-full bg-indigo-600/30 flex items-center justify-center flex-shrink-0 mt-1">
                 <User className="w-4 h-4 text-indigo-400" />
               </div>
+            )}
+            </div>
+            {m.role === "assistant" && i > 0 && !m.scored && (
+              <div className="flex gap-1 mt-1 ml-9 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => handleScore(i, true)} className="text-xs text-slate-500 hover:text-emerald-400 px-2 py-0.5 rounded hover:bg-slate-800 transition-colors flex items-center gap-1">
+                  <ThumbsUp size={10} /> Helpful
+                </button>
+                <button onClick={() => handleScore(i, false)} className="text-xs text-slate-500 hover:text-red-400 px-2 py-0.5 rounded hover:bg-slate-800 transition-colors flex items-center gap-1">
+                  <ThumbsDown size={10} /> Not quite
+                </button>
+              </div>
+            )}
+            {m.role === "assistant" && m.scored && (
+              <div className="text-xs text-slate-600 mt-1 ml-9">✓ Feedback recorded</div>
             )}
           </div>
         ))}
