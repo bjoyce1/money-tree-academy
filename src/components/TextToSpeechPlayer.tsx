@@ -5,9 +5,10 @@ import { useCharacterCompanion } from './CharacterCompanion';
 interface TextToSpeechPlayerProps {
   text: string;
   chapterTitle?: string;
+  onSentenceChange?: (sentenceIndex: number | null, sentenceText: string | null) => void;
 }
 
-export default function TextToSpeechPlayer({ text, chapterTitle }: TextToSpeechPlayerProps) {
+export default function TextToSpeechPlayer({ text, chapterTitle, onSentenceChange }: TextToSpeechPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [rate, setRate] = useState(1);
@@ -15,26 +16,37 @@ export default function TextToSpeechPlayer({ text, chapterTitle }: TextToSpeechP
   const [currentPosition, setCurrentPosition] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const isPlayingRef = useRef(false);
+  const currentPosRef = useRef(0);
   const { getSelectedCharacter } = useCharacterCompanion();
-  const selectedCharacter = getSelectedCharacter();
 
   const cleanText = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  const sentences = cleanText.split(/[.!?]+/).filter(s => s.trim().length > 0);
+  const sentences = cleanText.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
   const totalSentences = sentences.length;
 
   useEffect(() => {
     return () => {
       window.speechSynthesis?.cancel();
+      onSentenceChange?.(null, null);
     };
   }, []);
 
-  const speak = useCallback((fromPosition = 0) => {
+  const speakSentence = useCallback((index: number) => {
     window.speechSynthesis?.cancel();
 
-    const textToSpeak = sentences.slice(fromPosition).join('. ') + '.';
-    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    if (index >= totalSentences) {
+      setIsPlaying(false);
+      setIsPaused(false);
+      setCurrentPosition(0);
+      currentPosRef.current = 0;
+      isPlayingRef.current = false;
+      onSentenceChange?.(null, null);
+      return;
+    }
 
-    // Try to pick a voice
+    const sentenceText = sentences[index].trim();
+    const utterance = new SpeechSynthesisUtterance(sentenceText);
+
     const voices = window.speechSynthesis.getVoices();
     const englishVoice = voices.find(v => v.lang.startsWith('en'));
     if (englishVoice) utterance.voice = englishVoice;
@@ -47,31 +59,47 @@ export default function TextToSpeechPlayer({ text, chapterTitle }: TextToSpeechP
     utterance.onstart = () => {
       setIsPlaying(true);
       setIsPaused(false);
+      isPlayingRef.current = true;
+      setCurrentPosition(index);
+      currentPosRef.current = index;
+      onSentenceChange?.(index, sentenceText);
     };
 
     utterance.onend = () => {
-      setIsPlaying(false);
-      setIsPaused(false);
-      setCurrentPosition(0);
-      utteranceRef.current = null;
+      // Auto-advance to next sentence
+      const nextPos = currentPosRef.current + 1;
+      if (nextPos < totalSentences && isPlayingRef.current) {
+        speakSentence(nextPos);
+      } else {
+        setIsPlaying(false);
+        setIsPaused(false);
+        setCurrentPosition(0);
+        currentPosRef.current = 0;
+        isPlayingRef.current = false;
+        utteranceRef.current = null;
+        onSentenceChange?.(null, null);
+      }
     };
 
     utterance.onerror = () => {
       setIsPlaying(false);
       setIsPaused(false);
+      isPlayingRef.current = false;
       utteranceRef.current = null;
+      onSentenceChange?.(null, null);
     };
 
     window.speechSynthesis.speak(utterance);
-  }, [sentences, rate, volume]);
+  }, [sentences, totalSentences, rate, volume, onSentenceChange]);
 
   const handlePlay = () => {
     if (isPaused) {
       window.speechSynthesis.resume();
       setIsPaused(false);
       setIsPlaying(true);
+      isPlayingRef.current = true;
     } else {
-      speak(currentPosition);
+      speakSentence(currentPosition);
     }
   };
 
@@ -79,25 +107,31 @@ export default function TextToSpeechPlayer({ text, chapterTitle }: TextToSpeechP
     window.speechSynthesis.pause();
     setIsPaused(true);
     setIsPlaying(false);
+    isPlayingRef.current = false;
   };
 
   const handleStop = () => {
     window.speechSynthesis.cancel();
     setIsPlaying(false);
     setIsPaused(false);
+    isPlayingRef.current = false;
     setCurrentPosition(0);
+    currentPosRef.current = 0;
+    onSentenceChange?.(null, null);
   };
 
   const handleSkipBack = () => {
     const newPos = Math.max(0, currentPosition - 1);
     setCurrentPosition(newPos);
-    if (isPlaying) speak(newPos);
+    currentPosRef.current = newPos;
+    if (isPlaying || isPaused) speakSentence(newPos);
   };
 
   const handleSkipForward = () => {
     const newPos = Math.min(totalSentences - 1, currentPosition + 1);
     setCurrentPosition(newPos);
-    if (isPlaying) speak(newPos);
+    currentPosRef.current = newPos;
+    if (isPlaying || isPaused) speakSentence(newPos);
   };
 
   return (
@@ -144,7 +178,7 @@ export default function TextToSpeechPlayer({ text, chapterTitle }: TextToSpeechP
       <div className="mb-3">
         <div className="flex justify-between text-sm text-muted-foreground mb-1">
           <span>Position: {currentPosition + 1} / {totalSentences}</span>
-          <span>{isPlaying ? 'Playing' : isPaused ? 'Paused' : 'Stopped'}</span>
+          <span>{isPlaying ? '🔊 Playing' : isPaused ? '⏸ Paused' : 'Stopped'}</span>
         </div>
         <div className="w-full bg-white/10 rounded-full h-2">
           <div className="bg-primary h-full rounded-full transition-all duration-300"
