@@ -62,7 +62,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ sections }) => {
     <>
       {/* Toggle Button */}
       <button
-        className="fixed top-4 left-4 z-50 p-3 rounded-full shadow-lg bg-slate-800 text-slate-200 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors lg:hidden"
+        className="fixed top-28 left-3 z-40 p-2.5 rounded-full shadow-lg bg-muted/90 backdrop-blur text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors lg:hidden touch-manipulation"
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Close table of contents" : "Open table of contents"}
         data-testid="button-toggle-toc"
