@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Volume2, VolumeX, Sparkles } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Character } from './CharacterCompanion';
 import voiceService from '../services/voiceService';
 
@@ -12,7 +12,7 @@ interface CharacterIntroductionProps {
 
 export default function CharacterIntroduction({ character, isOpen, onClose }: CharacterIntroductionProps) {
   const [isPlayingVoice, setIsPlayingVoice] = useState(false);
-  const [, setLocation] = useLocation();
+  const navigate = useNavigate();
 
   const introductionText = `Hello! I'm ${character.name}, your financial literacy companion! ${character.catchphrase} 
 
@@ -55,7 +55,7 @@ Ready to start this adventure? Let's grow your money tree together!`;
     voiceService.stopCurrent();
     setIsPlayingVoice(false);
     onClose();
-    setLocation('/read');
+    navigate('/read');
   };
 
   if (!isOpen) return null;

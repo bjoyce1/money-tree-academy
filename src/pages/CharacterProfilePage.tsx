@@ -1,4 +1,4 @@
-import { useRoute, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Heart, Star, Award, BookOpen, Lightbulb, Target, TrendingUp, Volume2, VolumeX } from 'lucide-react';
 import { CHARACTERS, Character, useCharacterCompanion } from '../components/CharacterCompanion';
 import CharacterIntroduction from '../components/CharacterIntroduction';
@@ -6,8 +6,8 @@ import { useState, useEffect } from 'react';
 import voiceService from '../services/voiceService';
 
 export default function CharacterProfilePage() {
-  const [, params] = useRoute('/characters/:characterId');
-  const characterId = params?.characterId;
+  const { characterId } = useParams();
+  
   const character = CHARACTERS.find(c => c.id === characterId);
   const { getSelectedCharacter } = useCharacterCompanion();
   const [selectedCharacter, setSelectedCharacter] = useState<Character>(getSelectedCharacter());
