@@ -1,261 +1,129 @@
-// Character voice mappings are now handled server-side for security
-
 export interface VoiceOptions {
   characterId: string;
   text: string;
-  stability?: number;
-  similarityBoost?: number;
-  style?: number;
-  speakerBoost?: boolean;
+  rate?: number;
+  pitch?: number;
+  volume?: number;
 }
 
-interface SpeechRequest {
-  characterId: string;
-  text: string;
-  resolve: () => void;
-  reject: (error: any) => void;
-}
+// Character voice preferences (mapped to browser voice selection heuristics)
+const CHARACTER_VOICE_PREFS: Record<string, { gender: string; pitch: number; rate: number }> = {
+  liam: { gender: 'male', pitch: 1.0, rate: 0.95 },
+  emma: { gender: 'female', pitch: 1.1, rate: 1.0 },
+  mateo: { gender: 'male', pitch: 0.9, rate: 0.9 },
+  aisha: { gender: 'female', pitch: 1.05, rate: 1.0 },
+};
 
 class VoiceService {
-  private audioCache = new Map<string, string>();
+  private currentUtterance: SpeechSynthesisUtterance | null = null;
   private isPlaying = false;
-  private currentAudio: HTMLAudioElement | null = null;
-  private speechQueue: SpeechRequest[] = [];
-  private isProcessingQueue = false;
+  private resolveCallback: (() => void) | null = null;
 
   /**
-   * Generate speech audio for a character via backend API
+   * Pick the best available browser voice for a character
    */
-  async generateSpeech(options: VoiceOptions): Promise<string> {
-    const { characterId, text, stability = 0.5, similarityBoost = 0.8, style = 0.3, speakerBoost = true } = options;
-    
-    // Create cache key
-    const cacheKey = `${characterId}_${text}`;
-    
-    // Return cached audio if available
-    if (this.audioCache.has(cacheKey)) {
-      return this.audioCache.get(cacheKey)!;
-    }
+  private pickVoice(characterId: string): SpeechSynthesisVoice | null {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length === 0) return null;
 
-    try {
-      // Call backend API to generate speech
-      const response = await fetch('/api/voice/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          characterId,
-          text,
-          stability,
-          similarityBoost,
-          style,
-          speakerBoost
-        }),
-      });
+    const prefs = CHARACTER_VOICE_PREFS[characterId] || { gender: 'female', pitch: 1.0, rate: 1.0 };
 
-      if (!response.ok) {
-        let errorMessage = 'Unknown error';
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.details || errorData.error || errorData.message || response.statusText;
-        } catch (e) {
-          errorMessage = response.statusText || `HTTP ${response.status}`;
-        }
-        throw new Error(`Voice generation failed: ${errorMessage}`);
-      }
+    // Try to find an English voice matching the preferred gender
+    const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+    const genderHint = prefs.gender === 'female'
+      ? (v: SpeechSynthesisVoice) => /female|woman|zira|samantha|karen|victoria|fiona/i.test(v.name)
+      : (v: SpeechSynthesisVoice) => /male|man|david|daniel|james|george|aaron/i.test(v.name);
 
-      // Convert response to blob and create URL
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
+    const matched = englishVoices.find(genderHint);
+    if (matched) return matched;
 
-      // Cache the audio URL
-      this.audioCache.set(cacheKey, audioUrl);
-      
-      // Set up cleanup for memory management
-      setTimeout(() => {
-        this.revokeAudioUrl(cacheKey);
-      }, 300000); // Cleanup after 5 minutes of inactivity
-      
-      return audioUrl;
-    } catch (error) {
-      // Log error in development only
-      // Voice generation failed - error details handled by service
-      throw error instanceof Error ? error : new Error(String(error));
-    }
+    // Fallback: any English voice, or first available
+    return englishVoices[0] || voices[0];
   }
 
   /**
-   * Play character speech (queued to prevent overlap)
+   * Play character speech using the browser's SpeechSynthesis API
    */
   async playCharacterSpeech(characterId: string, text: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      // Clear the existing queue and stop current audio to ensure single speech
-      this.clearSpeechQueue();
-      this.stopCurrent();
+    // Cancel any ongoing speech first
+    this.stopCurrent();
 
-      // Add new speech request to queue
-      const request: SpeechRequest = {
-        characterId,
-        text,
-        resolve,
-        reject
+    const synth = window.speechSynthesis;
+    if (!synth) {
+      throw new Error('Speech synthesis is not supported in this browser.');
+    }
+
+    // Ensure voices are loaded
+    let voices = synth.getVoices();
+    if (voices.length === 0) {
+      await new Promise<void>(resolve => {
+        synth.addEventListener('voiceschanged', () => resolve(), { once: true });
+        setTimeout(resolve, 1000); // fallback timeout
+      });
+      voices = synth.getVoices();
+    }
+
+    const prefs = CHARACTER_VOICE_PREFS[characterId] || { gender: 'female', pitch: 1.0, rate: 1.0 };
+
+    // Create utterance synchronously (important for mobile gesture context)
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voice = this.pickVoice(characterId);
+    if (voice) utterance.voice = voice;
+    utterance.pitch = prefs.pitch;
+    utterance.rate = prefs.rate;
+    utterance.volume = 0.9;
+
+    this.currentUtterance = utterance;
+    this.isPlaying = true;
+
+    return new Promise<void>((resolve, reject) => {
+      this.resolveCallback = resolve;
+
+      utterance.onend = () => {
+        this.isPlaying = false;
+        this.currentUtterance = null;
+        this.resolveCallback = null;
+        resolve();
       };
 
-      this.speechQueue = [request]; // Only keep the latest request
-      this.processQueue();
-    });
-  }
-
-  /**
-   * Process the speech queue (only one speech at a time)
-   */
-  private async processQueue(): Promise<void> {
-    if (this.isProcessingQueue || this.speechQueue.length === 0) {
-      return;
-    }
-
-    this.isProcessingQueue = true;
-
-    try {
-      const request = this.speechQueue.shift();
-      if (!request) {
-        this.isProcessingQueue = false;
-        return;
-      }
-
-      const { characterId, text, resolve, reject } = request;
-
-      // Stop any current audio before starting new one
-      this.stopCurrent();
-
-      const audioUrl = await this.generateSpeech({ characterId, text });
-      
-      // Create and configure audio
-      this.currentAudio = new Audio(audioUrl);
-      this.currentAudio.preload = 'auto';
-      this.currentAudio.volume = 0.8; // Set reasonable volume
-      this.isPlaying = true;
-
-      // Set up event listeners
-      this.currentAudio.addEventListener('ended', () => {
+      utterance.onerror = (event) => {
         this.isPlaying = false;
-        this.currentAudio = null;
-        this.isProcessingQueue = false;
-        resolve();
-        // Process next in queue if any
-        this.processQueue();
-      });
-
-      this.currentAudio.addEventListener('error', (error) => {
-        // Audio playback error
-        this.isPlaying = false;
-        this.currentAudio = null;
-        this.isProcessingQueue = false;
-        reject(new Error('Audio playback failed - please try again'));
-        // Process next in queue if any
-        this.processQueue();
-      });
-
-      // Add loadstart event to verify audio is loading
-      this.currentAudio.addEventListener('loadstart', () => {
-        // Audio loading started
-      });
-
-      // Play audio with user gesture handling
-      try {
-        await this.currentAudio.play();
-      } catch (playError: any) {
-        // Audio play failed
-        
-        // Handle common audio play issues
-        if (playError.name === 'NotAllowedError') {
-          throw new Error('Audio playback requires user interaction. Please try clicking the audio button.');
-        } else if (playError.name === 'NotSupportedError') {
-          throw new Error('Audio format not supported by this browser.');
+        this.currentUtterance = null;
+        this.resolveCallback = null;
+        if (event.error === 'canceled' || event.error === 'interrupted') {
+          resolve(); // expected when stopping
         } else {
-          throw new Error(`Audio playback failed: ${playError.message}`);
+          reject(new Error(`Speech error: ${event.error}`));
         }
-      }
-    } catch (error) {
-      // Error playing character speech
-      this.isPlaying = false;
-      this.isProcessingQueue = false;
-      
-      // Find and reject the current request
-      const request = this.speechQueue.find(r => r.characterId && r.text);
-      if (request) {
-        request.reject(error);
-      }
-      
-      // Process next in queue if any
-      this.processQueue();
-    }
-  }
+      };
 
-  /**
-   * Clear the speech queue
-   */
-  private clearSpeechQueue(): void {
-    // Reject all pending requests
-    this.speechQueue.forEach(request => {
-      request.reject(new Error('Speech cancelled - new speech started'));
+      synth.speak(utterance);
     });
-    this.speechQueue = [];
   }
 
   /**
-   * Stop current audio playback and clear queue
+   * Stop current speech
    */
   stopCurrent(): void {
-    if (this.currentAudio) {
-      this.currentAudio.pause();
-      this.currentAudio.currentTime = 0;
-      this.currentAudio = null;
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
     }
     this.isPlaying = false;
-    this.isProcessingQueue = false;
-    this.clearSpeechQueue();
+    if (this.resolveCallback) {
+      this.resolveCallback();
+      this.resolveCallback = null;
+    }
+    this.currentUtterance = null;
   }
 
-  /**
-   * Check if audio is currently playing
-   */
   getIsPlaying(): boolean {
     return this.isPlaying;
   }
 
-  /**
-   * Clear audio cache
-   */
-  clearCache(): void {
-    // Revoke blob URLs to free memory
-    this.audioCache.forEach(url => {
-      URL.revokeObjectURL(url);
-    });
-    this.audioCache.clear();
-  }
-
-  /**
-   * Revoke a specific audio URL to prevent memory leaks
-   */
-  private revokeAudioUrl(cacheKey: string): void {
-    const url = this.audioCache.get(cacheKey);
-    if (url) {
-      URL.revokeObjectURL(url);
-      this.audioCache.delete(cacheKey);
-    }
-  }
-
-  /**
-   * Get available character voices (now handled server-side)
-   */
-  getCharacterVoices(): Record<string, string> {
-    // Character voices are now managed server-side for security
-    return {};
-  }
+  /** No-op kept for API compatibility */
+  clearCache(): void {}
+  getCharacterVoices(): Record<string, string> { return {}; }
 }
 
-// Export singleton instance
 export const voiceService = new VoiceService();
 export default voiceService;

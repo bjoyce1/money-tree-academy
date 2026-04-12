@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, Pause, Square, SkipBack, SkipForward, Volume2, Settings } from 'lucide-react';
-import voiceService from '../services/voiceService';
 import { useCharacterCompanion } from './CharacterCompanion';
 
 interface TextToSpeechPlayerProps {
@@ -15,273 +14,161 @@ export default function TextToSpeechPlayer({ text, chapterTitle }: TextToSpeechP
   const [volume, setVolume] = useState(0.8);
   const [currentPosition, setCurrentPosition] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
-  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const textRef = useRef<string>('');
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const { getSelectedCharacter } = useCharacterCompanion();
   const selectedCharacter = getSelectedCharacter();
 
-  // Clean text for speech (remove HTML tags and normalize)
   const cleanText = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  textRef.current = cleanText;
-
-  // Split text into sentences for better control
   const sentences = cleanText.split(/[.!?]+/).filter(s => s.trim().length > 0);
   const totalSentences = sentences.length;
 
   useEffect(() => {
     return () => {
-      // Stop any playing audio and clean up
-      voiceService.stopCurrent();
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+      window.speechSynthesis?.cancel();
     };
   }, []);
 
-  const speak = async (fromPosition = 0) => {
-    // Stop any current audio
-    voiceService.stopCurrent();
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-
-    // Check if a character is selected
-    if (!selectedCharacter || !selectedCharacter.id) {
-      // No character selected for voice generation
-      return;
-    }
+  const speak = useCallback((fromPosition = 0) => {
+    window.speechSynthesis?.cancel();
 
     const textToSpeak = sentences.slice(fromPosition).join('. ') + '.';
-    
-    try {
-      setIsGeneratingAudio(true);
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+    // Try to pick a voice
+    const voices = window.speechSynthesis.getVoices();
+    const englishVoice = voices.find(v => v.lang.startsWith('en'));
+    if (englishVoice) utterance.voice = englishVoice;
+
+    utterance.rate = rate;
+    utterance.volume = volume;
+    utterance.pitch = 1.0;
+    utteranceRef.current = utterance;
+
+    utterance.onstart = () => {
       setIsPlaying(true);
       setIsPaused(false);
+    };
 
-      // Generate audio using ElevenLabs via the selected character's voice
-      const audioUrl = await voiceService.generateSpeech({
-        characterId: selectedCharacter.id,
-        text: textToSpeak,
-        stability: 0.5,
-        similarityBoost: 0.8
-      });
-
-      setIsGeneratingAudio(false);
-
-      // Create and configure audio element
-      const audio = new Audio(audioUrl);
-      audio.volume = volume;
-      audio.playbackRate = rate;
-      audioRef.current = audio;
-
-      audio.onplay = () => {
-        setIsPlaying(true);
-        setIsPaused(false);
-      };
-
-      audio.onpause = () => {
-        setIsPaused(true);
-        setIsPlaying(false);
-      };
-
-      audio.onended = () => {
-        setIsPlaying(false);
-        setIsPaused(false);
-        setCurrentPosition(0);
-        audioRef.current = null;
-      };
-
-      audio.onerror = (event) => {
-        // Audio playback error
-        setIsPlaying(false);
-        setIsPaused(false);
-        setIsGeneratingAudio(false);
-        audioRef.current = null;
-      };
-
-      // Start playing
-      await audio.play();
-
-    } catch (error) {
-      // Don't log cancellation errors as they're expected behavior
-      if (!(error as Error).message?.includes('Speech cancelled')) {
-        // Error generating or playing speech - handled by voice service
-      }
+    utterance.onend = () => {
       setIsPlaying(false);
       setIsPaused(false);
-      setIsGeneratingAudio(false);
-    }
-  };
+      setCurrentPosition(0);
+      utteranceRef.current = null;
+    };
 
-  const handlePlay = async () => {
-    if (isPaused && audioRef.current && audioRef.current.paused) {
-      audioRef.current.play();
+    utterance.onerror = () => {
+      setIsPlaying(false);
+      setIsPaused(false);
+      utteranceRef.current = null;
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }, [sentences, rate, volume]);
+
+  const handlePlay = () => {
+    if (isPaused) {
+      window.speechSynthesis.resume();
       setIsPaused(false);
       setIsPlaying(true);
     } else {
-      await speak(currentPosition);
+      speak(currentPosition);
     }
   };
 
   const handlePause = () => {
-    if (audioRef.current && !audioRef.current.paused) {
-      audioRef.current.pause();
-      setIsPaused(true);
-      setIsPlaying(false);
-    }
+    window.speechSynthesis.pause();
+    setIsPaused(true);
+    setIsPlaying(false);
   };
 
   const handleStop = () => {
-    voiceService.stopCurrent();
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current = null;
-    }
+    window.speechSynthesis.cancel();
     setIsPlaying(false);
     setIsPaused(false);
     setCurrentPosition(0);
   };
 
-  const handleSkipBack = async () => {
-    const newPosition = Math.max(0, currentPosition - 1);
-    setCurrentPosition(newPosition);
-    if (isPlaying) {
-      await speak(newPosition);
-    }
+  const handleSkipBack = () => {
+    const newPos = Math.max(0, currentPosition - 1);
+    setCurrentPosition(newPos);
+    if (isPlaying) speak(newPos);
   };
 
-  const handleSkipForward = async () => {
-    const newPosition = Math.min(totalSentences - 1, currentPosition + 1);
-    setCurrentPosition(newPosition);
-    if (isPlaying) {
-      await speak(newPosition);
-    }
+  const handleSkipForward = () => {
+    const newPos = Math.min(totalSentences - 1, currentPosition + 1);
+    setCurrentPosition(newPos);
+    if (isPlaying) speak(newPos);
   };
 
   return (
-    <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-xl p-4 mb-6">
+    <div className="glass-card rounded-xl p-4 mb-6">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Volume2 className="text-brand" size={20} />
-          <h3 className="font-semibold text-slate-100">Audio Narration</h3>
+          <Volume2 className="text-primary" size={20} />
+          <h3 className="font-bold text-foreground">Audio Narration</h3>
           {chapterTitle && (
-            <span className="text-sm text-slate-400">• {chapterTitle}</span>
+            <span className="text-sm text-muted-foreground">• {chapterTitle}</span>
           )}
         </div>
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className="p-2 rounded-lg hover:bg-slate-800 transition-colors"
+          className="p-2 rounded-lg hover:bg-white/10 transition-colors"
           data-testid="button-tts-settings"
         >
-          <Settings className="text-slate-400" size={16} />
+          <Settings className="text-muted-foreground" size={16} />
         </button>
       </div>
 
-      {/* Main Controls */}
       <div className="flex items-center justify-center gap-4 mb-4">
-        <button
-          onClick={handleSkipBack}
-          className="p-2 rounded-lg hover:bg-slate-800 transition-colors"
-          disabled={currentPosition === 0}
-          data-testid="button-skip-back"
-        >
-          <SkipBack className="text-slate-300" size={20} />
+        <button onClick={handleSkipBack} disabled={currentPosition === 0}
+          className="p-2 rounded-lg hover:bg-white/10 transition-colors disabled:opacity-30" data-testid="button-skip-back">
+          <SkipBack className="text-foreground" size={20} />
         </button>
 
-        <button
-          onClick={isPlaying ? handlePause : handlePlay}
-          disabled={isGeneratingAudio}
-          className="p-3 rounded-full bg-brand hover:bg-brand/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          data-testid="button-play-pause"
-          title={isGeneratingAudio ? 'Generating audio with ElevenLabs...' : isPlaying ? 'Pause' : 'Play'}
-        >
-          {isGeneratingAudio ? (
-            <div className="animate-spin rounded-full h-6 w-6 border-2 border-slate-900 border-t-transparent"></div>
-          ) : isPlaying ? (
-            <Pause className="text-slate-900" size={24} />
-          ) : (
-            <Play className="text-slate-900 ml-1" size={24} />
-          )}
+        <button onClick={isPlaying ? handlePause : handlePlay}
+          className="p-3 rounded-full bg-primary hover:bg-primary/90 transition-colors" data-testid="button-play-pause"
+          title={isPlaying ? 'Pause' : 'Play'}>
+          {isPlaying ? <Pause className="text-primary-foreground" size={24} /> : <Play className="text-primary-foreground ml-1" size={24} />}
         </button>
 
-        <button
-          onClick={handleStop}
-          className="p-2 rounded-lg hover:bg-slate-800 transition-colors"
-          data-testid="button-stop"
-        >
-          <Square className="text-slate-300" size={20} />
+        <button onClick={handleStop} className="p-2 rounded-lg hover:bg-white/10 transition-colors" data-testid="button-stop">
+          <Square className="text-foreground" size={20} />
         </button>
 
-        <button
-          onClick={handleSkipForward}
-          className="p-2 rounded-lg hover:bg-slate-800 transition-colors"
-          disabled={currentPosition >= totalSentences - 1}
-          data-testid="button-skip-forward"
-        >
-          <SkipForward className="text-slate-300" size={20} />
+        <button onClick={handleSkipForward} disabled={currentPosition >= totalSentences - 1}
+          className="p-2 rounded-lg hover:bg-white/10 transition-colors disabled:opacity-30" data-testid="button-skip-forward">
+          <SkipForward className="text-foreground" size={20} />
         </button>
       </div>
 
-      {/* Progress Bar */}
       <div className="mb-3">
-        <div className="flex justify-between text-sm text-slate-400 mb-1">
+        <div className="flex justify-between text-sm text-muted-foreground mb-1">
           <span>Position: {currentPosition + 1} / {totalSentences}</span>
-          <span>
-            {isGeneratingAudio ? 'Generating Audio...' : 
-             isPlaying ? 'Playing' : 
-             isPaused ? 'Paused' : 'Stopped'}
-          </span>
+          <span>{isPlaying ? 'Playing' : isPaused ? 'Paused' : 'Stopped'}</span>
         </div>
-        <div className="w-full bg-slate-700 rounded-full h-2">
-          <div 
-            className="progress-bar h-full rounded-full transition-all duration-300"
-            style={{ width: `${((currentPosition + 1) / totalSentences) * 100}%` }}
-          ></div>
+        <div className="w-full bg-white/10 rounded-full h-2">
+          <div className="bg-primary h-full rounded-full transition-all duration-300"
+            style={{ width: `${((currentPosition + 1) / totalSentences) * 100}%` }} />
         </div>
       </div>
 
-      {/* Settings Panel */}
       {showSettings && (
-        <div className="border-t border-slate-700 pt-3 space-y-3">
+        <div className="border-t border-white/10 pt-3 space-y-3">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Speech Speed: {rate}x
-            </label>
-            <input
-              type="range"
-              min="0.5"
-              max="2"
-              step="0.1"
-              value={rate}
-              onChange={(e) => setRate(Number(e.target.value))}
-              className="w-full accent-brand"
-              data-testid="slider-speech-rate"
-            />
+            <label className="block text-sm font-medium text-foreground mb-2">Speed: {rate}x</label>
+            <input type="range" min="0.5" max="2" step="0.1" value={rate}
+              onChange={(e) => setRate(Number(e.target.value))} className="w-full accent-primary" data-testid="slider-speech-rate" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Volume: {Math.round(volume * 100)}%
-            </label>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={volume}
-              onChange={(e) => setVolume(Number(e.target.value))}
-              className="w-full accent-brand"
-              data-testid="slider-volume"
-            />
+            <label className="block text-sm font-medium text-foreground mb-2">Volume: {Math.round(volume * 100)}%</label>
+            <input type="range" min="0" max="1" step="0.1" value={volume}
+              onChange={(e) => setVolume(Number(e.target.value))} className="w-full accent-primary" data-testid="slider-volume" />
           </div>
         </div>
       )}
 
-      {/* Instructions */}
-      <div className="text-xs text-slate-500 mt-3 text-center">
-        Listen to the chapter content read aloud. Use controls to pause, skip sections, or adjust settings.
+      <div className="text-xs text-muted-foreground mt-3 text-center">
+        🔊 Uses your browser's built-in voices. Click play to listen!
       </div>
     </div>
   );
