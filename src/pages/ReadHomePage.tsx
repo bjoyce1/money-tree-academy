@@ -50,7 +50,7 @@ export default function ReadHomePage() {
       <header className="sticky top-0 z-10 backdrop-blur bg-black/40 border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link 
-            href="/" 
+            to="/" 
             className="font-semibold text-slate-100 hover:text-brand transition-colors flex items-center gap-2"
             data-testid="link-home"
           >
@@ -59,21 +59,21 @@ export default function ReadHomePage() {
           </Link>
           <div className="flex items-center gap-3">
             <Link 
-              href="/characters" 
+              to="/characters" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="link-characters"
             >
               Characters
             </Link>
             <Link 
-              href="/read/glossary" 
+              to="/read/glossary" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="link-glossary"
             >
               Glossary
             </Link>
             <Link 
-              href="/read/search" 
+              to="/read/search" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="link-search"
             >
@@ -185,7 +185,7 @@ export default function ReadHomePage() {
           <p className="text-xl text-slate-300">Choose how you'd like to begin reading</p>
           <div className="mt-6">
             <Link 
-              href="/characters" 
+              to="/characters" 
               className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
               data-testid="button-choose-character-guide"
             >
@@ -204,7 +204,7 @@ export default function ReadHomePage() {
             <p className="text-slate-300 mb-4">Continue where you left off</p>
             {resumeSlug ? (
               <Link 
-                href={`/read/${resumeSlug}`}
+                to={`/read/${resumeSlug}`}
                 className="bg-brand text-slate-900 px-6 py-2 rounded-lg font-semibold hover:bg-brand/90 transition-colors inline-block"
                 data-testid="button-resume"
               >
@@ -212,7 +212,7 @@ export default function ReadHomePage() {
               </Link>
             ) : (
               <Link 
-                href={`/read/${chapters[0].slug}`}
+                to={`/read/${chapters[0].slug}`}
                 className="bg-brand text-slate-900 px-6 py-2 rounded-lg font-semibold hover:bg-brand/90 transition-colors inline-block"
                 data-testid="button-start-first"
               >
@@ -227,7 +227,7 @@ export default function ReadHomePage() {
             </h3>
             <p className="text-slate-300 mb-4">Begin your journey from Chapter 1</p>
             <Link 
-              href={`/read/${chapters[0].slug}`}
+              to={`/read/${chapters[0].slug}`}
               className="bg-slate-800 text-slate-300 px-6 py-2 rounded-lg hover:bg-slate-700 transition-colors inline-block"
               data-testid="button-chapter-1"
             >
@@ -297,7 +297,7 @@ export default function ReadHomePage() {
                   </div>
                   {isUnlocked && (
                     <Link 
-                      href={`/read/${chapter.slug}`} 
+                      to={`/read/${chapter.slug}`} 
                       className="absolute inset-0"
                       data-testid={`link-chapter-${chapter.slug}`}
                     />

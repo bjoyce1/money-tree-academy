@@ -83,7 +83,7 @@ export default function DashboardPage() {
             <p className="text-slate-400 mt-1 text-sm sm:text-base">Track reading progress and achievements</p>
           </div>
           <Link 
-            href="/read" 
+            to="/read" 
             className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors touch-manipulation self-start"
             data-testid="link-back-to-reading"
           >
@@ -255,7 +255,7 @@ export default function DashboardPage() {
           
           <div className="grid md:grid-cols-3 gap-4">
             <Link 
-              href="/read"
+              to="/read"
               className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-950/50 to-blue-900/30 border border-blue-500/30 rounded-lg hover:from-blue-900/50 hover:to-blue-800/30 transition-all"
               data-testid="link-continue-reading"
             >
@@ -267,7 +267,7 @@ export default function DashboardPage() {
             </Link>
 
             <Link 
-              href="/glossary"
+              to="/glossary"
               className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-950/50 to-purple-900/30 border border-purple-500/30 rounded-lg hover:from-purple-900/50 hover:to-purple-800/30 transition-all"
               data-testid="link-glossary"
             >
@@ -279,7 +279,7 @@ export default function DashboardPage() {
             </Link>
 
             <Link 
-              href="/search"
+              to="/search"
               className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-950/50 to-green-900/30 border border-green-500/30 rounded-lg hover:from-green-900/50 hover:to-green-800/30 transition-all"
               data-testid="link-search"
             >

@@ -83,35 +83,35 @@ export default function HomePage() {
         <div className="flex items-center gap-6">
           <nav className="hidden md:flex gap-6">
             <Link 
-              href="/home" 
+              to="/home" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="nav-home"
             >
               Home
             </Link>
             <Link 
-              href="/read" 
+              to="/read" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="nav-read"
             >
               Read
             </Link>
             <Link 
-              href="/characters" 
+              to="/characters" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="nav-characters"
             >
               Characters
             </Link>
             <Link 
-              href="/dashboard" 
+              to="/dashboard" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="nav-dashboard"
             >
               Dashboard
             </Link>
             <Link 
-              href="/read/glossary" 
+              to="/read/glossary" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="nav-glossary"
             >
@@ -165,7 +165,7 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link 
-              href="/read" 
+              to="/read" 
               className="inline-flex items-center gap-2 bg-brand text-slate-900 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-brand/90 transition-colors shadow-lg"
               data-testid="button-start-reading"
             >
@@ -173,7 +173,7 @@ export default function HomePage() {
               Start Reading
             </Link>
             <Link 
-              href="/characters" 
+              to="/characters" 
               className="inline-flex items-center gap-2 bg-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-purple-700 transition-colors shadow-lg"
               data-testid="button-choose-guide"
             >
@@ -181,7 +181,7 @@ export default function HomePage() {
               Choose Your Guide
             </Link>
             <Link 
-              href="/read/glossary" 
+              to="/read/glossary" 
               className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/30 transition-colors"
               data-testid="button-browse-glossary"
             >

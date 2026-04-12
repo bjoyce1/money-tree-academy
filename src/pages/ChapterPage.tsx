@@ -183,7 +183,7 @@ export default function ChapterPage() {
         <div className="text-center py-12">
           <h2 className="text-2xl font-bold text-slate-100 mb-4">Chapter not found</h2>
           <Link 
-            href="/read" 
+            to="/read" 
             className="text-brand hover:text-brand/80 transition-colors"
             data-testid="link-back-to-read"
           >
@@ -334,7 +334,7 @@ export default function ChapterPage() {
         <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-slate-700 pt-6 sm:pt-8 gap-4 px-3 sm:px-0">
           {prev ? (
             <Link 
-              href={`/read/${prev.slug}`} 
+              to={`/read/${prev.slug}`} 
               className="text-brand hover:text-brand/80 transition-colors flex items-center gap-2"
               data-testid="link-previous"
             >
@@ -346,7 +346,7 @@ export default function ChapterPage() {
           )}
           {next ? (
             <Link 
-              href={`/read/${next.slug}`} 
+              to={`/read/${next.slug}`} 
               className="text-brand hover:text-brand/80 transition-colors flex items-center gap-2"
               data-testid="link-next"
             >

@@ -27,7 +27,7 @@ export default function GlossaryPage() {
       <header className="sticky top-0 z-10 backdrop-blur bg-black/40 border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link 
-            href="/" 
+            to="/" 
             className="font-semibold text-slate-100 hover:text-brand transition-colors flex items-center gap-2"
             data-testid="link-home"
           >
@@ -36,14 +36,14 @@ export default function GlossaryPage() {
           </Link>
           <div className="flex items-center gap-3">
             <Link 
-              href="/read" 
+              to="/read" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="link-read"
             >
               Read
             </Link>
             <Link 
-              href="/read/search" 
+              to="/read/search" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="link-search"
             >

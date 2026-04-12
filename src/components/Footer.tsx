@@ -32,25 +32,25 @@ export default function Footer() {
             <h4 className="text-slate-200 font-semibold mb-4">Explore</h4>
             <nav className="space-y-3">
               <Link 
-                href="/read" 
+                to="/read" 
                 className="block text-slate-400 hover:text-brand transition-colors text-sm"
               >
                 Read Book
               </Link>
               <Link 
-                href="/read/glossary" 
+                to="/read/glossary" 
                 className="block text-slate-400 hover:text-brand transition-colors text-sm"
               >
                 Glossary
               </Link>
               <Link 
-                href="/read/search" 
+                to="/read/search" 
                 className="block text-slate-400 hover:text-brand transition-colors text-sm"
               >
                 Search
               </Link>
               <Link 
-                href="/" 
+                to="/" 
                 className="block text-slate-400 hover:text-brand transition-colors text-sm"
               >
                 Home

@@ -35,7 +35,7 @@ export default function SearchPage() {
       <header className="sticky top-0 z-10 backdrop-blur bg-black/40 border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link 
-            href="/" 
+            to="/" 
             className="font-semibold text-slate-100 hover:text-brand transition-colors flex items-center gap-2"
             data-testid="link-home"
           >
@@ -44,14 +44,14 @@ export default function SearchPage() {
           </Link>
           <div className="flex items-center gap-3">
             <Link 
-              href="/read" 
+              to="/read" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="link-read"
             >
               Read
             </Link>
             <Link 
-              href="/read/glossary" 
+              to="/read/glossary" 
               className="text-slate-300 hover:text-brand transition-colors"
               data-testid="link-glossary"
             >
@@ -97,7 +97,7 @@ export default function SearchPage() {
                   <h3 className="font-semibold text-slate-100 mb-2">{result.title}</h3>
                   <p className="text-slate-300 mb-3">{result.excerpt}</p>
                   <Link 
-                    href={`/read/${result.slug}`} 
+                    to={`/read/${result.slug}`} 
                     className="text-brand hover:text-brand/80 transition-colors inline-flex items-center gap-1"
                     data-testid={`link-${result.slug}`}
                   >

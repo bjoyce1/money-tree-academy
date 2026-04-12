@@ -48,7 +48,7 @@ export default function ReaderShell({ children, currentSlug }: Props) {
             </div>
             <div className="flex items-center gap-1">
               <Link 
-                href="/dashboard" 
+                to="/dashboard" 
                 className="p-2 rounded-md border border-slate-600 hover:bg-slate-700 transition-colors touch-manipulation"
                 aria-label="Dashboard"
                 data-testid="link-dashboard-mobile"
@@ -56,7 +56,7 @@ export default function ReaderShell({ children, currentSlug }: Props) {
                 <BarChart3 size={18} />
               </Link>
               <Link 
-                href="/read/search" 
+                to="/read/search" 
                 className="p-2 rounded-md border border-slate-600 hover:bg-slate-700 transition-colors touch-manipulation"
                 aria-label="Search"
                 data-testid="link-search-mobile"
@@ -80,7 +80,7 @@ export default function ReaderShell({ children, currentSlug }: Props) {
             </div>
             <div className="flex items-center gap-3">
               <Link 
-                href="/dashboard" 
+                to="/dashboard" 
                 className="px-3 py-2 rounded border border-slate-600 hover:bg-slate-700 transition-colors"
                 data-testid="link-dashboard-desktop"
               >
@@ -117,7 +117,7 @@ export default function ReaderShell({ children, currentSlug }: Props) {
                 </button>
               </div>
               <Link 
-                href="/read/search" 
+                to="/read/search" 
                 className="underline hover:text-slate-300 transition-colors"
                 data-testid="link-search-desktop"
               >
@@ -196,7 +196,7 @@ export default function ReaderShell({ children, currentSlug }: Props) {
               {chapters.map(ch => (
                 <Link
                   key={ch.id}
-                  href={`/read/${ch.slug}`}
+                  to={`/read/${ch.slug}`}
                   className={`
                     block px-3 py-3 lg:px-2 lg:py-2 rounded hover:bg-slate-800 transition-colors
                     ${currentSlug === ch.slug ? 'bg-slate-800 border-l-2 border-purple-500' : ''}
