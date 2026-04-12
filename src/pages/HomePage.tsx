@@ -14,7 +14,7 @@ type Theme = typeof themes[number];
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
 });
 
 const stagger = {
@@ -220,7 +220,7 @@ export default function HomePage() {
                   transition={{ duration: 3.5, delay: 1, repeat: Infinity, ease: "easeInOut" }}
                 >
                   <TrendingUp size={12} />
-                  {book.chapters?.length || 12} Chapters
+                  {book.totalChapters} Chapters
                 </motion.div>
               </div>
             </motion.div>
