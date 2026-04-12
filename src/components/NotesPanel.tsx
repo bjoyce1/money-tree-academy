@@ -24,7 +24,7 @@ export default function NotesPanel({ userId = 'local', chapterId }: { userId?: s
   const { awardCoins } = useCoins();
 
   // Get notes from API
-  const { data: notes = [] } = useQuery({
+  const { data: notes = [] as any[] = [] } = useQuery({
     queryKey: ['/api/notes', chapterId],
     enabled: isAuthenticated,
   });
