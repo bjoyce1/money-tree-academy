@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTTSHighlight } from '@/hooks/useTTSHighlight';
 import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
@@ -156,6 +157,22 @@ export default function ChapterPage() {
     return () => clearInterval(interval);
   }, [wordCount]);
 
+  const bodyWithGlossary = chapter
+    ? chapter.sections.map(s => s.htmlBody).join('').replace(/\[\[(.+?)\]\]/g, (_m, term) => `<span data-popover="${term}">${term}</span>`)
+    : '';
+
+  const highlightedContent = useHighlights(chapter?.id || '', bodyWithGlossary);
+
+  const { highlightSentence, clearHighlights } = useTTSHighlight(contentRef);
+
+  const handleSentenceChange = useCallback((_index: number | null, sentenceText: string | null) => {
+    if (sentenceText) {
+      highlightSentence(sentenceText);
+    } else {
+      clearHighlights();
+    }
+  }, [highlightSentence, clearHighlights]);
+
   if (!chapter) {
     return (
       <ReaderShell>
@@ -171,11 +188,6 @@ export default function ChapterPage() {
 
   const prev = chapters.find(c => c.order === chapter.order - 1);
   const next = chapters.find(c => c.order === chapter.order + 1);
-
-  const bodyWithGlossary = chapter.sections.map(s => s.htmlBody).join('')
-    .replace(/\[\[(.+?)\]\]/g, (_m, term) => `<span data-popover="${term}">${term}</span>`);
-
-  const highlightedContent = useHighlights(chapter.id, bodyWithGlossary);
 
   return (
     <ReaderShell currentSlug={chapter.slug}>
@@ -226,7 +238,7 @@ export default function ChapterPage() {
 
         <CharacterCompanion showSelection={true} />
 
-        <TextToSpeechPlayer text={bodyWithGlossary} chapterTitle={chapter.title} />
+        <TextToSpeechPlayer text={bodyWithGlossary} chapterTitle={chapter.title} onSentenceChange={handleSentenceChange} />
 
         <ChapterRecap chapterId={chapter.id} />
 
