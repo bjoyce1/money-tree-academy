@@ -5,12 +5,11 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Map character IDs to ElevenLabs voice IDs
 const CHARACTER_VOICES: Record<string, string> = {
-  liam: 'TX3LPaxmHKxFdv7VOQHJ',    // Liam voice
-  emma: 'EXAVITQu4vr4xnSDxMaL',     // Sarah (warm female)
-  mateo: 'onwK4e9ZLuTAKqWW03F9',     // Daniel (calm male)
-  aisha: 'vZzlAds9NzvLsFSWp0qk',     // Aisha (free voice)
+  liam: 'TX3LPaxmHKxFdv7VOQHJ',
+  emma: 'EXAVITQu4vr4xnSDxMaL',
+  mateo: 'onwK4e9ZLuTAKqWW03F9',
+  aisha: 'vZzlAds9NzvLsFSWp0qk',
 };
 
 const CHARACTER_SETTINGS: Record<string, { stability: number; similarity_boost: number; style: number; speed: number }> = {
@@ -20,6 +19,16 @@ const CHARACTER_SETTINGS: Record<string, { stability: number; similarity_boost: 
   aisha: { stability: 0.5, similarity_boost: 0.75, style: 0.35, speed: 1.0 },
 };
 
+function fallbackResponse(error: string, detail?: unknown) {
+  return new Response(
+    JSON.stringify({ fallback: true, error, detail }),
+    {
+      status: 200,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    }
+  );
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -28,7 +37,7 @@ serve(async (req) => {
   try {
     const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
     if (!ELEVENLABS_API_KEY) {
-      throw new Error('ELEVENLABS_API_KEY is not configured');
+      return fallbackResponse('ELEVENLABS_API_KEY is not configured');
     }
 
     const { text, characterId } = await req.json();
@@ -40,8 +49,8 @@ serve(async (req) => {
       });
     }
 
-    const voiceId = CHARACTER_VOICES[characterId] || CHARACTER_VOICES['emma'];
-    const settings = CHARACTER_SETTINGS[characterId] || CHARACTER_SETTINGS['emma'];
+    const voiceId = CHARACTER_VOICES[characterId] || CHARACTER_VOICES.emma;
+    const settings = CHARACTER_SETTINGS[characterId] || CHARACTER_SETTINGS.emma;
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
@@ -68,11 +77,30 @@ serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`ElevenLabs API error [${response.status}]:`, errorText);
-      // Return structured error so client can fallback to browser TTS
-      return new Response(
-        JSON.stringify({ error: `ElevenLabs API error: ${response.status}`, detail: errorText }),
-        { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+
+      if (response.status === 401) {
+        try {
+          const parsed = JSON.parse(errorText);
+          if (parsed?.detail?.status === 'quota_exceeded') {
+            return fallbackResponse('QUOTA_EXCEEDED', parsed);
+          }
+        } catch {
+          return fallbackResponse('ELEVENLABS_UNAVAILABLE', errorText);
+        }
+      }
+
+      if (response.status >= 500) {
+        return fallbackResponse('ELEVENLABS_UNAVAILABLE', errorText);
+      }
+
+      return fallbackResponse(`ElevenLabs API error: ${response.status}`, errorText);
+    }
+
+    const contentType = response.headers.get('Content-Type') || 'audio/mpeg';
+    if (!contentType.includes('audio')) {
+      const body = await response.text();
+      console.error('Unexpected ElevenLabs content type:', contentType, body);
+      return fallbackResponse('INVALID_AUDIO_RESPONSE', body);
     }
 
     const audioBuffer = await response.arrayBuffer();
@@ -80,18 +108,14 @@ serve(async (req) => {
     return new Response(audioBuffer, {
       headers: {
         ...corsHeaders,
-        'Content-Type': 'audio/mpeg',
+        'Content-Type': contentType,
         'Cache-Control': 'public, max-age=3600',
       },
     });
   } catch (error) {
     console.error('TTS error:', error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
+    return fallbackResponse(
+      error instanceof Error ? error.message : 'Unknown error'
     );
   }
 });

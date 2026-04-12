@@ -11,30 +11,27 @@ class VoiceService {
   private isPlaying = false;
   private resolveCallback: (() => void) | null = null;
   private audioCache = new Map<string, string>();
-  private useElevenLabs = true; // will flip to false on quota/auth error
+  private useElevenLabs = true;
 
   private getCacheKey(characterId: string, text: string): string {
     return `${characterId}:${text.slice(0, 100)}`;
   }
 
-  // ── ElevenLabs ──
-
   private async fetchElevenLabs(text: string, characterId: string): Promise<string> {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-    const response = await fetch(
-      `${supabaseUrl}/functions/v1/elevenlabs-tts`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': supabaseKey,
-          'Authorization': `Bearer ${supabaseKey}`,
-        },
-        body: JSON.stringify({ text, characterId }),
-      }
-    );
+    const response = await fetch(`${supabaseUrl}/functions/v1/elevenlabs-tts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+      body: JSON.stringify({ text, characterId }),
+    });
+
+    const contentType = response.headers.get('content-type') || '';
 
     if (!response.ok) {
       this.useElevenLabs = false;
@@ -42,28 +39,38 @@ class VoiceService {
       throw new Error('elevenlabs-unavailable');
     }
 
+    if (contentType.includes('application/json')) {
+      const payload = await response.json().catch(() => null);
+      if (payload?.fallback) {
+        this.useElevenLabs = false;
+        console.warn('ElevenLabs quota/service fallback triggered, switching to Google Cloud TTS');
+        throw new Error(payload.error || 'elevenlabs-fallback');
+      }
+      throw new Error('invalid-elevenlabs-response');
+    }
+
+    if (!contentType.includes('audio')) {
+      this.useElevenLabs = false;
+      throw new Error('invalid-elevenlabs-audio');
+    }
+
     const blob = await response.blob();
     return URL.createObjectURL(blob);
   }
-
-  // ── Google Cloud TTS fallback ──
 
   private async fetchGoogleTTS(text: string, characterId: string): Promise<string> {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-    const response = await fetch(
-      `${supabaseUrl}/functions/v1/google-cloud-tts`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': supabaseKey,
-          'Authorization': `Bearer ${supabaseKey}`,
-        },
-        body: JSON.stringify({ text, characterId }),
-      }
-    );
+    const response = await fetch(`${supabaseUrl}/functions/v1/google-cloud-tts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+      body: JSON.stringify({ text, characterId }),
+    });
 
     if (!response.ok) {
       const err = await response.text();
@@ -75,8 +82,6 @@ class VoiceService {
     return URL.createObjectURL(blob);
   }
 
-  // ── Public API ──
-
   async playCharacterSpeech(characterId: string, text: string): Promise<void> {
     this.stopCurrent();
     this.isPlaying = true;
@@ -87,19 +92,13 @@ class VoiceService {
 
       if (!url) {
         try {
-          if (this.useElevenLabs) {
-            url = await this.fetchElevenLabs(text, characterId);
-          } else {
-            url = await this.fetchGoogleTTS(text, characterId);
-          }
+          url = this.useElevenLabs
+            ? await this.fetchElevenLabs(text, characterId)
+            : await this.fetchGoogleTTS(text, characterId);
         } catch {
-          // If ElevenLabs failed, try Google; if Google failed, give up
-          if (this.useElevenLabs) {
-            // already flipped in fetchElevenLabs
-          }
           url = await this.fetchGoogleTTS(text, characterId);
         }
-        if (url) this.audioCache.set(cacheKey, url);
+        this.audioCache.set(cacheKey, url);
       }
 
       const audio = new Audio(url);
@@ -108,7 +107,7 @@ class VoiceService {
         this.resolveCallback = resolve;
         audio.onended = () => { this.cleanup(); resolve(); };
         audio.onerror = () => { this.cleanup(); reject(new Error('playback error')); };
-        audio.play().catch(e => { this.cleanup(); reject(e); });
+        audio.play().catch((e) => { this.cleanup(); reject(e); });
       });
     } catch (err) {
       console.error('Voice playback failed:', err);
@@ -123,17 +122,12 @@ class VoiceService {
     if (cached) return cached;
 
     try {
-      let url: string;
-      if (this.useElevenLabs) {
-        url = await this.fetchElevenLabs(text, charId);
-      } else {
-        url = await this.fetchGoogleTTS(text, charId);
-      }
+      const url = this.useElevenLabs
+        ? await this.fetchElevenLabs(text, charId)
+        : await this.fetchGoogleTTS(text, charId);
       this.audioCache.set(cacheKey, url);
       return url;
     } catch {
-      // ElevenLabs failed, try Google
-      if (!this.useElevenLabs) return null;
       try {
         const url = await this.fetchGoogleTTS(text, charId);
         this.audioCache.set(cacheKey, url);
@@ -166,7 +160,7 @@ class VoiceService {
   getIsPlaying(): boolean { return this.isPlaying; }
 
   clearCache(): void {
-    this.audioCache.forEach(url => URL.revokeObjectURL(url));
+    this.audioCache.forEach((url) => URL.revokeObjectURL(url));
     this.audioCache.clear();
   }
 
