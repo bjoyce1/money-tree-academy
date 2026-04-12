@@ -178,6 +178,16 @@ export default function ChapterPage() {
 
   const highlightedContent = useHighlights(chapter.id, bodyWithGlossary);
 
+  const { highlightSentence, clearHighlights } = useTTSHighlight(contentRef);
+
+  const handleSentenceChange = useCallback((_index: number | null, sentenceText: string | null) => {
+    if (sentenceText) {
+      highlightSentence(sentenceText);
+    } else {
+      clearHighlights();
+    }
+  }, [highlightSentence, clearHighlights]);
+
   return (
     <ReaderShell currentSlug={chapter.slug}>
       <button
