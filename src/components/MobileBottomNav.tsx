@@ -18,15 +18,13 @@ export default function MobileBottomNav() {
     return pathname.startsWith(path);
   };
 
-  // Hide on chapter reading pages for immersive experience
   const isReading = /^\/read\/[^/]+$/.test(pathname) && pathname !== '/read/search' && pathname !== '/read/glossary';
 
   return (
     <nav
       className={cn(
-        'lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border/50',
-        'bg-background/95 backdrop-blur-xl',
-        'safe-area-bottom transition-transform duration-300',
+        'lg:hidden fixed bottom-0 inset-x-0 z-40',
+        'glass-nav safe-area-bottom transition-transform duration-300',
         isReading && 'translate-y-full'
       )}
       role="tablist"
@@ -43,7 +41,7 @@ export default function MobileBottomNav() {
               aria-selected={active}
               className={cn(
                 'flex flex-col items-center justify-center flex-1 gap-0.5',
-                'text-[10px] font-medium transition-colors touch-manipulation',
+                'text-[10px] font-bold transition-colors touch-manipulation',
                 'active:scale-95 active:opacity-70',
                 active
                   ? 'text-primary'

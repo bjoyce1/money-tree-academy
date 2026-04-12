@@ -10,12 +10,12 @@ export default function AchievementsPanel(){
         const isUnlocked = !!unlocked[a.id];
         return (
           <div key={a.id}
-            className={`rounded-2xl p-4 border ${isUnlocked?"border-emerald-400 bg-emerald-500/10":"border-zinc-700 bg-zinc-800/40"} shadow`}>
+            className={`glass-card rounded-2xl p-4 transition-all hover:scale-105 ${isUnlocked ? "!border-coral/30 !bg-coral/5" : ""}`}>
             <div className="text-3xl">{a.icon}</div>
-            <div className="mt-2 font-semibold">{a.title}</div>
-            <p className="text-sm opacity-80">{a.description}</p>
-            <div className="mt-2 text-xs">Reward: {a.coins} coins</div>
-            <div className={`mt-2 inline-block text-xs px-2 py-1 rounded ${isUnlocked?"bg-emerald-600 text-white":"bg-zinc-700"}`}>
+            <div className="mt-2 font-extrabold text-foreground">{a.title}</div>
+            <p className="text-sm text-muted-foreground">{a.description}</p>
+            <div className="mt-2 text-xs text-golden font-bold">Reward: {a.coins} coins</div>
+            <div className={`mt-2 inline-block text-xs px-3 py-1 rounded-full font-bold ${isUnlocked ? "bg-coral text-white" : "bg-white/10 text-muted-foreground"}`}>
               {isUnlocked ? "Unlocked ✓" : "Locked"}
             </div>
           </div>

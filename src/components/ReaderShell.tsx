@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState, useCallback } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Search, BarChart3, ChevronUp } from 'lucide-react'
+import { Menu, X, Search, BarChart3, ChevronUp, Coins } from 'lucide-react'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { useIsMobile } from '@/hooks/use-mobile'
 import chapters from '../data/chapters.json'
@@ -33,7 +33,6 @@ export default function ReaderShell({ children, currentSlug }: Props) {
     localStorage.setItem('fontSize', String(fontSize))
   }, [fontSize])
 
-  // Auto-hide header on scroll down, show on scroll up (mobile only)
   useEffect(() => {
     if (!isMobile) return
     const onScroll = () => {
@@ -48,13 +47,14 @@ export default function ReaderShell({ children, currentSlug }: Props) {
 
   const currentChapter = chapters.find(ch => ch.slug === currentSlug)
   const currentIndex = currentChapter ? chapters.indexOf(currentChapter) : -1
+  const completedChapters = JSON.parse(localStorage.getItem('completed_chapters') || '[]')
 
   return (
     <div className="min-h-screen pb-safe">
-      {/* Mobile header — auto-hides on scroll */}
+      {/* Mobile header */}
       <header
         className={`
-          lg:hidden sticky top-0 z-30 backdrop-blur-xl bg-background/90 border-b border-border/40
+          lg:hidden sticky top-0 z-30 glass-nav
           transition-transform duration-300 ease-out
           ${headerVisible ? 'translate-y-0' : '-translate-y-full'}
         `}
@@ -62,7 +62,7 @@ export default function ReaderShell({ children, currentSlug }: Props) {
         <div className="flex items-center justify-between h-12 px-3 safe-area-top">
           <button
             onClick={() => setDrawerOpen(true)}
-            className="p-2 -ml-1 rounded-lg active:bg-muted/60 transition-colors touch-manipulation"
+            className="p-2 -ml-1 rounded-xl active:bg-muted/60 transition-colors touch-manipulation"
             aria-label="Open chapters"
           >
             <Menu size={22} />
@@ -70,27 +70,19 @@ export default function ReaderShell({ children, currentSlug }: Props) {
 
           <div className="flex-1 text-center px-2">
             {currentChapter ? (
-              <span className="text-sm font-semibold truncate block">
+              <span className="text-sm font-extrabold truncate block">
                 Ch. {currentChapter.order} · {currentChapter.title}
               </span>
             ) : (
-              <span className="text-sm font-semibold">The Money Tree of Life</span>
+              <span className="text-sm font-extrabold">The Money Tree of Life</span>
             )}
           </div>
 
           <div className="flex items-center gap-0.5">
-            <Link
-              to="/dashboard"
-              className="p-2 rounded-lg active:bg-muted/60 transition-colors touch-manipulation"
-              aria-label="Dashboard"
-            >
+            <Link to="/dashboard" className="p-2 rounded-xl active:bg-muted/60 transition-colors touch-manipulation" aria-label="Dashboard">
               <BarChart3 size={20} />
             </Link>
-            <Link
-              to="/read/search"
-              className="p-2 rounded-lg active:bg-muted/60 transition-colors touch-manipulation"
-              aria-label="Search"
-            >
+            <Link to="/read/search" className="p-2 rounded-xl active:bg-muted/60 transition-colors touch-manipulation" aria-label="Search">
               <Search size={20} />
             </Link>
           </div>
@@ -101,7 +93,7 @@ export default function ReaderShell({ children, currentSlug }: Props) {
           <select
             value={theme}
             onChange={e => setTheme(e.target.value as Theme)}
-            className="bg-muted/50 border-0 rounded-lg px-2 py-1.5 text-xs font-medium appearance-none flex-shrink-0"
+            className="bg-white/5 border border-white/10 rounded-xl px-2 py-1.5 text-xs font-bold appearance-none flex-shrink-0"
           >
             <option value="day">☀️ Day</option>
             <option value="sepia">📜 Sepia</option>
@@ -109,12 +101,11 @@ export default function ReaderShell({ children, currentSlug }: Props) {
             <option value="contrast">⚡ Contrast</option>
           </select>
 
-          {/* Reading progress mini-bar */}
           {currentChapter && (
             <div className="flex-1 mx-2">
-              <div className="h-1 bg-muted rounded-full overflow-hidden">
+              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-primary rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-primary to-golden rounded-full transition-all duration-500"
                   style={{ width: `${((currentIndex + 1) / chapters.length) * 100}%` }}
                 />
               </div>
@@ -124,14 +115,14 @@ export default function ReaderShell({ children, currentSlug }: Props) {
           <div className="flex items-center gap-1">
             <button
               onClick={() => setFontSize(f => Math.max(14, f - 2))}
-              className="w-8 h-8 flex items-center justify-center rounded-lg bg-muted/50 text-xs font-bold active:bg-muted transition-colors touch-manipulation"
+              className="w-8 h-8 flex items-center justify-center rounded-xl glass-card text-xs font-extrabold active:bg-muted transition-colors touch-manipulation"
               aria-label="Decrease font size"
             >
               A−
             </button>
             <button
               onClick={() => setFontSize(f => Math.min(28, f + 2))}
-              className="w-8 h-8 flex items-center justify-center rounded-lg bg-muted/50 text-xs font-bold active:bg-muted transition-colors touch-manipulation"
+              className="w-8 h-8 flex items-center justify-center rounded-xl glass-card text-xs font-extrabold active:bg-muted transition-colors touch-manipulation"
               aria-label="Increase font size"
             >
               A+
@@ -140,68 +131,73 @@ export default function ReaderShell({ children, currentSlug }: Props) {
         </div>
       </header>
 
-      {/* Mobile chapter drawer (native sheet) */}
+      {/* Mobile chapter drawer */}
       <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-        <SheetContent side="left" className="w-[300px] p-0 border-r-0">
-          <SheetHeader className="px-4 pt-5 pb-3 border-b border-border/40">
-            <SheetTitle className="text-base">Chapters</SheetTitle>
+        <SheetContent side="left" className="w-[300px] p-0 border-r-0 bg-background/95 backdrop-blur-xl">
+          <SheetHeader className="px-4 pt-5 pb-3 border-b border-white/10">
+            <SheetTitle className="text-base font-extrabold">Chapters</SheetTitle>
           </SheetHeader>
           <nav className="overflow-y-auto h-[calc(100%-60px)] overscroll-contain">
-            {chapters.map(ch => (
-              <Link
-                key={ch.id}
-                to={`/read/${ch.slug}`}
-                className={`
-                  flex items-center gap-3 px-4 py-3.5 transition-colors touch-manipulation
-                  active:bg-muted/60
-                  ${currentSlug === ch.slug
-                    ? 'bg-primary/10 border-l-3 border-primary'
-                    : 'border-l-3 border-transparent hover:bg-muted/30'}
-                `}
-                onClick={() => setDrawerOpen(false)}
-              >
-                <span className={`
-                  w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0
-                  ${currentSlug === ch.slug
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-muted-foreground'}
-                `}>
-                  {ch.order}
-                </span>
-                <div className="min-w-0">
-                  <span className={`text-sm font-medium block truncate ${
-                    currentSlug === ch.slug ? 'text-primary' : ''
-                  }`}>
-                    {ch.title}
+            {chapters.map(ch => {
+              const isCompleted = completedChapters.includes(ch.id);
+              return (
+                <Link
+                  key={ch.id}
+                  to={`/read/${ch.slug}`}
+                  className={`
+                    flex items-center gap-3 px-4 py-3.5 transition-colors touch-manipulation
+                    active:bg-muted/60
+                    ${currentSlug === ch.slug
+                      ? 'bg-primary/10 border-l-3 border-primary'
+                      : 'border-l-3 border-transparent hover:bg-white/5'}
+                  `}
+                  onClick={() => setDrawerOpen(false)}
+                >
+                  <span className={`
+                    w-7 h-7 rounded-full flex items-center justify-center text-xs font-extrabold flex-shrink-0
+                    ${currentSlug === ch.slug
+                      ? 'bg-primary text-primary-foreground'
+                      : isCompleted
+                        ? 'bg-primary/20 text-primary'
+                        : 'bg-white/10 text-muted-foreground'}
+                  `}>
+                    {isCompleted ? '✓' : ch.order}
                   </span>
-                  <span className="text-[11px] text-muted-foreground">{ch.estReadMinutes} min</span>
-                </div>
-              </Link>
-            ))}
+                  <div className="min-w-0">
+                    <span className={`text-sm font-bold block truncate ${
+                      currentSlug === ch.slug ? 'text-primary' : ''
+                    }`}>
+                      {ch.title}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground">{ch.estReadMinutes} min</span>
+                  </div>
+                </Link>
+              );
+            })}
           </nav>
         </SheetContent>
       </Sheet>
 
       {/* Desktop header */}
-      <header className="hidden lg:block sticky top-0 z-30 backdrop-blur bg-background/80 border-b border-border/40">
+      <header className="hidden lg:block sticky top-0 z-30 glass-nav">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setDesktopOpen(!desktopOpen)}
-              className="px-3 py-2 rounded border border-border hover:bg-muted transition-colors"
+              className="px-3 py-2 rounded-xl glass-card hover:scale-105 transition-all font-bold text-sm"
             >
               {desktopOpen ? 'Hide Chapters' : 'Show Chapters'}
             </button>
-            <Link to="/" className="font-semibold">The Money Tree of Life</Link>
+            <Link to="/" className="font-extrabold">The Money Tree of Life</Link>
           </div>
           <div className="flex items-center gap-3">
-            <Link to="/dashboard" className="px-3 py-2 rounded border border-border hover:bg-muted transition-colors">
+            <Link to="/dashboard" className="px-3 py-2 rounded-xl glass-card hover:scale-105 transition-all font-bold text-sm">
               Dashboard
             </Link>
             <select
               value={theme}
               onChange={e => setTheme(e.target.value as Theme)}
-              className="bg-transparent border border-border rounded px-2 py-1 text-sm"
+              className="bg-white/5 border border-white/10 rounded-xl px-2 py-1 text-sm font-bold"
             >
               <option value="day">Day</option>
               <option value="sepia">Sepia</option>
@@ -211,21 +207,17 @@ export default function ReaderShell({ children, currentSlug }: Props) {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setFontSize(f => Math.max(14, f - 2))}
-                className="px-2 py-1 border border-border rounded hover:bg-muted transition-colors text-sm"
+                className="px-2 py-1 rounded-xl glass-card hover:scale-105 transition-all text-sm font-bold"
                 aria-label="Decrease font size"
-              >
-                A
-              </button>
-              <span className="w-10 text-center text-sm">{fontSize}</span>
+              >A</button>
+              <span className="w-10 text-center text-sm font-bold">{fontSize}</span>
               <button
                 onClick={() => setFontSize(f => Math.min(28, f + 2))}
-                className="px-2 py-1 border border-border rounded hover:bg-muted transition-colors text-sm"
+                className="px-2 py-1 rounded-xl glass-card hover:scale-105 transition-all text-sm font-bold"
                 aria-label="Increase font size"
-              >
-                A
-              </button>
+              >A</button>
             </div>
-            <Link to="/read/search" className="underline hover:text-muted-foreground transition-colors">
+            <Link to="/read/search" className="text-muted-foreground hover:text-primary transition-colors font-bold text-sm">
               Search
             </Link>
           </div>
@@ -238,21 +230,29 @@ export default function ReaderShell({ children, currentSlug }: Props) {
           <aside className={`
             hidden lg:block transition-all duration-300
             ${desktopOpen ? 'w-64' : 'w-0'}
-            overflow-hidden border-r border-border/40
+            overflow-hidden border-r border-white/5
           `}>
             <nav className="py-4 sticky top-16">
-              {chapters.map(ch => (
-                <Link
-                  key={ch.id}
-                  to={`/read/${ch.slug}`}
-                  className={`
-                    block px-3 py-2 rounded mx-1 hover:bg-muted transition-colors text-sm
-                    ${currentSlug === ch.slug ? 'bg-muted border-l-2 border-primary' : ''}
-                  `}
-                >
-                  <span className="font-medium">{ch.order}.</span> {ch.title}
-                </Link>
-              ))}
+              {chapters.map(ch => {
+                const isCompleted = completedChapters.includes(ch.id);
+                return (
+                  <Link
+                    key={ch.id}
+                    to={`/read/${ch.slug}`}
+                    className={`
+                      flex items-center gap-2 px-3 py-2.5 rounded-xl mx-1 hover:bg-white/5 transition-colors text-sm font-bold
+                      ${currentSlug === ch.slug ? 'bg-primary/10 border-l-2 border-primary' : ''}
+                    `}
+                  >
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-extrabold ${
+                      isCompleted ? 'bg-primary/20 text-primary' : 'bg-white/10 text-muted-foreground'
+                    }`}>
+                      {isCompleted ? '✓' : ch.order}
+                    </span>
+                    <span className="truncate">{ch.title}</span>
+                  </Link>
+                );
+              })}
             </nav>
           </aside>
 
@@ -268,11 +268,11 @@ export default function ReaderShell({ children, currentSlug }: Props) {
         </div>
       </div>
 
-      {/* Back to top FAB (mobile) */}
+      {/* Back to top FAB */}
       {showBackToTop && isMobile && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-20 right-4 z-30 w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center active:scale-90 transition-transform touch-manipulation"
+          className="fixed bottom-20 right-4 z-30 w-10 h-10 rounded-full bg-gradient-to-r from-primary to-emerald-400 text-primary-foreground shadow-lg flex items-center justify-center active:scale-90 transition-transform touch-manipulation"
           aria-label="Back to top"
         >
           <ChevronUp size={20} />

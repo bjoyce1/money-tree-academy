@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Nunito', 'system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -59,6 +62,9 @@ export default {
         },
         brand: "hsl(var(--brand))",
         brand2: "hsl(var(--brand2))",
+        coral: "hsl(var(--coral))",
+        violet: "hsl(var(--violet))",
+        golden: "hsl(var(--golden))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -67,25 +73,34 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "bounce-in": {
+          "0%": { transform: "scale(0.3)", opacity: "0" },
+          "50%": { transform: "scale(1.1)" },
+          "70%": { transform: "scale(0.95)" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        "sparkle": {
+          "0%, 100%": { opacity: "0", transform: "scale(0) rotate(0deg)" },
+          "50%": { opacity: "1", transform: "scale(1) rotate(180deg)" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-8px)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "bounce-in": "bounce-in 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97)",
+        "sparkle": "sparkle 0.8s ease-in-out",
+        "float": "float 3s ease-in-out infinite",
       },
     },
   },
