@@ -14,16 +14,261 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookmarks: {
+        Row: {
+          chapter_id: string
+          created_at: string
+          id: string
+          is_favorite: boolean
+          label: string | null
+          scroll_position: number
+          user_id: string
+        }
+        Insert: {
+          chapter_id: string
+          created_at?: string
+          id?: string
+          is_favorite?: boolean
+          label?: string | null
+          scroll_position?: number
+          user_id: string
+        }
+        Update: {
+          chapter_id?: string
+          created_at?: string
+          id?: string
+          is_favorite?: boolean
+          label?: string | null
+          scroll_position?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      highlights: {
+        Row: {
+          chapter_id: string
+          color: string
+          created_at: string
+          end_offset: number | null
+          id: string
+          start_offset: number | null
+          text: string
+          user_id: string
+        }
+        Insert: {
+          chapter_id: string
+          color?: string
+          created_at?: string
+          end_offset?: number | null
+          id?: string
+          start_offset?: number | null
+          text: string
+          user_id: string
+        }
+        Update: {
+          chapter_id?: string
+          color?: string
+          created_at?: string
+          end_offset?: number | null
+          id?: string
+          start_offset?: number | null
+          text?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notes: {
+        Row: {
+          chapter_id: string
+          content: string
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chapter_id: string
+          content: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chapter_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      parent_child_links: {
+        Row: {
+          child_user_id: string
+          created_at: string
+          id: string
+          parent_user_id: string
+        }
+        Insert: {
+          child_user_id: string
+          created_at?: string
+          id?: string
+          parent_user_id: string
+        }
+        Update: {
+          child_user_id?: string
+          created_at?: string
+          id?: string
+          parent_user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          age: number | null
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age?: number | null
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age?: number | null
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reading_sessions: {
+        Row: {
+          chapter_id: string
+          created_at: string
+          duration_seconds: number
+          id: string
+          user_id: string
+          words_read: number
+        }
+        Insert: {
+          chapter_id: string
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          user_id: string
+          words_read?: number
+        }
+        Update: {
+          chapter_id?: string
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          user_id?: string
+          words_read?: number
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          achievements_unlocked: Json
+          chapters_completed: Json
+          coins: number
+          created_at: string
+          first_login_at: string | null
+          highlights_count: number
+          id: string
+          last_read_date: string | null
+          mini_games_completed: Json
+          purchased_items: Json
+          quiz_results: Json
+          selected_guide: string | null
+          streak_days: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          achievements_unlocked?: Json
+          chapters_completed?: Json
+          coins?: number
+          created_at?: string
+          first_login_at?: string | null
+          highlights_count?: number
+          id?: string
+          last_read_date?: string | null
+          mini_games_completed?: Json
+          purchased_items?: Json
+          quiz_results?: Json
+          selected_guide?: string | null
+          streak_days?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          achievements_unlocked?: Json
+          chapters_completed?: Json
+          coins?: number
+          created_at?: string
+          first_login_at?: string | null
+          highlights_count?: number
+          id?: string
+          last_read_date?: string | null
+          mini_games_completed?: Json
+          purchased_items?: Json
+          quiz_results?: Json
+          selected_guide?: string | null
+          streak_days?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "parent" | "child"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +395,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "parent", "child"],
+    },
   },
 } as const
