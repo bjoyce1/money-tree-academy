@@ -6,40 +6,37 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// ─── RICH GUIDE PERSONAS (harness upgrade) ──────────────────────
+// ─── GUIDES: the two friends the Money Tree chose ───────────────
 
 const PERSONAS: Record<string, string> = {
-  aisha: `You are Aisha, a curious and analytical girl who loves drawing and planning ahead. You explain financial concepts through creative metaphors — comparing compound interest to a sketch that keeps getting more detailed, or diversification to mixing colors on a palette. You're patient, encouraging, and love when students ask "why?" Your catchphrase is "Let's think about this like an artist..."`,
-  emma: `You are Emma, a thoughtful researcher who studies everything carefully before acting. You teach budgeting and smart spending through detective metaphors — tracking expenses is like following clues, comparing prices is gathering evidence. You're precise, organized, and love breaking things into clear steps. Your catchphrase is "Let's look at the evidence..."`,
-  liam: `You are Liam, an energetic boy who loves exploring outdoors. You teach saving through adventure metaphors — an emergency fund is like packing snacks for a hike, a savings goal is like training for a race. You're enthusiastic and celebrate small wins loudly. Your catchphrase is "Every penny is a step forward!"`,
-  mateo: `You are Mateo, a creative entrepreneur who sees business opportunities everywhere. You teach earning and entrepreneurship through inventor metaphors — a business idea is like a prototype, customer feedback is like testing your invention. You're optimistic and encourage creative thinking. Your catchphrase is "What problem could you solve?"`,
+  renee: `You are Renee, one of the two best friends from Houston in "The Money Tree of Life". You are the saver: thoughtful and patient. You save first, keep your drawing-tablet fund separate, compare prices before buying, and pause before spending. Your tips teach kids to plan money before it wanders. Your catchphrase: "Before spending, ask: What else could this money do?"`,
+  alex: `You are Alex, one of the two best friends from Houston in "The Money Tree of Life". You are the builder: curious and ambitious. You wanted glowing black-and-gold shoes, then learned to earn, save and wait for them. You started the Market Pack business with Renee and think about what money can help build. Your catchphrase: "Do not think only about what money can buy. Think about what it can help build."`,
 };
 
-const BASE_PROMPT = `You are a financial literacy tutor for "The Money Tree of Life" book, for kids ages 8-15.
+const BASE_PROMPT = `You help children aged 8 to 15 understand "The Money Tree of Life" by Cornelius A. Pratt, a story about Renee and Alex learning what money can become.
 
 RULES:
-- Keep answers short (2-4 sentences unless generating a quiz or scenario)
-- Use simple, age-appropriate language
-- Be encouraging and positive
-- Relate financial concepts to things kids experience (allowance, birthday money, school store)
-- Avoid medical, personal, political, or adult topics — gently redirect
-- Use the Money Tree metaphor: roots = savings, branches = budget categories, leaves = earnings, fruit = goals achieved
-- You can generate quizzes and practice scenarios when asked`;
-
-// ─── HARNESS CONFIG SELECTOR ────────────────────────────────────
+- Keep answers short: 2 to 4 sentences, unless asked for a quiz or a practice scenario.
+- Write plain text with no markdown: no asterisks, pound signs or tables. Use simple numbered lines for lists.
+- Use simple, warm, encouraging language. No jargon without explaining it.
+- Use the book's own ideas: needs before wants, save first, give every dollar a job, check the total cost of borrowing, protect money and information (STOP, CHECK, ASK, REPORT), build value through useful work, invest with patience, give with purpose.
+- Relate ideas to a kid's life: allowance, birthday money, chores, a school sale.
+- Never give personal financial, legal, tax or investment advice. For real decisions, say to talk with a trusted adult.
+- Never ask for or repeat personal information (names, addresses, passwords, account or card numbers).
+- Avoid medical, political, romantic or adult topics; gently steer back to the book.`;
 
 function selectConfigInstructions(lastUserMessage: string): string {
   const msg = lastUserMessage.toLowerCase();
-  if (/generate quiz|quiz me|test me/.test(msg)) {
-    return `\n\nThe reader wants a quiz. Generate exactly 3 multiple-choice questions about the chapter topic. Each question: prompt, 4 options (a-d), correct answer letter, brief explanation. Format clearly.`;
+  if (/quiz me|generate (a )?quiz|test me/.test(msg)) {
+    return `\n\nThe reader wants a quiz. Write exactly 3 multiple-choice questions about this chapter. Each: the question, 4 options (a to d), the correct letter, and one short sentence explaining why.`;
   }
-  if (/scenario|practice|real.?life|what would/.test(msg)) {
-    return `\n\nThe reader wants a practice scenario. Create a realistic money scenario a kid might face. Present a clear decision with 2-3 options that each have tradeoffs. End by asking what they would do and why. Keep under 120 words.`;
+  if (/scenario|practice|real.?life|money problem|what would/.test(msg)) {
+    return `\n\nThe reader wants a practice scenario. Describe a realistic money choice a kid might face, give 2 or 3 options with tradeoffs, then ask what they would do and why. Under 120 words.`;
   }
   if (/what does .+ mean|define |what is a |what's a /.test(msg)) {
-    return `\n\nThe reader is asking about a financial term. Give: (1) a one-sentence kid-friendly definition, (2) a real-life example, (3) connect it to the Money Tree metaphor if possible. Keep under 80 words total.`;
+    return `\n\nThe reader is asking about a money word. Give a one-sentence kid-friendly definition, a real-life example, and, if it fits, where it shows up in the story. Under 80 words.`;
   }
-  return `\n\nRespond warmly and educationally. If relevant, tie your answer to the Money Tree metaphor.`;
+  return `\n\nAnswer warmly and tie it to the chapter when you can.`;
 }
 
 serve(async (req) => {
@@ -49,76 +46,75 @@ serve(async (req) => {
     const { messages, characterId, chapterContext } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return new Response(JSON.stringify({ error: "Ask a question first." }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
-    // Build harness system prompt
-    const persona = characterId && PERSONAS[characterId] ? PERSONAS[characterId] : "";
-    const configInstructions = selectConfigInstructions(messages[messages.length - 1]?.content || "");
+    // Keep the conversation small and well-formed.
+    const history = messages
+      .filter((m: { role?: string; content?: unknown }) => (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+      .slice(-12)
+      .map((m: { role: string; content: string }) => ({ role: m.role, content: m.content.slice(0, 2000) }));
+
+    const persona = characterId && PERSONAS[characterId] ? PERSONAS[characterId] : PERSONAS.renee;
+    const lastUser = [...history].reverse().find((m) => m.role === "user")?.content || "";
+    const configInstructions = selectConfigInstructions(lastUser);
 
     let chapterBlock = "";
     if (chapterContext) {
-      chapterBlock = `\n\nCURRENT CHAPTER CONTEXT:\nThe reader is on Chapter ${chapterContext.order}: "${chapterContext.title}".\nChapter summary: ${chapterContext.summary || "Not available"}`;
+      const where = chapterContext.order === 13 ? "the Epilogue" : `Chapter ${chapterContext.order}`;
+      chapterBlock = `\n\nCURRENT CHAPTER:\nThe reader is on ${where}: "${String(chapterContext.title).slice(0, 120)}".\nThe chapter's lesson: ${String(chapterContext.summary || "Not available").slice(0, 300)}`;
     }
 
     const systemPrompt = `${persona}\n\n${BASE_PROMPT}${chapterBlock}${configInstructions}`;
 
-    // Log the harness run
     const configUsed = configInstructions.includes("quiz") ? "quiz_generation"
       : configInstructions.includes("scenario") ? "practice_scenario"
-      : configInstructions.includes("financial term") ? "glossary_explain"
+      : configInstructions.includes("money word") ? "glossary_explain"
       : "chapter_discussion";
 
     try {
-      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-      const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-      const supabase = createClient(supabaseUrl, supabaseKey);
+      const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
       await supabase.from("harness_runs").insert({
         config_used: configUsed,
         guide_id: characterId || null,
         chapter_id: chapterContext?.id || null,
-        user_message: messages[messages.length - 1]?.content?.substring(0, 500) || "",
+        user_message: lastUser.substring(0, 500),
         prompt_length: systemPrompt.length,
       });
     } catch (logErr) {
       console.error("Harness log error (non-fatal):", logErr);
     }
 
-    // Call AI gateway
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        messages: [{ role: "system", content: systemPrompt }, ...messages],
-        stream: true,
-      }),
+      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [{ role: "system", content: systemPrompt }, ...history], stream: true }),
     });
 
     if (!response.ok) {
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Too many questions right now! Try again in a moment." }), {
+        return new Response(JSON.stringify({ error: "Lots of questions right now! Try again in a moment." }), {
           status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits needed. Please add funds in Settings > Workspace > Usage." }), {
+        return new Response(JSON.stringify({ error: "Asking questions is resting for now. Please try again later." }), {
           status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const t = await response.text();
-      console.error("AI gateway error:", response.status, t);
-      return new Response(JSON.stringify({ error: "AI gateway error" }), {
+      console.error("AI gateway error:", response.status, await response.text());
+      return new Response(JSON.stringify({ error: "Something went wrong. Please try again." }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    return new Response(response.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
-    });
+    return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
   } catch (e) {
     console.error("chat error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
+    return new Response(JSON.stringify({ error: "Something went wrong. Please try again." }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

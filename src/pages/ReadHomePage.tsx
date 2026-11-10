@@ -1,272 +1,212 @@
-import { Link } from "react-router-dom";
-import { ArrowLeft, Play, Sprout, Search, Lock, Heart, Award, Coins } from "lucide-react";
-import { useAuth } from '@/hooks/useAuth';
-import chapters from "../data/chapters.json";
-import Footer from "../components/Footer";
-import SmartRecommendations from "../components/SmartRecommendations";
-import { CHARACTERS, Character, useCharacterCompanion } from "../components/CharacterCompanion";
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from 'react';
+import { Link } from 'wouter';
+import { ArrowRight, Check } from 'lucide-react';
+import { PageShell, PageIntro } from '@/components/site/PageShell';
+import { LinkButton } from '@/components/site/GoldButton';
+import {
+  ART_HEIGHT,
+  ART_WIDTH,
+  CHAPTERS,
+  STORY_CHAPTER_COUNT,
+  chapterArt,
+  chapterMark,
+  getChapter,
+  isEpilogue,
+  type Chapter,
+} from '@/data/content';
+import { CHARACTERS, setGuide, useGuideId, type GuideId } from '@/data/characters';
+import { useRewards } from '@/lib/rewards';
+import { cn } from '@/lib/utils';
 
-const CHAPTER_COLORS = [
-  'from-emerald-500 to-green-400',
-  'from-blue-500 to-cyan-400',
-  'from-violet-500 to-purple-400',
-  'from-amber-500 to-yellow-400',
-  'from-rose-500 to-pink-400',
-  'from-teal-500 to-emerald-400',
-  'from-indigo-500 to-blue-400',
-  'from-orange-500 to-amber-400',
-  'from-fuchsia-500 to-pink-400',
-  'from-lime-500 to-green-400',
-  'from-sky-500 to-blue-400',
-  'from-red-500 to-rose-400',
-];
-
-function ProgressRing({ progress, size = 44, strokeWidth = 3, color = 'stroke-primary' }: { progress: number; size?: number; strokeWidth?: number; color?: string }) {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (progress / 100) * circumference;
-
-  return (
-    <svg width={size} height={size} className="transform -rotate-90">
-      <circle cx={size / 2} cy={size / 2} r={radius} stroke="currentColor" strokeWidth={strokeWidth} fill="none" className="text-white/10" />
-      <circle cx={size / 2} cy={size / 2} r={radius} strokeWidth={strokeWidth} fill="none"
-        className={color} strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round"
-        style={{ transition: 'stroke-dashoffset 0.5s ease' }} />
-    </svg>
-  );
+function useResumeChapter() {
+  const [slug, setSlug] = useState<string | null>(null);
+  useEffect(() => {
+    try {
+      setSlug(localStorage.getItem('resumeSlug'));
+    } catch {
+      setSlug(null);
+    }
+  }, []);
+  return getChapter(slug ?? undefined);
 }
 
 export default function ReadHomePage() {
-  const { user } = useAuth();
-  const { getSelectedCharacter } = useCharacterCompanion();
-  const [selectedCharacter, setSelectedCharacter] = useState<Character>(getSelectedCharacter());
-  const resumeSlug = localStorage.getItem('resumeSlug');
-  const completedChapters = JSON.parse(localStorage.getItem('completed_chapters') || '[]');
-  const coins = JSON.parse(localStorage.getItem('coins_data') || '{}').total || 0;
-
-  useEffect(() => {
-    setSelectedCharacter(getSelectedCharacter());
-  }, []);
-
-  const selectCharacter = async (character: Character) => {
-    try {
-      const companionState = {
-        selectedCharacterId: character.id,
-        lastInteraction: Date.now(),
-        totalInteractions: 0,
-        messagesShown: []
-      };
-      localStorage.setItem('character_companion', JSON.stringify(companionState));
-      setSelectedCharacter(character);
-      const event = new CustomEvent('character-celebration', {
-        detail: { message: `Great choice! ${character.name} is now your reading companion. Ready to learn together?` }
-      });
-      window.dispatchEvent(event);
-    } catch (error) {}
-  };
+  const { completed } = useRewards();
+  const resume = useResumeChapter();
+  const finished = CHAPTERS.filter((c) => !isEpilogue(c) && completed.includes(c.id)).length;
+  const nextUp = resume ?? CHAPTERS.find((c) => !completed.includes(c.id)) ?? CHAPTERS[0];
 
   return (
-    <div className="min-h-screen pb-safe">
-      {/* Header */}
-      <header className="sticky top-0 z-10 glass-nav">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/" className="font-extrabold hover:text-primary transition-colors flex items-center gap-2" data-testid="link-home">
-            <ArrowLeft size={16} className="lg:block hidden" />
-            The Money Tree of Life
-          </Link>
-          <div className="flex items-center gap-4">
-            {/* Coins */}
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full glass-card text-golden text-sm font-bold">
-              <Coins size={14} />
-              {coins}
-            </div>
-            {/* Guide avatar */}
-            {selectedCharacter && (
-              <img src={selectedCharacter.image} alt={selectedCharacter.name}
-                className="w-8 h-8 rounded-full border-2 border-violet object-cover" />
-            )}
-            <div className="hidden lg:flex items-center gap-3">
-              <Link to="/characters" className="text-muted-foreground hover:text-primary transition-colors font-bold text-sm">Guides</Link>
-              <Link to="/read/glossary" className="text-muted-foreground hover:text-primary transition-colors font-bold text-sm">Glossary</Link>
-              <Link to="/read/search" className="text-muted-foreground hover:text-primary transition-colors"><Search size={16} /></Link>
-            </div>
-          </div>
-        </div>
-      </header>
+    <PageShell title="Read the book">
+      <PageIntro
+        title="Read the book"
+        lead="Twelve chapters and an epilogue. Read them in order or start anywhere. Every chapter ends with a family challenge, a conversation to have at home, and a short quiz."
+      />
 
-      {/* Hero Section with Characters */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-violet/5 to-transparent pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-4 py-12">
-          <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">
-              Choose Your Learning Companion
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Select a character to guide you through your financial learning journey
-            </p>
-          </motion.div>
-
-          {/* Character Selection Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {CHARACTERS.map((character, i) => {
-              const isSelected = selectedCharacter?.id === character.id;
-              return (
-                <motion.div
-                  key={character.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  onClick={() => selectCharacter(character)}
-                  className={`relative glass-card rounded-2xl p-4 md:p-6 cursor-pointer transition-all duration-300 hover:scale-105 ${
-                    isSelected ? 'pulse-glow !border-primary/50 !bg-primary/10' : ''
-                  }`}
-                  data-testid={`hero-character-${character.id}`}
-                >
-                  {isSelected && (
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-primary rounded-full border-2 border-background flex items-center justify-center">
-                      <Heart size={12} className="text-primary-foreground" fill="currentColor" />
-                    </div>
-                  )}
-                  <div className="flex flex-col items-center mb-3">
-                    <img src={character.image} alt={character.name}
-                      className={`w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border-2 shadow-lg mb-3 ${isSelected ? 'border-primary' : 'border-violet/50'}`}
-                    />
-                    <h3 className="font-extrabold text-foreground text-center">{character.name}</h3>
-                    <p className="text-xs text-muted-foreground text-center">{character.personality}</p>
-                  </div>
-                  <div className="text-center mb-2">
-                    <div className="inline-flex items-center gap-1 px-2 py-1 bg-violet/20 rounded-full text-violet text-xs font-bold">
-                      <Award size={12} />
-                      {character.speciality.split(' & ')[0]}
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    {isSelected ? (
-                      <div className="text-primary text-sm font-bold">✨ Your Guide</div>
-                    ) : (
-                      <div className="text-muted-foreground text-sm">Click to Choose</div>
-                    )}
-                  </div>
-                </motion.div>
-              );
-            })}
+      <section aria-labelledby="continue-title" className="mx-auto max-w-container px-5 sm:px-8">
+        <h2 id="continue-title" className="sr-only">
+          {resume ? 'Continue reading' : 'Start reading'}
+        </h2>
+        <ContinueCard chapter={nextUp} resuming={!!resume} />
+        <div className="mt-6 flex items-center gap-4 text-[0.875rem] text-cream-3">
+          <div className="h-[3px] w-40 overflow-hidden rounded-full bg-hairline" aria-hidden>
+            <div
+              className="h-full origin-left bg-gold"
+              style={{ transform: `scaleX(${finished / STORY_CHAPTER_COUNT})` }}
+            />
           </div>
+          <p>
+            {finished} of {STORY_CHAPTER_COUNT} chapters finished
+          </p>
         </div>
+      </section>
+
+      <div className="mx-auto mt-16 grid max-w-container gap-16 px-5 pb-24 sm:px-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] lg:gap-20">
+        <section aria-labelledby="chapters-title">
+          <h2 id="chapters-title" className="font-display text-[clamp(1.5rem,2.4vw,2rem)] font-bold text-gold">
+            Contents
+          </h2>
+          <ol className="mt-6 border-b border-hairline">
+            {CHAPTERS.map((c) => (
+              <ChapterRow key={c.id} chapter={c} done={completed.includes(c.id)} current={c.id === resume?.id} />
+            ))}
+          </ol>
+        </section>
+
+        <aside aria-labelledby="guide-title" className="lg:sticky lg:top-[100px] lg:self-start">
+          <GuidePicker />
+        </aside>
       </div>
+    </PageShell>
+  );
+}
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Resume / Start buttons */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
-          <div className="glass-card rounded-2xl p-6 border-primary/20">
-            <h3 className="text-xl font-extrabold text-foreground mb-2 flex items-center gap-2">
-              <Play className="text-primary" size={20} />
-              Resume Reading
-            </h3>
-            <p className="text-muted-foreground mb-4">Continue where you left off</p>
-            <Link
-              to={resumeSlug ? `/read/${resumeSlug}` : `/read/${chapters[0].slug}`}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-emerald-400 text-primary-foreground px-6 py-3 rounded-full font-bold hover:scale-105 transition-all min-h-[48px]"
-              data-testid={resumeSlug ? "button-resume" : "button-start-first"}
+function ContinueCard({ chapter, resuming }: { chapter: Chapter; resuming: boolean }) {
+  return (
+    <div className="grid grid-cols-[72px_1fr] items-center gap-x-4 gap-y-5 sm:grid-cols-[112px_1fr] sm:gap-x-7">
+      <img
+        src={chapterArt(chapter)}
+        alt=""
+        width={ART_WIDTH}
+        height={ART_HEIGHT}
+        className="w-full rounded-plate bg-night-3 shadow-plate"
+      />
+      <div className="min-w-0">
+        <p className="text-[0.875rem] text-cream-3">
+          {resuming ? 'Pick up where you left off' : 'Start here'} · {isEpilogue(chapter) ? 'Epilogue' : chapter.label}
+        </p>
+        <p className="mt-1 font-display text-[clamp(1.25rem,2.2vw,1.6rem)] font-semibold leading-tight text-cream">
+          {chapter.title}
+        </p>
+      </div>
+      <div className="col-span-2 sm:col-span-1 sm:col-start-2 sm:-mt-2">
+          <LinkButton href={`/read/${chapter.slug}`} data-testid={resuming ? 'button-resume' : 'button-start-first'}>
+            {resuming ? 'Continue reading' : 'Start reading'}
+            <ArrowRight size={18} aria-hidden />
+          </LinkButton>
+      </div>
+    </div>
+  );
+}
+
+function ChapterRow({ chapter, done, current }: { chapter: Chapter; done: boolean; current: boolean }) {
+  return (
+    <li className="border-t border-hairline">
+      <Link
+        href={`/read/${chapter.slug}`}
+        className="group grid grid-cols-[1.6rem_56px_1fr] items-center gap-3 py-4 sm:grid-cols-[3rem_56px_1fr_auto] sm:gap-5"
+        aria-current={current ? 'location' : undefined}
+        data-testid={`link-chapter-${chapter.slug}`}
+      >
+        <span
+          className={cn(
+            'font-display text-[1.35rem] font-bold sm:text-[1.6rem]',
+            current ? 'text-gold' : 'text-gold/55 group-hover:text-gold',
+          )}
+        >
+          {chapterMark(chapter)}
+        </span>
+        <img
+          src={chapterArt(chapter)}
+          alt=""
+          width={56}
+          height={72}
+          loading="lazy"
+          decoding="async"
+          className="h-[72px] w-14 rounded-thumb bg-night-3 object-cover shadow-paper-thumb"
+        />
+        <span className="min-w-0">
+          <span className="block font-display text-[clamp(1.05rem,1.5vw,1.25rem)] font-semibold leading-snug text-cream group-hover:text-gold">
+            {chapter.title}
+          </span>
+          <span className="mt-1 line-clamp-2 block text-[0.9375rem] leading-[1.5] text-cream-3">{chapter.summary}</span>
+          <span className="mt-1.5 flex items-center gap-2 text-[0.875rem] text-cream-3 sm:hidden">
+            {chapter.estReadMinutes} min
+            {done && (
+              <span className="inline-flex items-center gap-1 text-gold">
+                <Check size={14} aria-hidden /> Finished
+              </span>
+            )}
+          </span>
+        </span>
+        <span className="hidden w-24 text-right text-[0.875rem] text-cream-3 sm:block">
+          {done ? (
+            <span className="inline-flex items-center gap-1 text-gold">
+              <Check size={15} aria-hidden /> Finished
+            </span>
+          ) : (
+            `${chapter.estReadMinutes} min`
+          )}
+        </span>
+      </Link>
+    </li>
+  );
+}
+
+function GuidePicker() {
+  const guide = useGuideId();
+  return (
+    <div>
+      <h2 id="guide-title" className="font-display text-[clamp(1.5rem,2.4vw,2rem)] font-bold text-gold">
+        Your reading guide
+      </h2>
+      <p className="mt-3 max-w-measure leading-[1.6] text-cream-2">
+        Pick who reads with you. Your guide's tips come first in each chapter's lesson.
+      </p>
+      <div className="mt-5 grid gap-2" role="radiogroup" aria-labelledby="guide-title">
+        {CHARACTERS.map((c) => {
+          const selected = guide === c.id;
+          return (
+            <button
+              key={c.id}
+              type="button"
+              role="radio"
+              aria-checked={selected}
+              onClick={() => setGuide(c.id as GuideId)}
+              className="flex items-center gap-4 rounded-choice px-4 py-3 text-left hover:bg-white/[0.03] aria-checked:bg-gold/[0.09]"
+              data-testid={`guide-${c.id}`}
             >
-              {resumeSlug ? 'Resume Chapter' : `Chapter 1: ${chapters[0].title}`}
-            </Link>
-          </div>
-          <div className="glass-card rounded-2xl p-6">
-            <h3 className="text-xl font-extrabold text-foreground mb-2 flex items-center gap-2">
-              <Sprout className="text-golden" size={20} />
-              Start from Beginning
-            </h3>
-            <p className="text-muted-foreground mb-4">Begin your journey from Chapter 1</p>
-            <Link
-              to={`/read/${chapters[0].slug}`}
-              className="inline-flex items-center gap-2 glass-card text-foreground px-6 py-3 rounded-full font-bold hover:scale-105 transition-all min-h-[48px]"
-              data-testid="button-chapter-1"
-            >
-              Go to Chapter 1
-            </Link>
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <SmartRecommendations />
-        </div>
-
-        {/* Adventure Path Chapter List */}
-        <div>
-          <h3 className="text-2xl font-extrabold text-foreground mb-6">Your Adventure Path</h3>
-          <div className="adventure-path space-y-0">
-            {chapters.map((chapter, index) => {
-              const isUnlocked = index === 0 || resumeSlug;
-              const isCompleted = completedChapters.includes(chapter.id);
-              const isCurrent = resumeSlug === chapter.slug;
-              const progress = isCompleted ? 100 : isCurrent ? 60 : 0;
-              const colorClass = CHAPTER_COLORS[index % CHAPTER_COLORS.length];
-
-              return (
-                <motion.div
-                  key={chapter.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="relative pl-14 pb-6"
-                  data-testid={`chapter-${chapter.slug}`}
-                >
-                  {/* Level node */}
-                  <div className="absolute left-0 top-1 z-10">
-                    <div className="relative">
-                      <ProgressRing progress={progress} size={44} strokeWidth={3} color={isCompleted ? 'stroke-primary' : isCurrent ? 'stroke-golden' : 'stroke-muted-foreground/30'} />
-                      <div className={`absolute inset-0 flex items-center justify-center`}>
-                        {isUnlocked ? (
-                          <span className={`text-sm font-extrabold ${isCompleted ? 'text-primary' : isCurrent ? 'text-golden' : 'text-muted-foreground'}`}>
-                            {isCompleted ? '✓' : chapter.order}
-                          </span>
-                        ) : (
-                          <Lock className="text-muted-foreground/40" size={14} />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Chapter card */}
-                  <div className={`glass-card rounded-2xl p-4 transition-all group ${
-                    isUnlocked ? 'hover:scale-[1.02] cursor-pointer' : 'opacity-50 cursor-not-allowed'
-                  } ${isCurrent ? '!border-golden/30 !bg-golden/5' : ''}`}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${colorClass}`} />
-                          <h4 className={`font-extrabold transition-colors ${
-                            isUnlocked ? 'text-foreground group-hover:text-primary' : 'text-muted-foreground'
-                          }`}>
-                            {chapter.title}
-                          </h4>
-                          {isCurrent && (
-                            <span className="px-2 py-0.5 bg-golden/20 text-golden text-xs rounded-full font-bold">Reading</span>
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {isUnlocked ? `Level ${chapter.order} · ${chapter.estReadMinutes} min` : 'Complete previous levels to unlock'}
-                        </p>
-                      </div>
-                      {isCompleted && (
-                        <div className="text-primary text-sm font-bold">⭐ Complete</div>
-                      )}
-                    </div>
-                    {isUnlocked && (
-                      <Link to={`/read/${chapter.slug}`} className="absolute inset-0" data-testid={`link-chapter-${chapter.slug}`} />
-                    )}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </main>
-
-      <Footer />
+              <img
+                src={c.image}
+                alt=""
+                width={56}
+                height={56}
+                className="h-14 w-14 shrink-0 rounded-full object-cover object-top ring-1 ring-gold/30"
+              />
+              <span className="flex-1">
+                <span className={cn('block font-display text-[1.12rem] font-semibold', selected ? 'text-gold' : 'text-cream')}>
+                  {c.name}
+                </span>
+                <span className="block text-[0.9375rem] text-cream-2">{c.speciality}</span>
+              </span>
+              {selected && <Check size={20} className="text-gold" aria-hidden />}
+            </button>
+          );
+        })}
+      </div>
+      <Link href="/characters" className="mt-4 inline-block text-[0.9375rem] text-cream-2 underline decoration-gold/40 underline-offset-4 hover:text-gold">
+        Meet Renee and Alex
+      </Link>
     </div>
   );
 }

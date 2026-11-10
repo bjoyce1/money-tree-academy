@@ -1,352 +1,292 @@
-import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useTTSHighlight } from '@/hooks/useTTSHighlight';
-import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useParams } from 'wouter';
+import { ArrowLeft, ArrowRight, Headphones, NotebookPen, Pause, Play } from 'lucide-react';
+import ReaderShell from '@/components/ReaderShell';
+import { StoryBody } from '@/components/reader/StoryBody';
+import { ChapterKit } from '@/components/reader/ChapterKit';
+import { ChapterQuiz } from '@/components/reader/ChapterQuiz';
+import { ToolsDrawer, type ToolId } from '@/components/reader/ToolsDrawer';
+import { useSpeech } from '@/components/reader/ListenTool';
+import {
+  ART_HEIGHT,
+  ART_WIDTH,
+  CHAPTERS,
+  STORY_CHAPTER_COUNT,
+  chapterArt,
+  getChapter,
+  isEpilogue,
+  storyHtml,
+  storyText,
+  type Chapter,
+} from '@/data/content';
+import { flipbookHref } from '@/flipbook/chapters';
 import { useAuth } from '@/hooks/useAuth';
 import { progressAPI } from '@/lib/api';
-import ReaderShell from '../components/ReaderShell';
-import chapters from '../data/chapters.json';
-import GlossaryPopover from '../components/GlossaryPopover';
-import QuizBlock from '../components/QuizBlock';
-import NotesPanel from '../components/NotesPanel';
-import TextToSpeechPlayer from '../components/TextToSpeechPlayer';
-import HighlightManager, { useHighlights } from '../components/HighlightManager';
-import BookmarkManager from '../components/BookmarkManager';
-import ReadingSpeedTracker from '../components/ReadingSpeedTracker';
-import ChapterSummaryCards from '../components/ChapterSummaryCards';
-import RealWorldActivities from '../components/RealWorldActivities';
-import ReadingStreaks, { useReadingStreaks } from '../components/ReadingStreaks';
-import AchievementSystem, { useAchievements } from '../components/AchievementSystem';
-import { useCoins } from '../components/CoinsSystem';
-import ProgressTree from '../components/ProgressTree';
-import { MiniGamesLazy, RewardsShopLazy, AiChatInterfaceLazy } from '../components/LazyComponents';
-import CoinsSystem from '../components/CoinsSystem';
-import CharacterCompanion from '../components/CharacterCompanion';
-import ChapterRecap from '../components/ChapterRecap';
-import FloatingActions from '../components/FloatingActions';
-import TableOfContents from '../components/TableOfContents';
-
-// CollapsibleSection component
-const CollapsibleSection: React.FC<{id?: string; title: string; children: React.ReactNode}> = ({ id, title, children }) => {
-  const [isOpen, setIsOpen] = useState(true);
-  return (
-    <div id={id} className="mb-6 glass-card rounded-2xl scroll-mt-20 overflow-hidden">
-      <button
-        data-collapse-button
-        aria-expanded={isOpen}
-        className="w-full flex justify-between items-center px-5 py-4 bg-white/5 hover:bg-white/8 transition-colors"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span className="font-extrabold text-foreground">{title}</span>
-        <span className="text-xl text-muted-foreground">{isOpen ? '−' : '+'}</span>
-      </button>
-      {isOpen && (
-        <div className="p-5 space-y-4">
-          {children}
-        </div>
-      )}
-    </div>
-  );
-};
-
-function renderHtml(html: string) {
-  return { __html: html };
-}
+import { completeChapter, recordActivity, recordReadingDay, useRewards } from '@/lib/rewards';
+import { addHighlight, setAccountSync, useHighlightsList } from '@/lib/study';
 
 export default function ChapterPage() {
-  const { slug } = useParams();
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
-  const chapter = useMemo(() => chapters.find(c => c.slug === slug), [slug]);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [isPageVisible, setIsPageVisible] = useState(true);
-  const [sectionPreferences, setSectionPreferences] = useState({
-    'progress-rewards': true,
-    'reading-tools': true,
-    'learning-activities': true,
-    'ai-chat': true,
-  });
-  const { triggerReadingActivity } = useReadingStreaks();
-  const { triggerAchievement } = useAchievements();
-  const { awardCoins } = useCoins();
-
-  const tocSections = [
-    { id: 'progress-rewards', title: 'Progress & Rewards', isOpen: sectionPreferences['progress-rewards'] },
-    { id: 'reading-tools', title: 'Reading Tools', isOpen: sectionPreferences['reading-tools'] },
-    { id: 'learning-activities', title: 'Learning Activities', isOpen: sectionPreferences['learning-activities'] },
-    { id: 'ai-chat', title: 'AI Chat', isOpen: sectionPreferences['ai-chat'] },
-  ];
-
-  const handlePreferencesChange = (preferences: Record<string, boolean>) => {
-    setSectionPreferences(prev => ({ ...prev, ...preferences }));
-  };
-
-  const skipToContent = () => {
-    const contentElement = document.getElementById('chapter-content');
-    if (contentElement) {
-      contentElement.focus();
-      contentElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const updateProgressMutation = useMutation({
-    mutationFn: (resumeSlug: string) => progressAPI.update(resumeSlug),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/reading-progress'] });
-    },
-  });
-
-  useEffect(() => {
-    if (slug) localStorage.setItem('resumeSlug', slug);
-  }, [slug]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (contentRef.current) {
-        const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-        setScrollPosition(Math.min(100, Math.max(0, scrollPercent)));
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const handleVisibilityChange = () => { setIsPageVisible(!document.hidden); };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, []);
-
-  useEffect(() => {
-    if (chapter && isPageVisible) {
-      const timer = setTimeout(() => {
-        triggerReadingActivity();
-        triggerAchievement('reading-time', { minutes: 1 });
-        const readingCoins = 15 + Math.floor(Math.random() * 10);
-        awardCoins(readingCoins, `Reading Chapter ${chapter.order}`, 'reading');
-      }, 30000);
-      return () => clearTimeout(timer);
-    }
-  }, [chapter, isPageVisible, triggerReadingActivity, triggerAchievement, awardCoins]);
-
-  useEffect(() => {
-    if (chapter) {
-      const completed = JSON.parse(localStorage.getItem('completed_chapters') || '[]');
-      if (completed.includes(chapter.id)) {
-        triggerAchievement('chapter-completed', { count: completed.length });
-      }
-    }
-  }, [chapter, triggerAchievement]);
-
-  const wordCount = useMemo(() => {
-    if (!chapter) return 0;
-    const text = chapter.sections.map(s => s.htmlBody).join(' ').replace(/<[^>]+>/g, ' ');
-    return text.split(/\s+/).filter(word => word.length > 0).length;
-  }, [chapter]);
-
-  const [wordsRead, setWordsRead] = useState(0);
-  const [readingTimeInMinutes, setReadingTimeInMinutes] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setWordsRead(prev => Math.min(wordCount, prev + Math.floor(Math.random() * 20) + 5));
-      setReadingTimeInMinutes(prev => prev + 0.1);
-    }, 10000);
-    return () => clearInterval(interval);
-  }, [wordCount]);
-
-  const bodyWithGlossary = chapter
-    ? chapter.sections.map(s => s.htmlBody).join('').replace(/\[\[(.+?)\]\]/g, (_m, term) => `<span data-popover="${term}">${term}</span>`)
-    : '';
-
-  const highlightedContent = useHighlights(chapter?.id || '', bodyWithGlossary);
-
-  const { highlightSentence, clearHighlights } = useTTSHighlight(contentRef);
-
-  const handleSentenceChange = useCallback((_index: number | null, sentenceText: string | null) => {
-    if (sentenceText) {
-      highlightSentence(sentenceText);
-    } else {
-      clearHighlights();
-    }
-  }, [highlightSentence, clearHighlights]);
+  const { slug } = useParams<{ slug: string }>();
+  const chapter = getChapter(slug);
 
   if (!chapter) {
     return (
       <ReaderShell>
-        <div className="text-center py-12">
-          <h2 className="text-2xl font-extrabold text-foreground mb-4">Chapter not found</h2>
-          <Link to="/read" className="text-primary hover:text-primary/80 transition-colors font-bold" data-testid="link-back-to-read">
-            Back to Reading Home
+        <div className="mx-auto max-w-[44rem] px-5 py-24 sm:px-8">
+          <h1 className="font-display text-[2rem] font-bold text-reader-accent">That chapter isn't here.</h1>
+          <p className="mt-4 text-reader-soft">The link may be old. Every chapter is listed on the reader's home page.</p>
+          <Link href="/read" className="mt-6 inline-block font-bold text-reader-accent underline underline-offset-4" data-testid="link-back-to-read">
+            See all chapters
           </Link>
         </div>
       </ReaderShell>
     );
   }
+  // Keyed so every chapter starts with fresh state (quiz, tools, listening).
+  return <ChapterView key={chapter.id} chapter={chapter} />;
+}
 
-  const prev = chapters.find(c => c.order === chapter.order - 1);
-  const next = chapters.find(c => c.order === chapter.order + 1);
+const barButton =
+  'inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-pill px-3 text-reader-soft hover:text-reader-accent';
+
+function ChapterView({ chapter }: { chapter: Chapter }) {
+  const html = useMemo(() => storyHtml(chapter), [chapter]);
+  const text = useMemo(() => storyText(chapter), [chapter]);
+  const highlights = useHighlightsList(chapter.id);
+  const speech = useSpeech(text);
+  const storyRef = useRef<HTMLDivElement | null>(null);
+  const toolsButton = useRef<HTMLButtonElement>(null);
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const [tool, setTool] = useState<ToolId>('notes');
+  const { isAuthenticated } = useAuth();
+
+  const index = CHAPTERS.indexOf(chapter);
+  const prev = CHAPTERS[index - 1];
+  const next = CHAPTERS[index + 1];
+
+  useEffect(() => {
+    document.title = `${chapter.title} · The Money Tree of Life`;
+    try {
+      localStorage.setItem('resumeSlug', chapter.slug);
+    } catch {
+      /* ignore */
+    }
+  }, [chapter]);
+
+  useEffect(() => {
+    setAccountSync(isAuthenticated);
+    if (isAuthenticated) progressAPI.update(chapter.slug).catch(() => undefined);
+  }, [isAuthenticated, chapter.slug]);
+
+  useReadingTime();
+
+  const getPlace = useCallback(() => {
+    const el = storyRef.current;
+    if (!el) return { position: 0, excerpt: '' };
+    const rect = el.getBoundingClientRect();
+    const position = Math.min(100, Math.max(0, ((80 - rect.top) / rect.height) * 100));
+    const para = Array.from(el.querySelectorAll('p, li')).find((p) => p.getBoundingClientRect().top >= 80);
+    return { position, excerpt: (para?.textContent || '').trim().slice(0, 140) };
+  }, []);
+
+  const jumpTo = useCallback(({ position, highlightId }: { position?: number; highlightId?: string }) => {
+    setToolsOpen(false);
+    // Wait for the drawer to close so focus and scrolling land on the story.
+    window.setTimeout(() => {
+      if (highlightId) {
+        document.querySelector(`mark[data-highlight-id="${highlightId}"]`)?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        return;
+      }
+      const el = storyRef.current;
+      if (el && position !== undefined) {
+        const top = el.getBoundingClientRect().top + window.scrollY + (el.offsetHeight * position) / 100 - 80;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }, 60);
+  }, []);
+
+  const openTool = (t: ToolId) => {
+    setTool(t);
+    setToolsOpen(true);
+  };
+
+  const actions = (
+    <>
+      {speech.state !== 'idle' && (
+        <button
+          type="button"
+          className={barButton}
+          onClick={speech.state === 'playing' ? speech.pause : speech.resume}
+          aria-label={speech.state === 'playing' ? 'Pause reading aloud' : 'Resume reading aloud'}
+        >
+          <Headphones size={18} aria-hidden />
+          {speech.state === 'playing' ? <Pause size={16} aria-hidden /> : <Play size={16} aria-hidden />}
+        </button>
+      )}
+      <button ref={toolsButton} type="button" className={barButton} onClick={() => openTool(tool)} aria-label="Study tools" aria-haspopup="dialog" aria-expanded={toolsOpen} data-testid="button-tools">
+        <NotebookPen size={19} aria-hidden />
+        <span className="hidden sm:inline">Tools</span>
+      </button>
+    </>
+  );
 
   return (
-    <ReaderShell currentSlug={chapter.slug}>
-      <button
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-violet text-white rounded-full focus:outline-none focus:ring-2 focus:ring-violet font-bold"
-        onClick={skipToContent}
-        data-testid="skip-to-content"
-      >
-        Skip to chapter content
-      </button>
-
-      <TableOfContents sections={tocSections} />
-
-      <div className="fade-in px-3 sm:px-0">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+    <ReaderShell currentSlug={chapter.slug} actions={actions}>
+      <article className="mx-auto max-w-[44rem] px-5 pb-24 sm:px-8" aria-labelledby="chapter-title">
+        <header className="grid grid-cols-[1fr_auto] items-end gap-5 pt-10 sm:gap-8 sm:pt-16">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground leading-tight" data-testid="chapter-title">
+            <p className="text-[0.95rem] text-reader-quiet">
+              {isEpilogue(chapter) ? 'Epilogue' : `Chapter ${chapter.order} of ${STORY_CHAPTER_COUNT}`}
+            </p>
+            <h1
+              id="chapter-title"
+              className="mt-2 text-balance font-display text-[clamp(1.75rem,4.4vw,2.75rem)] font-bold leading-[1.12] text-reader-accent"
+              data-testid="chapter-title"
+            >
               {chapter.title}
-            </h2>
-            <div className="text-sm text-muted-foreground mt-1 flex items-center gap-1 font-bold">
-              <Clock size={14} />
+            </h1>
+            <p className="mt-4 text-[0.95rem] text-reader-quiet">
               {chapter.estReadMinutes} min read
-            </div>
+              <span aria-hidden> · </span>
+              <Link href={flipbookHref(chapter.printedPage)} className="underline decoration-[var(--r-rule)] underline-offset-4 hover:text-reader-accent">
+                Page {chapter.printedPage} in the book
+              </Link>
+            </p>
           </div>
-          <div className="sm:text-right">
-            <div className="text-sm text-muted-foreground font-bold">Chapter {chapter.order} of {chapters.length}</div>
-            <div className="w-full sm:w-32 bg-white/10 rounded-full h-2 mt-1">
-              <div
-                className="bg-gradient-to-r from-primary to-golden h-full rounded-full"
-                style={{ width: `${(chapter.order / chapters.length) * 100}%` }}
-              ></div>
-            </div>
-          </div>
+          <img
+            src={chapterArt(chapter)}
+            alt=""
+            width={ART_WIDTH}
+            height={ART_HEIGHT}
+            className="w-[88px] rounded-plate bg-night-3 shadow-plate sm:w-[148px]"
+            {...({ fetchpriority: 'high' } as object)}
+          />
+        </header>
+
+        <div className="mt-9 border-t border-reader-rule pt-9 sm:mt-12 sm:pt-12">
+          <StoryBody
+            ref={storyRef}
+            html={html}
+            highlights={highlights}
+            onHighlight={(s) =>
+              addHighlight({ chapterId: chapter.id, startOffset: s.start, endOffset: s.end, text: s.text, color: 'gold' })
+            }
+          />
         </div>
 
-        <div className="mb-4 px-3 sm:px-0">
-          <div className="w-full bg-white/10 rounded-full h-2">
-            <div
-              className="bg-gradient-to-r from-primary to-golden h-full rounded-full transition-all duration-300"
-              style={{ width: `${(wordsRead / wordCount) * 100}%` }}
-            ></div>
+        <EndOfStory chapter={chapter} />
+
+        {chapter.kit && (
+          <div className="mt-16">
+            <ChapterKit chapter={chapter} kit={chapter.kit} />
           </div>
-          <div className="text-xs text-muted-foreground mt-1 flex flex-col sm:flex-row sm:justify-between gap-1 font-bold">
-            <span>{wordsRead} / {wordCount} words</span>
-            <span>{readingTimeInMinutes.toFixed(1)} min</span>
-          </div>
+        )}
+
+        <div className="mt-16 border-t border-reader-rule pt-12">
+          <ChapterQuiz quizId={chapter.quizId} />
         </div>
 
-        <CharacterCompanion showSelection={true} />
-
-        <TextToSpeechPlayer text={bodyWithGlossary} chapterTitle={chapter.title} onSentenceChange={handleSentenceChange} />
-
-        <ChapterRecap chapterId={chapter.id} />
-
-        <div
-          id="chapter-content"
-          ref={contentRef}
-          className="magical-frame p-4 sm:p-6 space-y-4 mb-6 focus:outline-none"
-          data-testid="chapter-content"
-          tabIndex={-1}
-          style={{
-            lineHeight: 'var(--line-height, 1.6)',
-            maxWidth: 'var(--max-content-width, 720px)',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-          }}
-        >
-          <Glossarized html={highlightedContent} />
-        </div>
-
-        {sectionPreferences['progress-rewards'] && (
-          <CollapsibleSection id="progress-rewards" title="🏆 Progress & Rewards">
-            <ReadingStreaks />
-            <AchievementSystem />
-            <ProgressTree />
-            <MiniGamesLazy />
-            <CoinsSystem />
-            <RewardsShopLazy />
-          </CollapsibleSection>
-        )}
-
-        {sectionPreferences['reading-tools'] && (
-          <CollapsibleSection id="reading-tools" title="📚 Reading Tools">
-            <BookmarkManager chapterId={chapter.id} chapterTitle={chapter.title} currentScrollPosition={scrollPosition} />
-            <ReadingSpeedTracker chapterId={chapter.id} chapterTitle={chapter.title} wordCount={wordCount} isVisible={isPageVisible} />
-          </CollapsibleSection>
-        )}
-
-        {sectionPreferences['learning-activities'] && (
-          <CollapsibleSection id="learning-activities" title="🎮 Learning Activities">
-            {chapter.quizId && <QuizBlock quizId={chapter.quizId} />}
-            <ChapterSummaryCards chapterId={chapter.id} chapterTitle={chapter.title} chapterContent={bodyWithGlossary} chapterOrder={chapter.order} />
-            <RealWorldActivities chapterId={chapter.id} chapterTitle={chapter.title} chapterOrder={chapter.order} />
-            <NotesPanel chapterId={chapter.id} />
-          </CollapsibleSection>
-        )}
-
-        {sectionPreferences['ai-chat'] && (
-          <CollapsibleSection id="ai-chat" title="🤖 AI Chat">
-            <AiChatInterfaceLazy chapterId={chapter.id} chapterTitle={chapter.title} />
-          </CollapsibleSection>
-        )}
-
-        <HighlightManager chapterId={chapter.id} contentRef={contentRef} />
-
-        <FloatingActions onPreferencesChange={handlePreferencesChange} />
-
-        <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-white/10 pt-6 sm:pt-8 gap-4 px-3 sm:px-0">
+        <nav aria-label="Chapters" className="mt-20 grid gap-3 border-t border-reader-rule pt-8 sm:grid-cols-2">
           {prev ? (
             <Link
-              to={`/read/${prev.slug}`}
-              className="text-primary hover:text-primary/80 transition-colors flex items-center gap-2 font-bold"
+              href={`/read/${prev.slug}`}
+              className="group flex min-h-[4.5rem] flex-col justify-center rounded-choice px-1 hover:text-reader-accent"
               data-testid="link-previous"
             >
-              <ArrowLeft size={16} />
-              Previous: {prev.title}
+              <span className="inline-flex items-center gap-1.5 text-[0.875rem] text-reader-quiet">
+                <ArrowLeft size={15} aria-hidden /> Previous
+              </span>
+              <span className="mt-1 font-display text-[1.1rem] font-semibold leading-snug">{prev.title}</span>
             </Link>
           ) : (
-            <span className="text-muted-foreground">No previous chapter</span>
+            <span />
           )}
           {next ? (
             <Link
-              to={`/read/${next.slug}`}
-              className="text-primary hover:text-primary/80 transition-colors flex items-center gap-2 font-bold"
+              href={`/read/${next.slug}`}
+              className="group flex min-h-[4.5rem] flex-col justify-center rounded-choice px-1 text-right hover:text-reader-accent sm:items-end"
               data-testid="link-next"
             >
-              Next: {next.title}
-              <ArrowRight size={16} />
+              <span className="inline-flex items-center gap-1.5 self-end text-[0.875rem] text-reader-quiet">
+                Next <ArrowRight size={15} aria-hidden />
+              </span>
+              <span className="mt-1 font-display text-[1.1rem] font-semibold leading-snug">{next.title}</span>
             </Link>
           ) : (
-            <span className="text-muted-foreground">Last chapter</span>
+            <Link href="/dashboard" className="flex min-h-[4.5rem] flex-col justify-center px-1 text-right hover:text-reader-accent sm:items-end">
+              <span className="text-[0.875rem] text-reader-quiet">You reached the end</span>
+              <span className="mt-1 font-display text-[1.1rem] font-semibold">See your progress</span>
+            </Link>
           )}
-        </div>
-      </div>
+        </nav>
+      </article>
+
+      <ToolsDrawer
+        chapter={chapter}
+        open={toolsOpen}
+        onOpenChange={setToolsOpen}
+        tab={tool}
+        onTabChange={setTool}
+        getPlace={getPlace}
+        onJumpTo={jumpTo}
+        speech={speech}
+        returnFocusTo={toolsButton}
+      />
     </ReaderShell>
   );
 }
 
-function Glossarized({ html }: { html: string }) {
-  const regex = /<span data-popover="([^"]+)">([^<]+)<\/span>/g;
-  const chunks: Array<string | { term: string }> = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
+/** Reaching the end of the story finishes the chapter. */
+function EndOfStory({ chapter }: { chapter: Chapter }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { completed } = useRewards();
+  const done = completed.includes(chapter.id);
+  const [justFinished, setJustFinished] = useState(false);
 
-  while ((match = regex.exec(html)) !== null) {
-    const start = match.index;
-    if (start > lastIndex) chunks.push(html.slice(lastIndex, start));
-    chunks.push({ term: match[1] });
-    lastIndex = regex.lastIndex;
-  }
-  if (lastIndex < html.length) chunks.push(html.slice(lastIndex));
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || done) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && completeChapter(chapter.id, chapter.label)) setJustFinished(true);
+      },
+      { rootMargin: '0px 0px -20% 0px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [chapter, done]);
 
   return (
-    <div className="prose-invert reader-prose text-foreground/80">
-      {chunks.map((c, i) =>
-        typeof c === 'string'
-          ? <span key={i} dangerouslySetInnerHTML={{ __html: c }} />
-          : <GlossaryPopover key={i} term={c.term} />
+    <div ref={ref} className="mt-14 flex flex-col items-center gap-3 text-center" aria-live="polite">
+      <svg width="34" height="34" viewBox="0 0 24 24" aria-hidden className="text-reader-accent">
+        <path
+          fill="currentColor"
+          d="M12 2c-3.5 3-6 6.4-6 10.2C6 16 8.6 19 12 19.8V22h1v-2.2c3.2-.9 5-3.8 5-7.6C18 8.4 15.5 5 12 2zm.5 16.7V9h-1v9.7c-2.6-.8-4.5-3.3-4.5-6.5 0-3.1 1.9-6 5-8.9 3.1 2.9 5 5.8 5 8.9 0 3.2-1.9 5.7-4.5 6.5z"
+        />
+      </svg>
+      {done && (
+        <p className="text-[0.95rem] text-reader-quiet">
+          {justFinished ? `You finished ${isEpilogue(chapter) ? 'the epilogue' : chapter.label}. Nice reading!` : 'You have finished this chapter.'}
+        </p>
       )}
     </div>
   );
+}
+
+/** Time spent reading counts toward the streak and the reading-time achievement. */
+function useReadingTime() {
+  useEffect(() => {
+    let seconds = 0;
+    let countedDay = false;
+    const tick = window.setInterval(() => {
+      if (document.hidden) return;
+      seconds += 5;
+      if (!countedDay && seconds >= 30) {
+        countedDay = true;
+        recordReadingDay();
+      }
+      if (seconds % 60 === 0) recordActivity('reading-time', { minutes: 1 });
+    }, 5000);
+    return () => window.clearInterval(tick);
+  }, []);
 }

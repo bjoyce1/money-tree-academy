@@ -1,336 +1,284 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── CSS Variables ──────────────────────────────────────────── */
+/* ==========================================================================
+   The Money Tree of Life: app-wide tokens (see DESIGN.md)
+   The shadcn variables below are mapped onto the book's palette so every
+   shared UI primitive (dialogs, popovers, sheets, toasts) sits in the same
+   navy sky with the one gold lamp.
+   ========================================================================== */
 :root {
-  --background: 260 60% 6%;
-  --foreground: 240 20% 95%;
-  --card: 260 45% 10%;
-  --card-foreground: 240 20% 95%;
-  --popover: 260 45% 10%;
-  --popover-foreground: 240 20% 95%;
-  --primary: 142 70% 55%;
-  --primary-foreground: 260 60% 6%;
-  --secondary: 260 30% 18%;
-  --secondary-foreground: 240 20% 95%;
-  --muted: 260 30% 18%;
-  --muted-foreground: 260 15% 60%;
-  --accent: 260 30% 18%;
-  --accent-foreground: 240 20% 95%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 240 20% 95%;
-  --border: 260 25% 18%;
-  --input: 260 25% 18%;
-  --ring: 142 70% 55%;
-  --radius: 1.3rem;
+  --background: #0b1224;
+  --foreground: #f6efdf;
+  --card: #101a36;
+  --card-foreground: #f6efdf;
+  --popover: #101a36;
+  --popover-foreground: #f6efdf;
+  --primary: #e6b955;
+  --primary-foreground: #0b1224;
+  --secondary: #15214a;
+  --secondary-foreground: #f6efdf;
+  --muted: #15214a;
+  --muted-foreground: rgba(246, 239, 223, 0.7);
+  --accent: #15214a;
+  --accent-foreground: #f6efdf;
+  --destructive: #b4443a;
+  --destructive-foreground: #f6efdf;
+  --border: rgba(230, 185, 85, 0.18);
+  --input: rgba(230, 185, 85, 0.28);
+  --ring: #e6b955;
+  --chart-1: #e6b955;
+  --chart-2: #f6efdf;
+  --chart-3: #8fa3d6;
+  --chart-4: #c9a24a;
+  --chart-5: #6c7fb3;
+  --sidebar: #0b1224;
+  --sidebar-foreground: #f6efdf;
+  --sidebar-primary: #e6b955;
+  --sidebar-primary-foreground: #0b1224;
+  --sidebar-accent: #15214a;
+  --sidebar-accent-foreground: #f6efdf;
+  --sidebar-border: rgba(230, 185, 85, 0.18);
+  --sidebar-ring: #e6b955;
+  --font-sans: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --font-serif: Cinzel, 'Times New Roman', serif;
+  --font-mono: Menlo, monospace;
+  --radius: 12px;
+  /* Legacy accents still referenced by older components: both are gold now. */
+  --brand: #e6b955;
+  --brand2: #e6b955;
 
-  /* Semantic accent colors */
-  --brand: 142 70% 55%;
-  --brand2: 45 96% 56%;
-  --coral: 25 95% 53%;
-  --violet: 258 90% 66%;
-  --golden: 45 96% 56%;
+  /* Reader surfaces default to the Night theme. */
+  --r-bg: #0b1224;
+  --r-surface: #101a36;
+  --r-ink: #f6efdf;
+  --r-ink-soft: rgba(246, 239, 223, 0.84);
+  --r-ink-quiet: rgba(246, 239, 223, 0.64);
+  --r-accent: #e6b955;
+  --r-rule: rgba(230, 185, 85, 0.2);
+  --r-wash: rgba(230, 185, 85, 0.09);
+  --r-mark: rgba(230, 185, 85, 0.3);
+  --r-bar: rgba(11, 18, 36, 0.88);
+  --r-size: 19px;
 
-  --sidebar-background: 260 45% 10%;
-  --sidebar-foreground: 240 20% 90%;
-  --sidebar-primary: 142 70% 55%;
-  --sidebar-primary-foreground: 260 60% 6%;
-  --sidebar-accent: 260 30% 18%;
-  --sidebar-accent-foreground: 240 20% 90%;
-  --sidebar-border: 260 25% 18%;
-  --sidebar-ring: 142 70% 55%;
+  color-scheme: dark;
 }
 
-/* ─── Base ──────────────────────────────────────────────────── */
 @layer base {
-  * { @apply border-border; }
+  * {
+    @apply border-border;
+  }
+
+  html {
+    background: #0b1224;
+  }
+
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: 'Nunito', system-ui, sans-serif;
-    background: linear-gradient(145deg, #1a1040 0%, #0f0a2e 50%, #120d30 100%);
-    background-attachment: fixed;
-    min-height: 100vh;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  }
+
+  ::selection {
+    background: rgba(230, 185, 85, 0.35);
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid #e6b955;
+    outline-offset: 3px;
   }
 }
 
-html, body, #root { height: 100%; }
+html,
+body,
+#root {
+  min-height: 100%;
+}
 
-/* ─── Global Theme Transitions ──────────────────────────────── */
-* {
+/* Colour changes on hover take 180ms (DESIGN.md: Motion). Only colours. */
+a,
+button,
+[role='button'],
+input,
+select,
+textarea {
   transition:
-    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.3s ease;
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    opacity 180ms ease;
 }
 
-/* ─── Glassmorphism Cards ────────────────────────────────────── */
-.glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-.glass-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 1px 20px rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3);
+/* ==========================================================================
+   Reading themes. The reader root carries data-reader-theme; every reader
+   surface reads these variables through the Tailwind `reader-*` colours.
+   ========================================================================== */
+[data-reader-theme='paper'] {
+  --r-bg: #fbf6ea;
+  --r-surface: #f3ead6;
+  --r-ink: #1f1a12;
+  --r-ink-soft: #3b3325;
+  --r-ink-quiet: #665b47;
+  --r-accent: #7f5310;
+  --r-rule: rgba(127, 83, 16, 0.24);
+  --r-wash: rgba(127, 83, 16, 0.08);
+  --r-mark: rgba(230, 185, 85, 0.5);
+  --r-bar: rgba(251, 246, 234, 0.9);
+  color-scheme: light;
 }
 
-.glass-nav {
-  background: rgba(15, 10, 46, 0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+[data-reader-theme='contrast'] {
+  --r-bg: #03060f;
+  --r-surface: #0b1224;
+  --r-ink: #ffffff;
+  --r-ink-soft: #ffffff;
+  --r-ink-quiet: #ebe5d6;
+  --r-accent: #ffd36b;
+  --r-rule: rgba(255, 211, 107, 0.6);
+  --r-wash: rgba(255, 211, 107, 0.16);
+  --r-mark: rgba(255, 211, 107, 0.45);
+  --r-bar: rgba(3, 6, 15, 0.94);
 }
 
-/* ─── Themes ─────────────────────────────────────────────────── */
-.theme-night {
-  background: linear-gradient(145deg, #1a1040 0%, #0f0a2e 50%, #120d30 100%);
-  color: hsl(240, 20%, 95%);
+/* ==========================================================================
+   Story text (chapters.json). The book's own styling, in the reader theme.
+   ========================================================================== */
+.reader-prose {
+  font-size: var(--r-size);
+  line-height: 1.75;
+  color: var(--r-ink-soft);
 }
-
-.theme-day {
-  background: hsl(42, 14%, 96%);
-  color: hsl(0, 0%, 13%);
+.reader-prose p {
+  margin: 0 0 1.05em;
 }
-.theme-day .text-slate-100,
-.theme-day .text-slate-200,
-.theme-day .text-slate-300 { color: hsl(0, 0%, 13%) !important; }
-.theme-day .text-slate-400,
-.theme-day .text-slate-500 { color: hsl(0, 0%, 35%) !important; }
-.theme-day .bg-slate-900,
-.theme-day .bg-slate-800 {
-  background-color: hsl(0, 0%, 98%) !important;
-  border-color: hsl(0, 0%, 85%) !important;
-}
-.theme-day .bg-slate-900\/50 { background-color: hsl(0, 0%, 95%) !important; }
-.theme-day .border-slate-700,
-.theme-day .border-slate-800,
-.theme-day .border-slate-600 { border-color: hsl(0, 0%, 80%) !important; }
-.theme-day .bg-black\/40 { background-color: rgba(255, 255, 255, 0.95) !important; }
-.theme-day input, .theme-day select {
-  background-color: hsl(0, 0%, 100%) !important;
-  color: hsl(0, 0%, 13%) !important;
-}
-.theme-day .bg-slate-950 { background-color: hsl(0, 0%, 92%) !important; }
-.theme-day .glass-card {
-  background: rgba(255, 255, 255, 0.7) !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-}
-
-.theme-sepia {
-  background: hsl(42, 55%, 91%);
-  color: hsl(42, 30%, 15%);
-}
-.theme-sepia .text-slate-100,
-.theme-sepia .text-slate-200,
-.theme-sepia .text-slate-300 { color: hsl(42, 30%, 15%) !important; }
-.theme-sepia .text-slate-400 { color: hsl(42, 20%, 35%) !important; }
-.theme-sepia .bg-slate-900,
-.theme-sepia .bg-slate-800 {
-  background-color: hsl(42, 35%, 96%) !important;
-  border-color: hsl(42, 25%, 80%) !important;
-}
-.theme-sepia .border-slate-700,
-.theme-sepia .border-slate-600 { border-color: hsl(42, 25%, 75%) !important; }
-
-.theme-contrast {
-  background: hsl(0, 0%, 0%);
-  color: hsl(0, 0%, 100%);
-}
-.theme-contrast .bg-slate-900,
-.theme-contrast .bg-slate-800 {
-  background-color: #111 !important;
-  border-color: #fff !important;
-}
-
-/* ─── Kid Themes ────────────────────────────────────────────── */
-.theme-pink {
-  background: hsl(340, 100%, 97%);
-  color: hsl(340, 30%, 10%);
-  --brand: 340 90% 60%;
-}
-
-.theme-blue {
-  background: hsl(210, 100%, 97%);
-  color: hsl(210, 30%, 10%);
-  --brand: 210 90% 50%;
-}
-
-/* ─── Reader Prose ──────────────────────────────────────────── */
-.reader-prose p { margin: 1rem 0; line-height: 1.85; font-size: 1rem; }
-.reader-prose h2 { margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 800; font-size: 1.35rem; }
-.reader-prose h3 { margin-top: 1.25rem; margin-bottom: 0.4rem; font-weight: 700; }
-.reader-prose ul { margin: 0.75rem 0; padding-left: 1.5rem; list-style: disc; }
-.reader-prose li { margin: 0.4rem 0; line-height: 1.7; }
-.reader-prose a { text-decoration: underline; }
-.reader-prose strong { font-weight: 700; }
-.reader-prose em { font-style: italic; }
-
-/* ─── Glossary ──────────────────────────────────────────────── */
-.glossary-term {
+.reader-prose a {
+  color: var(--r-accent);
   text-decoration: underline;
-  text-decoration-style: dotted;
-  cursor: pointer;
-  color: hsl(var(--brand));
+  text-underline-offset: 0.2em;
 }
-.glossary-term:hover { background-color: hsla(142, 70%, 55%, 0.12); border-radius: 2px; }
-
-/* ─── Animations ────────────────────────────────────────────── */
-.fade-in { animation: fadeIn 0.45s ease-out; }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* The place line that opens a chapter ("Houston, Texas"). */
+.reader-prose .mt-place {
+  margin-bottom: 1.5em;
+  font-style: italic;
+  color: var(--r-ink-quiet);
+}
+/* Lines the book sets in bold gold: dialogue and the tree's words. */
+.reader-prose .mt-pull {
+  margin: 1.2em 0 1.2em 0.25em;
+  padding-left: 1em;
+  border-left: 2px solid var(--r-accent);
+  color: var(--r-accent);
+  font-weight: 700;
+}
+/* Signs, banners and the words on the golden leaf. */
+.reader-prose .mt-sign {
+  margin: 1.6em 0;
+  text-align: center;
+  color: var(--r-accent);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.reader-prose h3 {
+  margin: 2.2em 0 0.6em;
+  font-family: Cinzel, 'Times New Roman', serif;
+  font-size: 1.3em;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--r-accent);
+}
+.reader-prose ul {
+  margin: 0.5em 0 1.2em;
+  padding-left: 1.3em;
+  list-style: disc;
+}
+.reader-prose li {
+  margin: 0.25em 0;
+}
+.reader-prose li::marker {
+  color: var(--r-accent);
 }
 
-.slide-up { animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.theme-transition-glow { animation: themeGlow 0.8s ease-in-out; }
-@keyframes themeGlow {
-  0%   { box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
-  50%  { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-  100% { box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
-}
-
-/* Bounce animation for achievements/coins */
-@keyframes bounce-in {
-  0%   { transform: scale(0.3); opacity: 0; }
-  50%  { transform: scale(1.1); }
-  70%  { transform: scale(0.95); }
-  100% { transform: scale(1); opacity: 1; }
-}
-.bounce-in { animation: bounce-in 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
-
-/* Sparkle animation for coins */
-@keyframes sparkle {
-  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1) rotate(180deg); }
-}
-.sparkle { animation: sparkle 0.8s ease-in-out; }
-
-/* Pulse glow for selected items */
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(74, 222, 128, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.6), 0 0 40px rgba(74, 222, 128, 0.2); }
-}
-.pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-
-/* Float animation */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-}
-.float { animation: float 3s ease-in-out infinite; }
-
-/* ─── TTS Sentence Highlight ─────────────────────────────────── */
-mark.tts-highlight {
-  background: linear-gradient(135deg, hsla(47, 95%, 55%, 0.35), hsla(142, 71%, 45%, 0.25));
+/* Glossary words inside the story. */
+.glossary-term {
+  font: inherit;
   color: inherit;
+  text-decoration: underline dotted var(--r-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
   border-radius: 4px;
-  padding: 1px 2px;
-  box-shadow: 0 0 12px hsla(47, 95%, 55%, 0.2);
-  transition: background 0.3s ease;
-  animation: tts-pulse 1.5s ease-in-out infinite;
+  cursor: help;
+}
+.glossary-term:hover,
+.glossary-term[aria-expanded='true'] {
+  color: var(--r-accent);
 }
 
-@keyframes tts-pulse {
-  0%, 100% { box-shadow: 0 0 8px hsla(47, 95%, 55%, 0.15); }
-  50% { box-shadow: 0 0 18px hsla(47, 95%, 55%, 0.35); }
+/* Reader highlights: a gold wash that keeps the text colour. */
+.reader-prose mark.mt-highlight {
+  background: var(--r-mark);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 0.08em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
-/* ─── Quiz ──────────────────────────────────────────────────── */
-.quiz-choice { transition: all 0.2s ease; }
-.quiz-choice:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); }
-
-/* ─── Progress Bar ──────────────────────────────────────────── */
+/* Thin gold progress bars used by listening and reading tools. */
 .progress-bar {
-  background: linear-gradient(90deg, hsl(var(--brand)), hsl(var(--brand2)));
+  background: #e6b955;
   height: 4px;
   border-radius: 2px;
 }
 
-/* ─── Adventure Path ─────────────────────────────────────────── */
-.adventure-path {
-  position: relative;
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
 }
-.adventure-path::before {
-  content: '';
-  position: absolute;
-  left: 1.75rem;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(139, 92, 246, 0.3) 0px,
-    rgba(139, 92, 246, 0.3) 8px,
-    transparent 8px,
-    transparent 16px
-  );
-}
-
-/* ─── Scrollbar ─────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: hsl(260, 30%, 25%); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: hsl(260, 30%, 35%); }
-
-/* ─── Mobile Native Feel ────────────────────────────────────── */
-@media (max-width: 640px) {
-  html { font-size: 15px; }
-  .reader-prose { font-size: 1rem; line-height: 1.8; }
-  input, select, textarea { font-size: 16px; }
-}
-
-/* Safe area insets for notch devices */
-.safe-area-top { padding-top: env(safe-area-inset-top, 0px); }
-.safe-area-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
-.pb-safe { padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px)); }
-
-@media (min-width: 1024px) {
-  .pb-safe { padding-bottom: 0; }
-}
-
-/* Native touch feedback */
-@media (hover: none) {
-  * { -webkit-tap-highlight-color: transparent; }
-  .touch-manipulation { touch-action: manipulation; }
-}
-
-/* Smooth momentum scrolling */
-.overscroll-contain {
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Active press effect for mobile buttons */
-@media (hover: none) {
-  button:active, a:active {
-    transition-duration: 50ms;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-/* ─── Magical reader frame ──────────────────────────────────── */
-.magical-frame {
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  border-radius: 1rem;
-  box-shadow: 
-    inset 0 0 30px rgba(139, 92, 246, 0.03),
-    0 0 60px rgba(139, 92, 246, 0.05);
+.touch-manipulation {
+  touch-action: manipulation;
 }
 
-/* ─── Progress Ring ──────────────────────────────────────────── */
-.progress-ring-circle {
-  transition: stroke-dashoffset 0.5s ease;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
+/* Prevent iOS zoom on focus. */
+@media (max-width: 1024px) {
+  input[type='text'],
+  input[type='email'],
+  input[type='search'],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* While the reader is open, the whole page takes the reading theme. */
+html[data-reader-theme],
+html[data-reader-theme] body {
+  background: var(--r-bg);
+}
+html[data-reader-theme='paper'] ::selection {
+  background: rgba(127, 83, 16, 0.25);
+}
+html[data-reader-theme='paper'] :focus-visible {
+  outline-color: #7f5310;
 }

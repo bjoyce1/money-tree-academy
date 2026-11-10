@@ -5,28 +5,26 @@
       {
         "id": "q1",
         "type": "single",
-        "prompt": "What did the Money Tree compare money to?",
-        "choices": [
-          "A rock that stays the same",
-          "A seed that can grow",
-          "A toy to play with",
-          "A treasure to hide"
-        ],
+        "prompt": "According to the Money Tree, what grows on trees?",
+        "choices": ["Money", "Knowledge", "Gold coins", "Prizes"],
         "answerKey": [1],
-        "explanation": "The Money Tree taught that money is like a seed - plant it wisely and it grows into something wonderful!"
+        "explanation": "“Money does not grow on trees. Knowledge does. And knowledge can grow into wealth.”"
       },
       {
         "id": "q2",
         "type": "single",
-        "prompt": "What promise did the four friends make?",
-        "choices": [
-          "To spend all their money quickly",
-          "To never buy anything fun",
-          "To fill their jars with wise choices",
-          "To hide their money forever"
-        ],
+        "prompt": "Why did the Money Tree choose Renee and Alex?",
+        "choices": ["They were rich", "They won the Youth Innovation Challenge", "They were ready to learn what money could become", "They found the golden seed first"],
         "answerKey": [2],
-        "explanation": "Each friend promised to fill their magical jar with wise money choices, starting their journey to financial wisdom."
+        "explanation": "The tree had not chosen them because they were rich. It chose them because they were ready to learn what money could become."
+      },
+      {
+        "id": "q3",
+        "type": "multi",
+        "prompt": "The golden leaf asked what money is for. Which answers appeared on it? Choose all that apply.",
+        "choices": ["To spend", "To save", "To grow", "To give", "To hide"],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "The leaf read: TO SPEND? TO SAVE? TO GROW? TO GIVE? Money is a tool people can use to buy, save, grow, give, and build opportunities."
       }
     ]
   },
@@ -34,30 +32,28 @@
     "id": "qz-02",
     "questions": [
       {
-        "id": "q1", 
+        "id": "q1",
         "type": "single",
-        "prompt": "What does the 50-30-20 rule suggest?",
-        "choices": [
-          "50% save, 30% spend, 20% give away",
-          "50% needs, 30% wants, 20% saving",
-          "50% fun, 30% food, 20% clothes",
-          "50% today, 30% tomorrow, 20% never"
-        ],
-        "answerKey": [1],
-        "explanation": "The 50-30-20 rule helps you balance your money: 50% for things you need, 30% for things you want, and 20% for saving!"
+        "prompt": "Renee and Alex received $10.75 from their Fun Pack sales, and the supplies cost about $6. What was their profit?",
+        "choices": ["$10.75", "$6.00", "$4.75", "$16.75"],
+        "answerKey": [2],
+        "explanation": "Revenue minus costs equals profit: $10.75 minus about $6 leaves $4.75."
       },
       {
         "id": "q2",
         "type": "single",
-        "prompt": "What did the Money Tree say strong roots represent?",
-        "choices": [
-          "How tall you can grow",
-          "Your savings that help you weather storms",
-          "The friends you make",
-          "How much you can spend"
-        ],
-        "answerKey": [1], 
-        "explanation": "Just like tree roots anchor and nourish the tree, your savings create a strong foundation for your financial future."
+        "prompt": "What did the tree say profit is?",
+        "choices": ["What enters", "What the work requires", "What remains", "What you borrow"],
+        "answerKey": [2],
+        "explanation": "“Revenue is what enters. Cost is what the work requires. Profit is what remains.”"
+      },
+      {
+        "id": "q3",
+        "type": "multi",
+        "prompt": "Which forms of value did the tree show them? Choose all that apply.",
+        "choices": ["A product", "A service", "A skill", "Time", "Luck"],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "The tree showed five forms of value: product, service, skill, time, and an idea that solves a problem."
       }
     ]
   },
@@ -67,28 +63,26 @@
       {
         "id": "q1",
         "type": "single",
-        "prompt": "What are the four branches in the Branch System?",
-        "choices": [
-          "FOOD, GAMES, TOYS, BOOKS",
-          "NEEDS, WANTS, SAVE, SHARE",
-          "TODAY, TOMORROW, LATER, NEVER", 
-          "SMALL, MEDIUM, LARGE, HUGE"
-        ],
+        "prompt": "Alex's current shoes still fit. What were the $140 glowing shoes?",
+        "choices": ["A need", "A want", "An emergency", "A bill"],
         "answerKey": [1],
-        "explanation": "The Branch System organizes your money into four purposes: NEEDS (must-haves), WANTS (nice-to-haves), SAVE (future goals), and SHARE (helping others)."
+        "explanation": "A want can bring joy, but you can live without it. His shoes still fit, so the glowing shoes were a want."
       },
       {
         "id": "q2",
         "type": "single",
-        "prompt": "When money is tight, which branch should you feed first?",
-        "choices": [
-          "WANTS - because they're fun",
-          "SAVE - because it grows",
-          "NEEDS - because they're essential",
-          "SHARE - because it helps others"
-        ],
-        "answerKey": [2],
-        "explanation": "NEEDS always come first because they keep you safe, healthy, and able to learn and grow!"
+        "prompt": "What did Renee say about “Buy now, pay later”?",
+        "choices": ["It means you pay less", "Pay later does not mean pay less", "It is always free", "It has no fees"],
+        "answerKey": [1],
+        "explanation": "The small print included fees and late charges. “Pay later does not mean pay less.”"
+      },
+      {
+        "id": "q3",
+        "type": "multi",
+        "prompt": "A need is important for which of these? Choose all that apply.",
+        "choices": ["Health", "Safety", "Learning", "Daily life", "Looking cool"],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "“A need is important for health, safety, learning, or daily life.”"
       }
     ]
   },
@@ -97,30 +91,27 @@
     "questions": [
       {
         "id": "q1",
-        "type": "multi",
-        "prompt": "Which are examples of 'earning leaves' mentioned in the chapter?",
-        "choices": [
-          "Allowance from family",
-          "Money from doing chores",
-          "Using skills to help others", 
-          "Gift money for birthdays",
-          "Finding money on the ground"
-        ],
-        "answerKey": [0, 1, 2, 3],
-        "explanation": "All of these except finding money are ways to earn! The key is providing value through work, skills, or being part of a family."
+        "type": "single",
+        "prompt": "Why did Mrs. Carter add a two-dollar bonus?",
+        "choices": ["They asked for one", "They stayed focused and corrected their mistakes", "They finished first", "It was her birthday"],
+        "answerKey": [1],
+        "explanation": "She paid each of them ten dollars and added a two-dollar bonus for staying focused and correcting mistakes."
       },
       {
         "id": "q2",
         "type": "single",
-        "prompt": "What makes someone an entrepreneur according to the Money Tree?",
-        "choices": [
-          "Having lots of money to start with",
-          "Being older than 18",
-          "Solving problems for other people",
-          "Working for a big company"
-        ],
-        "answerKey": [2],
-        "explanation": "An entrepreneur finds creative ways to solve problems for others - and people gladly pay for solutions to their problems!"
+        "prompt": "What did Mrs. Carter tell Alex when he rushed?",
+        "choices": ["Work faster so you get paid sooner", "Think about the person you are helping and the result you are creating", "Only do the easy boxes", "Ask for more money"],
+        "answerKey": [1],
+        "explanation": "“Work feels slow when you only think about getting paid. Think about the person you are helping and the result you are creating.”"
+      },
+      {
+        "id": "q3",
+        "type": "multi",
+        "prompt": "The EARNING branch showed four paths. Which were they? Choose all that apply.",
+        "choices": ["Time", "Skill", "Product", "Service", "Luck"],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "The tree showed four paths: time, skill, product, and service. “What you earn matters. How you earn matters too.”"
       }
     ]
   },
@@ -130,28 +121,26 @@
       {
         "id": "q1",
         "type": "single",
-        "prompt": "What did the Money Tree compare flashy flowers to?",
-        "choices": [
-          "Things you need for survival",
-          "Wants that are beautiful but don't last long",
-          "Money that grows over time",
-          "Seeds that create more trees"
-        ],
+        "prompt": "What was wrong with the bucket at the Money Tree?",
+        "choices": ["It was too small", "It had a hole, so money leaked out through unplanned spending", "It was locked", "It was full of seeds"],
         "answerKey": [1],
-        "explanation": "Flashy flowers are like wants - they catch your eye and bring joy, but they don't produce the fruit (long-term value) that sustains you."
+        "explanation": "Money entered at the top and leaked out through unplanned spending, like Alex's snacks, phone games, trading cards, and drinks."
       },
       {
         "id": "q2",
-        "type": "single", 
-        "prompt": "What is the 24-hour rule?",
-        "choices": [
-          "Wait 24 hours before eating anything",
-          "Save money for 24 hours straight",
-          "Wait a full day before buying something you want but don't need",
-          "Exercise for 24 hours before spending money"
-        ],
-        "answerKey": [2],
-        "explanation": "The 24-hour rule helps you avoid impulse buying. Often after waiting a day, you realize you didn't really need that want-item after all!"
+        "type": "single",
+        "prompt": "When should you save?",
+        "choices": ["After spending, with whatever is left", "First, as part of the plan", "Only on birthdays", "Only when you have a lot of money"],
+        "answerKey": [1],
+        "explanation": "“Saving is not what happens after spending. Saving is part of the plan.” Save first, not last."
+      },
+      {
+        "id": "q3",
+        "type": "single",
+        "prompt": "Which three jars appeared at the Money Tree?",
+        "choices": ["Spend, Save, Grow", "Need, Want, Wish", "Food, Fun, Fees", "Now, Later, Never"],
+        "answerKey": [0],
+        "explanation": "Three glowing jars appeared: SPEND, SAVE, and GROW. “Give every dollar a job.”"
       }
     ]
   },
@@ -161,28 +150,26 @@
       {
         "id": "q1",
         "type": "single",
-        "prompt": "What is the main difference between saving and investing?",
-        "choices": [
-          "Saving is for rich people, investing is for poor people",
-          "Saving keeps money still like a rock, investing makes money work and grow",
-          "Saving is dangerous, investing is safe",
-          "There is no difference"
-        ],
-        "answerKey": [1],
-        "explanation": "When you save, your money sits safely but doesn't grow much. When you invest, your money works for you, growing and multiplying over time!"
+        "prompt": "The class had $60 for a celebration, but the wish list came to $95. What did Renee and Alex do?",
+        "choices": ["Borrowed the extra $35", "Cancelled the party", "Chose what the class needed and valued most, for exactly $60", "Asked each family to pay"],
+        "answerKey": [2],
+        "explanation": "They chose a sandwich tray, fruit, water, music, and paper decorations. The plan served more students and totaled exactly sixty dollars."
       },
       {
         "id": "q2",
         "type": "single",
-        "prompt": "What is diversification?",
-        "choices": [
-          "Putting all your money in one investment",
-          "Never investing any money",
-          "Planting many different types of seeds in different places", 
-          "Only investing in things your friends invest in"
-        ],
+        "prompt": "What did the tree say a budget is?",
+        "choices": ["A cage", "A punishment", "A guide, not a cage", "A list of wishes"],
         "answerKey": [2],
-        "explanation": "Diversification means spreading your investments around. If one investment fails, the others can keep growing - just like a smart gardener plants different seeds!"
+        "explanation": "“A budget is a guide, not a cage. Make each choice on purpose.” For Alex, a budget was a map."
+      },
+      {
+        "id": "q3",
+        "type": "multi",
+        "prompt": "Which three tags appeared on the BUDGETING branch? Choose all that apply.",
+        "choices": ["Plan", "Choose", "Adjust", "Borrow"],
+        "answerKey": [0, 1, 2],
+        "explanation": "The BUDGETING branch grew three tags: PLAN, CHOOSE, and ADJUST."
       }
     ]
   },
@@ -192,29 +179,26 @@
       {
         "id": "q1",
         "type": "multi",
-        "prompt": "What are the Four Shields of Protection?",
-        "choices": [
-          "Emergency Fund Shield",
-          "Insurance Shield", 
-          "Knowledge Shield",
-          "Diversification Shield",
-          "Friendship Shield"
-        ],
+        "prompt": "What are the four safety steps for a suspicious message? Choose all that apply.",
+        "choices": ["Stop", "Check", "Ask", "Report", "Click the link"],
         "answerKey": [0, 1, 2, 3],
-        "explanation": "The four shields protect your money tree: Emergency funds for surprises, insurance for big disasters, knowledge to spot scams, and diversification to spread risk."
+        "explanation": "STOP, CHECK, ASK, and REPORT. When Alex got a fake bank email, he stopped, checked the official app, asked his father, and reported the scam."
       },
       {
         "id": "q2",
         "type": "single",
-        "prompt": "Why should young people care about protection?",
-        "choices": [
-          "They have the most money to lose",
-          "Protection habits built young become armor when older",
-          "Young people face the most financial dangers",
-          "It's required by law"
-        ],
+        "prompt": "What does an account's balance show?",
+        "choices": ["Money you owe", "What remains in the account", "Your credit score", "Monthly fees"],
         "answerKey": [1],
-        "explanation": "Starting protection habits when you're young helps them become automatic. By the time you have more money to protect, you'll already know how to do it!"
+        "explanation": "Deposits add money, withdrawals remove it, and the balance shows what remains."
+      },
+      {
+        "id": "q3",
+        "type": "single",
+        "prompt": "Why did Renee worry about Alex keeping $58 in an old sneaker?",
+        "choices": ["The shoe could be lost, thrown away, or damaged", "Sneakers charge fees", "It was too much money", "His father wanted it"],
+        "answerKey": [0],
+        "explanation": "Banks and credit unions can help people store, move, track, and protect money. A sneaker cannot."
       }
     ]
   },
@@ -224,29 +208,26 @@
       {
         "id": "q1",
         "type": "single",
-        "prompt": "According to the Money Tree, what happens when you share wisely?",
-        "choices": [
-          "You lose money and become poor",
-          "Nothing changes in your life",
-          "More comes back to you in various forms",
-          "You only help other people"
-        ],
+        "prompt": "Marcus's phone cost $800. What did his payments add up to?",
+        "choices": ["$800", "$760", "$840", "$1,000"],
         "answerKey": [2],
-        "explanation": "The tree taught that sharing wisely creates a positive cycle - you receive connections, opportunities, and satisfaction that enriches your life in many ways!"
+        "explanation": "His payments totaled eight hundred forty dollars. Interest is the cost of borrowing."
       },
       {
-        "id": "q2", 
-        "type": "multi",
-        "prompt": "What are different ways to share according to the chapter?",
-        "choices": [
-          "Giving money to those in need",
-          "Sharing your time and skills",
-          "Supporting causes you believe in",
-          "Helping others grow their own money trees",
-          "Keeping everything for yourself"
-        ],
-        "answerKey": [0, 1, 2, 3],
-        "explanation": "Sharing isn't just about money! You can share time, skills, support causes, and help others learn - all of these create more 'shade' for everyone."
+        "id": "q2",
+        "type": "single",
+        "prompt": "What did the tree say credit is?",
+        "choices": ["Free money", "Borrowed trust", "A savings account", "A bonus"],
+        "answerKey": [1],
+        "explanation": "“Credit is borrowed trust. Debt is money you owe. Interest is the cost of borrowing.”"
+      },
+      {
+        "id": "q3",
+        "type": "single",
+        "prompt": "The financing offer for Alex's $140 shoes would have cost at least how much?",
+        "choices": ["$140", "$120", "$160", "$100"],
+        "answerKey": [2],
+        "explanation": "Twenty dollars now and eight monthly payments totaled one hundred sixty dollars before late fees. He kept saving instead."
       }
     ]
   },
@@ -256,28 +237,142 @@
       {
         "id": "q1",
         "type": "single",
-        "prompt": "What did the Money Tree say was the most important truth?",
-        "choices": [
-          "You need to be perfect with money",
-          "You should never make mistakes",
-          "You don't need to be perfect, just intentional",
-          "Money is the most important thing in life"
-        ],
-        "answerKey": [2],
-        "explanation": "The tree's wisdom: you don't need to be perfect with money. You just need to be intentional - making thoughtful choices that compound over time."
+        "prompt": "What is compounding?",
+        "choices": ["Spending money twice", "When growth earns more growth over time", "A kind of fee", "Borrowing from two banks"],
+        "answerKey": [1],
+        "explanation": "One dollar earned growth, and later that growth earned more growth."
       },
       {
         "id": "q2",
         "type": "single",
-        "prompt": "What is true wealth according to the Money Tree's final lesson?",
-        "choices": [
-          "Having more money than anyone else",
-          "Never spending any money",
-          "Using money wisely to create the life you want and help others",
-          "Buying everything you've ever wanted"
-        ],
+        "prompt": "Why did Alex keep his shoe money in savings instead of investing it?",
+        "choices": ["Investing is always bad", "He needed it soon", "The bank told him to", "He forgot about it"],
+        "answerKey": [1],
+        "explanation": "Saving is safer for short-term goals. Do not invest money you will need soon."
+      },
+      {
+        "id": "q3",
+        "type": "multi",
+        "prompt": "Which four rules grew on the INVESTING branch? Choose all that apply.",
+        "choices": ["Know the goal", "Know the risk", "Spread the seeds", "Give them time", "Get rich fast"],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "KNOW THE GOAL, KNOW THE RISK, SPREAD THE SEEDS, and GIVE THEM TIME. “Never confuse possibility with a promise.”"
+      }
+    ]
+  },
+  {
+    "id": "qz-10",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "single",
+        "prompt": "What problem did the snack packs solve?",
+        "choices": ["Families waited in long food lines", "The park needed cleaning", "Kids needed toys", "The yard sale needed signs"],
+        "answerKey": [0],
+        "explanation": "At Discovery Green they noticed families waiting in long food lines. A business solves a problem and creates value for a customer."
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "What did the tree say about honesty?",
+        "choices": ["Honesty slows business down", "Profit without honesty weakens the roots", "Only big businesses need it", "Customers never notice"],
+        "answerKey": [1],
+        "explanation": "“Profit without honesty weakens the roots. Your name is part of everything you sell.”"
+      },
+      {
+        "id": "q3",
+        "type": "multi",
+        "prompt": "Which steps appeared on the ENTREPRENEURSHIP branch? Choose all that apply.",
+        "choices": ["Notice", "Plan", "Serve", "Improve", "Give up"],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "Six steps appeared: NOTICE, PLAN, START, SERVE, LEARN, and IMPROVE."
+      }
+    ]
+  },
+  {
+    "id": "qz-11",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multi",
+        "prompt": "Giving can include which of these? Choose all that apply.",
+        "choices": ["Money", "Time", "Work", "Knowledge", "Embarrassing questions"],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "Four symbols appeared: MONEY, TIME, WORK, and KNOWLEDGE. Wise giving protects dignity."
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "What did Ms. Green say the best gift does?",
+        "choices": ["Costs the most", "Matches a real need", "Has your name on it", "Is always food"],
+        "answerKey": [1],
+        "explanation": "The best gift matches a real need. “Good giving does not shame people.”"
+      },
+      {
+        "id": "q3",
+        "type": "single",
+        "prompt": "How did Alex treat his classmate at the food pantry?",
+        "choices": ["He asked why he was there", "He pretended not to see him", "He treated him normally and invited him to help sort cereal", "He told the class"],
         "answerKey": [2],
-        "explanation": "True wealth isn't about having money - it's about using money as a tool to build the life you want while helping others do the same!"
+        "explanation": "He did not embarrass him or ask personal questions. A gift should respect the person receiving it."
+      }
+    ]
+  },
+  {
+    "id": "qz-12",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multi",
+        "prompt": "Which seeds were inside the golden fruit? Choose all that apply.",
+        "choices": ["Money", "Property", "Knowledge", "Values", "Luck"],
+        "answerKey": [0, 1, 2, 3],
+        "explanation": "The fruit held six seeds: MONEY, PROPERTY, BUSINESS, KNOWLEDGE, VALUES, and OPPORTUNITY."
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "How did Alex finally buy his shoes?",
+        "choices": ["He financed them for $160", "He reached his goal, found them on sale for $112, and bought them without debt", "The tree gave them to him", "Marcus lent him the money"],
+        "answerKey": [1],
+        "explanation": "He bought them without debt and kept twenty-eight dollars."
+      },
+      {
+        "id": "q3",
+        "type": "single",
+        "prompt": "Lessons become habits, habits become systems, systems create opportunity, and opportunity passed forward becomes what?",
+        "choices": ["Profit", "Interest", "Legacy", "A bonus"],
+        "answerKey": [2],
+        "explanation": "Opportunity passed forward becomes legacy: what continues after you."
+      }
+    ]
+  },
+  {
+    "id": "qz-13",
+    "questions": [
+      {
+        "id": "q1",
+        "type": "single",
+        "prompt": "Where did the seed really grow?",
+        "choices": ["In the ground at Discovery Green", "In a flower pot at school", "Each time a child asked a question and an adult sat down to answer", "In a bank account"],
+        "answerKey": [2],
+        "explanation": "“The seed did not grow in the ground. It grew each time a child asked a question and an adult sat down to answer.”"
+      },
+      {
+        "id": "q2",
+        "type": "single",
+        "prompt": "What do grown-ups need to help children learn about money?",
+        "choices": ["A banking license", "A finance degree", "To be willing to begin and learn together", "A lot of money"],
+        "answerKey": [2],
+        "explanation": "“You do not need to be a banker, investor, accountant, or financial expert. You only need to be willing to begin.”"
+      },
+      {
+        "id": "q3",
+        "type": "single",
+        "prompt": "A lesson practiced becomes a what?",
+        "choices": ["Habit", "Fee", "Debt", "Prize"],
+        "answerKey": [0],
+        "explanation": "“A lesson practiced becomes a habit. A habit repeated becomes a system.”"
       }
     ]
   }

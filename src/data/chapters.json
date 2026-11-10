@@ -1,128 +1,429 @@
 [
   {
     "id": "ch-01",
-    "slug": "the-seed",
-    "title": "The Seed",
+    "slug": "the-day-the-tree-chose-them",
+    "label": "Chapter 1",
+    "title": "The Day the Tree Chose Them",
+    "summary": "Money is a tool. People can use it to buy, save, grow, give, and build opportunities.",
     "order": 1,
-    "estReadMinutes": 10,
+    "estReadMinutes": 6,
     "sections": [
       {
         "id": "s1",
-        "htmlBody": "<p>The afternoon sun stretched across Maplewood Park, where four friends wandered off the main trail. Liam kicked at fallen leaves while Emma studied a nature guide. Mateo snapped photos of interesting rocks, and Aisha sketched trees in her notebook.</p><p>\"Look at this!\" Emma called out, pointing to an unusual shimmer between the trees. The friends pushed through thick bushes and found themselves in a hidden clearing they'd never seen before.</p><p>In the center stood the most beautiful tree any of them had ever seen. Its trunk seemed to glow with a soft golden light, and its leaves rustled even though there was no wind. But strangest of all, small coins appeared to be growing from its branches like fruit.</p><p>\"Is that... money?\" whispered Mateo, adjusting his glasses.</p><p>The tree's voice was warm and gentle, like wind through leaves: <em>\"Welcome, young ones. I am the Money Tree of Life. I have been waiting for you.\"</em></p><div class=\"bg-slate-900/50 border border-slate-700 rounded-xl p-6 my-8\"><h3 class=\"text-xl font-semibold text-slate-100 mb-4\">The Tree's First Lesson</h3><p><em>\"Money is like a seed. Plant it wisely, and it grows into something wonderful. Spend it carelessly, and it's gone forever. Each choice you make with money is like choosing which seeds to plant in your garden of life.\"</em></p></div><p>As the friends stared in wonder, the tree continued: <em>\"I will teach you the secrets of money - how to save, spend, earn, and share. But first, you must each make a promise.\"</em></p><p>Four small jars appeared at the base of the tree, each one glowing with the same golden light. <em>\"Take these home. Fill them with your choices. Return tomorrow, and your real education begins.\"</em></p>"
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>The crowd roared as a giant screen counted down over Discovery Green in downtown Houston.</p><p>“Ten!” the crowd shouted.</p><p>Golden lights flashed across the park. A drone carried a bright sign above the stage:</p><p class=\"mt-sign\">YOUTH INNOVATION CHALLENGE - GRAND PRIZE:</p><p class=\"mt-sign\">$1,000</p><p>Alex stared up at it. “One thousand dollars?”</p><p>Renee smiled. “Now I know why you wanted to come.”</p><p class=\"mt-pull\">“I came for the learning.”</p><p class=\"mt-pull\">“You came for the prize.”</p><p class=\"mt-pull\">“I can do both.”</p><p>The two best friends moved through rows of youth businesses and inventions. One student had built a robot that sorted cans. Another sold handmade bracelets. A girl their age showed an app that helped families find free meals.</p><p>“Everybody built something,” Alex said.</p><p>“And every project began with an idea,” Renee answered.</p><p>After the event, they walked toward the food trucks. Alex stopped at a picture of loaded fries.</p><p class=\"mt-pull\">“Those look perfect.”</p><p>“They cost ten dollars,” Renee said.</p><p>Alex found one dollar and two quarters in his pocket. Renee had three dollars. Together, they had four dollars and twenty-five cents.</p><p>“This is painful,” Alex said.</p><p>Nearby, a child asked his father for food. The father checked his wallet and said, “Not today. We have food at home. Wanting something does not mean we can always buy it. We have to choose what our money does.”</p><p>Renee watched them leave. “Our parents say things like that too.”</p><p class=\"mt-pull\">“They work all day,” Alex said. “Sometimes they are too tired to explain it.”</p><p>Money moved everywhere around them, but the reasons behind each choice were harder to see.</p><p>Alex looked at the few dollars in his hand. “Why does money feel simple when you have it and confusing when you do not?”</p><p>A warm breeze moved through the park. A golden leaf floated between them and landed in Alex’s hand. Words appeared on it:</p><p class=\"mt-sign\">WHAT IS MONEY FOR?</p><p>Then the words changed:</p><p class=\"mt-sign\">TO SPEND? TO SAVE? TO GROW? TO GIVE?</p><p>The leaf lifted and floated toward a narrow path behind a row of trees.</p><p>“That path was not there before,” Renee said.</p><p>Alex grabbed his bike. “We are following it.”</p><p class=\"mt-pull\">“That is how people disappear in movies.”</p><p class=\"mt-pull\">“It is also how adventures start.”</p><p>They followed the leaf. With every step, the city grew quieter. The path opened into a clearing where a giant tree stood. Its roots spread like rivers. Its leaves shone green, silver, and gold.</p><p>A deep voice rose from the roots and branches.</p><p class=\"mt-pull\">“What is money for?”</p><p>Renee answered first. “To buy things we need.”</p><p>One branch glowed.</p><p>“And things we want,” Alex added.</p><p>Another branch lit up.</p><p>“To save for later,” Renee said.</p><p>“To grow,” Alex said.</p><p>The roots shone brighter.</p><p>“And what will you do with what you grow?” the tree asked.</p><p>Renee thought of tired parents and curious children. “Share what we learn.”</p><p>The whole tree filled with golden light.</p><p class=\"mt-pull\">“Money does not grow on trees,” the voice said.</p><p class=\"mt-pull\">“Knowledge does. And knowledge can grow into wealth.”</p><p>A golden seed appeared between them. When Alex touched it, images flashed around them: a savings jar, a family budget, a small business, a bank account, a house key, an investment chart, and a parent and child talking at a kitchen table.</p><p>A tiny golden leaf appeared on each of their palms.</p><p>“Why did you choose us?” Renee asked.</p><p class=\"mt-pull\">“You asked the first question,” said the tree. “How can money become more than something you spend?”</p><p>A new branch grew from the trunk. One word appeared on it:</p><p class=\"mt-sign\">VALUE</p><p>“What does value mean?” Alex asked.</p><p class=\"mt-pull\">“Return when you are ready to find out.”</p><p>Back in the park, the trail disappeared. The tree had not given them money. It had given them questions.</p><p>Renee looked at the four dollars and twenty-five cents they still had. “What will you do with yours?”</p><p>Alex put it back in his pocket. “I do not know yet.”</p><p class=\"mt-pull\">“That sounds like the next question.”</p><p>They rode home beneath the Houston skyline, knowing the Money Tree had not chosen them because they were rich. It had chosen them because they were ready to learn what money could become.</p>"
       }
     ],
-    "quizId": "qz-01"
+    "quizId": "qz-01",
+    "printedPage": 6,
+    "kit": {
+      "lesson": "Money is a tool. People can use it to buy, save, grow, give, and build opportunities.",
+      "words": [
+        "Money",
+        "Value",
+        "Wealth",
+        "Choice"
+      ],
+      "reneeTip": "Before spending, ask: What else could this money do?",
+      "alexTip": "Do not think only about what money can buy. Think about what it can help build.",
+      "challenge": "Ask a parent what money meant in their home growing up and what lesson they wish they had learned earlier.",
+      "conversation": "What money lesson do you wish someone had taught you earlier?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
   },
   {
     "id": "ch-02",
-    "slug": "roots-of-saving",
-    "title": "Roots of Saving", 
+    "slug": "what-is-money-really",
+    "label": "Chapter 2",
+    "title": "What Is Money, Really?",
+    "summary": "Money helps people trade value. Revenue minus costs equals profit.",
     "order": 2,
-    "estReadMinutes": 12,
+    "estReadMinutes": 4,
     "sections": [
       {
         "id": "s1",
-        "htmlBody": "<p>The next afternoon, the four friends hurried back to the hidden clearing. The Money Tree shimmered in the sunlight, its golden glow even brighter than before.</p><p><em>\"You've returned,\"</em> the tree said warmly. <em>\"Show me what you've brought.\"</em></p><p>Each friend held up their jar. Liam had put in two quarters from his allowance. Emma had added a dollar bill she'd found in her coat pocket. Mateo had contributed some birthday money, and Aisha had put in coins she'd saved from lunch money.</p><p><em>\"Excellent! You've planted your first seeds of [[saving]]. Now watch...\"</em></p><p>The tree's roots began to glow, extending deeper into the earth. <em>\"My roots are my savings. The deeper they grow, the stronger I become. Without strong roots, no tree can weather storms or grow tall.\"</em></p><div class=\"bg-slate-900/50 border border-slate-700 rounded-xl p-6 my-8\"><h3 class=\"text-xl font-semibold text-slate-100 mb-4\">The 50-30-20 Rule</h3><p>The tree taught them a simple rule:</p><ul class=\"list-disc list-inside mt-2 space-y-1 text-slate-300\"><li><strong>50%</strong> for things you need (food, clothes, school supplies)</li><li><strong>30%</strong> for things you want (games, treats, movies)</li><li><strong>20%</strong> for saving (your money roots)</li></ul><p class=\"mt-3 text-slate-400\">\"Start small, but start today. Even a penny saved is a root that can grow.\"</p></div><p><em>\"Your homework is simple,\"</em> the tree said. <em>\"For one week, put something in your jar every day. It doesn't matter how much. What matters is that you build the habit of saving first, before you spend.\"</em></p><p>As the friends left the clearing, their jars felt lighter in their hands but heavier with possibility.</p>"
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>The next morning, Renee and Alex returned to Discovery Green. The hidden trail was gone.</p><p>A flyer slid across the grass and stopped at Alex’s shoe.</p><p class=\"mt-sign\">YOUTH MARKET DAY - BUILD IT. SELL IT. LEARN!</p><p>The event began in two hours.</p><p>“We should enter,” Alex said.</p><p>“With what?” Renee asked.</p><p>They watched children preparing booths. One bored child drew on the back of a receipt while his parent worked.</p><p>“What if we make activity packs for kids?” Renee said.</p><p>They used paper, crayons, markers, tape, string, and pencils from their backpacks. They created mazes, drawing pages, and a game called Make a Dollar.</p><p>Each pack cost about one dollar to make. They priced it at two dollars and called it the Money Tree Fun Pack.</p><p>At first, no one stopped. Renee opened a sample pack and spread the pages across the table. Alex demonstrated the coin game. Their new sign explained the value clearly:</p><p class=\"mt-sign\">KEEP KIDS BUSY WHILE THEY LEARN - $2</p><p>A father bought the first pack. Soon only one remained.</p><p>A younger boy approached with seventy-five cents. “That is all I have.”</p><p>Alex offered a trade. The boy could pay the coins and help clean their table after the market. With his mother’s approval, he agreed.</p><p>After the boy finished the work, a golden leaf landed on the table.</p><p>“Money is a tool people use to trade value,” it read.</p><p>The leaf showed people trading apples for bread and baskets for fish.</p><p>“But what if the person with bread does not want apples?” Alex asked.</p><p>The words changed. “Money makes trading easier.”</p><p>The hidden trail appeared.</p><p>At the tree, Renee and Alex counted ten dollars and seventy-five cents in sales.</p><p>“We made almost eleven dollars!” Alex said.</p><p class=\"mt-pull\">“We received almost eleven dollars,” Renee corrected. “The supplies cost about six dollars.”</p><p>They subtracted the cost.</p><p class=\"mt-pull\">“Four dollars and seventy-five cents,” Alex said.</p><p class=\"mt-pull\">“That is our profit.”</p><p>The tree glowed.</p><p class=\"mt-pull\">“Revenue is what enters. Cost is what the work requires. Profit is what remains.”</p><p>A branch marked TRADE began to grow. The tree showed them five forms of value: product, service, skill, time, and an idea that solves a problem.</p><p>“We used all five,” Alex said.</p><p>They divided the profit. Renee saved her share. Alex wanted to grow his.</p><p>The Money Tree had not created their money. They had noticed a problem, made a product, taken a risk, and done the work. Money had appeared because value had been exchanged.</p>"
       }
     ],
-    "quizId": "qz-02"
+    "quizId": "qz-02",
+    "printedPage": 11,
+    "kit": {
+      "lesson": "Money helps people trade value. Revenue minus costs equals profit.",
+      "words": [
+        "Money",
+        "Value",
+        "Barter",
+        "Revenue",
+        "Cost",
+        "Profit"
+      ],
+      "reneeTip": "Replace supply money before spending business income.",
+      "alexTip": "Start with a real problem you can solve.",
+      "challenge": "Design one safe product or service. List the customer, cost, price, and possible profit.",
+      "conversation": "What skill have you used to create value, and who taught it to you?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
   },
   {
-    "id": "ch-03", 
-    "slug": "branches-of-budgeting",
-    "title": "Branches of Budgeting",
+    "id": "ch-03",
+    "slug": "the-want-that-felt-like-a-need",
+    "label": "Chapter 3",
+    "title": "The Want That Felt Like a Need",
+    "summary": "Needs come first. Wants are not bad, but they can wait.",
     "order": 3,
-    "estReadMinutes": 14,
+    "estReadMinutes": 3,
     "sections": [
       {
         "id": "s1",
-        "htmlBody": "<p>By the end of the week, the kids had a small stash saved in their jars. When they returned to the clearing, the Money Tree looked different. New branches had sprouted, reaching in different directions.</p><p><em>\"Do you see how I've grown?\"</em> the tree asked. <em>\"Each branch has a purpose. One reaches toward the sun for energy. Another spreads wide for shade. A third grows strong to hold my fruit. This is called [[budgeting]] - giving every part of me a job to do.\"</em></p><p>The tree's voice grew thoughtful. <em>\"Your money needs jobs too. Let me teach you the Branch System.\"</em></p><p>Four new jars appeared, each labeled with a different word: NEEDS, WANTS, SAVE, SHARE.</p><div class=\"bg-slate-900/50 border border-slate-700 rounded-xl p-6 my-8\"><h3 class=\"text-xl font-semibold text-slate-100 mb-4\">The Branch System</h3><div class=\"grid grid-cols-2 gap-4 mt-3\"><div><h4 class=\"font-semibold text-brand mb-2\">NEEDS Branch</h4><p class=\"text-slate-300 text-sm\">Things you must have to live and learn: food, clothes, school supplies, transportation.</p></div><div><h4 class=\"font-semibold text-brand2 mb-2\">WANTS Branch</h4><p class=\"text-slate-300 text-sm\">Things that are fun but not necessary: games, candy, movies, toys.</p></div><div><h4 class=\"font-semibold text-purple-400 mb-2\">SAVE Branch</h4><p class=\"text-slate-300 text-sm\">Money for the future: emergency fund, big goals, college fund.</p></div><div><h4 class=\"font-semibold text-green-400 mb-2\">SHARE Branch</h4><p class=\"text-slate-300 text-sm\">Money to help others: donations, gifts, community support.</p></div></div></div><p>Emma raised her hand. \"But what if I don't have enough money for all four jars?\"</p><p><em>\"Smart question,\"</em> the tree replied. <em>\"When money is tight, you feed the most important branches first. NEEDS always come first. Then SAVE, even if it's just a penny. SHARE, because giving connects you to others. And finally, WANTS - but only if there's money left over.\"</em></p><p><em>\"A [[budget]] is not about limiting yourself. It's about making sure your money tree grows strong and balanced, with every branch getting what it needs to thrive.\"</em></p>"
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>On Monday, Alex showed Renee a flyer for black-and-gold shoes with glowing soles. They cost one hundred and forty dollars.</p><p>“I need them,” he said.</p><p>Renee looked at the clean shoes on his feet. “You want them.”</p><p>At the Money Tree, a golden leaf showed a family choosing between roof repairs and a new television. The roof was a need. The television was a want.</p><p>Then it showed a child with holes in their shoes choosing between plain shoes and expensive glowing shoes.</p><p class=\"mt-pull\">“A need is important for health, safety, learning, or daily life,” said the tree. “A want can bring joy, but you can live without it.”</p><p>Alex admitted his current shoes still fit. The glowing shoes were a want.</p><p>On the way home, a store sign offered BUY NOW, PAY LATER. The small print included fees and late charges.</p><p>“Pay later does not mean pay less,” Renee said.</p><p>Alex decided to wait thirty days and save toward the full price. At home, his father gave him three questions:</p><p>Do I still want it after waiting? Can I buy it without missing something important? Will I still be happy with the choice later?</p><p>Alex made three boxes: Needs, Savings, and Shoe Fund. The Money Tree grew a NEEDS AND WANTS branch.</p><p>Alex still wanted the shoes. But now the want no longer felt like an emergency. Knowing the difference gave him control.</p>"
       }
     ],
-    "quizId": "qz-03"
+    "quizId": "qz-03",
+    "printedPage": 15,
+    "kit": {
+      "lesson": "Needs come first. Wants are not bad, but they can wait.",
+      "words": [
+        "Need",
+        "Want",
+        "Fee",
+        "Choice"
+      ],
+      "reneeTip": "Use a waiting period before buying a want.",
+      "alexTip": "A money plan can include fun without hurting important goals.",
+      "challenge": "List five needs and five wants. Choose one want and set a waiting period.",
+      "conversation": "What is something you once wanted badly but decided not to buy?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
   },
   {
     "id": "ch-04",
-    "slug": "leaves-of-earning", 
-    "title": "Leaves of Earning",
+    "slug": "earn-it-dont-just-ask-for-it",
+    "label": "Chapter 4",
+    "title": "Earn It, Don’t Just Ask for It",
+    "summary": "Useful work can create income through time, effort, skill, products, and services.",
     "order": 4,
-    "estReadMinutes": 16,
+    "estReadMinutes": 3,
     "sections": [
       {
         "id": "s1",
-        "htmlBody": "<p>A week later, the kids hurried into the clearing, only to stop short. The Money Tree looked different again. Where before there had been modest branches, now there was an explosion of bright green leaves, each one catching and reflecting sunlight.</p><p><em>\"Beautiful, aren't they?\"</em> the tree said proudly. <em>\"These are my earning leaves. Each one captures sunlight and turns it into energy I can use to grow bigger and stronger.\"</em></p><p>Aisha tilted her head. \"How do we grow earning leaves?\"</p><p><em>\"Ah, excellent question! Your earning leaves are the ways you bring money into your life. Let me show you the different types.\"</em></p><p>The tree's leaves began to glow in different colors, each representing a different way to earn money.</p><div class=\"bg-slate-900/50 border border-slate-700 rounded-xl p-6 my-8\"><h3 class=\"text-xl font-semibold text-slate-100 mb-4\">Types of Earning Leaves</h3><div class=\"space-y-3\"><div class=\"flex items-start gap-3\"><div class=\"w-3 h-3 rounded-full bg-green-400 mt-1 flex-shrink-0\"></div><div><h4 class=\"font-semibold text-slate-200\">Allowance Leaves</h4><p class=\"text-slate-300 text-sm\">Regular money from family for being part of the household.</p></div></div><div class=\"flex items-start gap-3\"><div class=\"w-3 h-3 rounded-full bg-blue-400 mt-1 flex-shrink-0\"></div><div><h4 class=\"font-semibold text-slate-200\">Chore Leaves</h4><p class=\"text-slate-300 text-sm\">Money earned by doing extra tasks: raking leaves, washing cars, organizing.</p></div></div><div class=\"flex items-start gap-3\"><div class=\"w-3 h-3 rounded-full bg-yellow-400 mt-1 flex-shrink-0\"></div><div><h4 class=\"font-semibold text-slate-200\">Skill Leaves</h4><p class=\"text-slate-300 text-sm\">Money from using talents: tutoring, art, music lessons, pet sitting.</p></div></div><div class=\"flex items-start gap-3\"><div class=\"w-3 h-3 rounded-full bg-purple-400 mt-1 flex-shrink-0\"></div><div><h4 class=\"font-semibold text-slate-200\">Gift Leaves</h4><p class=\"text-slate-300 text-sm\">Money received for birthdays, holidays, or special occasions.</p></div></div></div></div><p><em>\"The secret,\"</em> the tree continued, <em>\"is that earning isn't just about working harder. It's about working smarter. Use your natural talents. Solve problems for people. Create [[value]] for others, and they will gladly share their money with you.\"</em></p><p>Mateo's eyes lit up. \"I'm good with computers. Maybe I could teach older people how to use them?\"</p><p><em>\"Perfect! You're already thinking like an entrepreneur. Remember, every successful business starts with someone solving a problem that others have.\"</em></p><p><em>\"Your assignment: each of you find one way to earn money this week using your unique talents. It doesn't have to be big. What matters is that you start growing your own earning leaves.\"</em></p>"
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>Alex had eight dollars in his shoe fund and needed a safe way to earn more.</p><p>While biking through the neighborhood, Renee and Alex saw Mrs. Carter struggling with a crowded garage. She offered them ten dollars each to sort boxes into Keep, Give Away, and Sell piles.</p><p>They called their parents for permission and began.</p><p>Alex rushed and made mistakes. He almost placed a box of family photos in the sale pile. Mrs. Carter told him, “Work feels slow when you only think about getting paid. Think about the person you are helping and the result you are creating.”</p><p>They slowed down and finished well. Mrs. Carter paid each of them ten dollars and added a two-dollar bonus for staying focused and correcting mistakes.</p><p>She also showed them an old sewing kit. At Renee and Alex’s age, she had learned to sew and used that skill to help her family.</p><p>At the Money Tree, a new EARNING branch appeared. The tree showed four paths: time, skill, product, and service.</p><p class=\"mt-pull\">“What you earn matters,” the tree said. “How you earn matters too.”</p><p>At home, Alex divided his twelve dollars. Eight went to his shoe fund, three to savings, and one to spending. His shoe fund reached sixteen dollars.</p><p>Renee divided her money among saving, a future goal, giving, and spending.</p><p>They learned that earned money carries proof: their time mattered, their skills mattered, and they could create value again.</p>"
       }
     ],
-    "quizId": "qz-04"
+    "quizId": "qz-04",
+    "printedPage": 18,
+    "kit": {
+      "lesson": "Useful work can create income through time, effort, skill, products, and services.",
+      "words": [
+        "Earn",
+        "Job",
+        "Product",
+        "Service",
+        "Skill",
+        "Bonus"
+      ],
+      "reneeTip": "Save part of every amount you earn.",
+      "alexTip": "Ask what useful thing you can do—not only how to get money.",
+      "challenge": "List three safe, adult-approved jobs you could do and the problem each job solves.",
+      "conversation": "What skill has helped you earn money?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
   },
   {
     "id": "ch-05",
-    "slug": "flowers-of-needs-vs-wants",
-    "title": "Flowers of Needs vs. Wants", 
+    "slug": "save-first-spend-second",
+    "label": "Chapter 5",
+    "title": "Save First, Spend Second",
+    "summary": "Saving means keeping money for later. Save first, not last.",
     "order": 5,
-    "estReadMinutes": 13,
+    "estReadMinutes": 3,
     "sections": [
       {
         "id": "s1",
-        "htmlBody": "<p>Spring came to Maplewood Park. When the kids pushed through the bushes into the clearing, they stopped in awe. The Money Tree had burst into bloom. Beautiful flowers of every color decorated its branches - some bright and flashy, others simple and elegant.</p><p><em>\"Welcome to my flower season,\"</em> the tree said joyfully. <em>\"Do you notice something interesting about my flowers?\"</em></p><p>Emma looked closely. \"Some are really big and bright, but others are small and plain. Why?\"</p><p><em>\"Excellent observation! The bright, flashy flowers catch your eye immediately. They're beautiful, but they don't last long and they don't produce fruit. The smaller, simpler flowers aren't as exciting to look at, but they're the ones that create seeds and fruit that sustain me.\"</em></p><div class=\"bg-slate-900/50 border border-slate-700 rounded-xl p-6 my-8\"><h3 class=\"text-xl font-semibold text-slate-100 mb-4\">The Flower Test</h3><p class=\"mb-3\">Before spending money, ask yourself:</p><div class=\"grid md:grid-cols-2 gap-4\"><div class=\"border border-slate-600 rounded-lg p-3\"><h4 class=\"font-semibold text-green-400 mb-2\">NEED Flowers (Simple but Essential)</h4><ul class=\"text-sm text-slate-300 space-y-1\"><li>• Will I be safe/healthy without this?</li><li>• Do I need this to learn or work?</li><li>• Is this required for daily life?</li></ul></div><div class=\"border border-slate-600 rounded-lg p-3\"><h4 class=\"font-semibold text-yellow-400 mb-2\">WANT Flowers (Flashy but Temporary)</h4><ul class=\"text-sm text-slate-300 space-y-1\"><li>• Would this just be nice to have?</li><li>• Am I buying this because I'm bored?</li><li>• Will I still want this next month?</li></ul></div></div></div><p>Liam frowned. \"But wants aren't bad, right? I mean, ice cream makes me happy.\"</p><p><em>\"You're absolutely right!\"</em> the tree chuckled. <em>\"Flashy flowers have their place too. They bring joy and beauty to life. The key is balance. If you only plant flashy flowers, you'll have a beautiful garden for a few days, then nothing. If you only plant practical flowers, life becomes dull.\"</em></p><p><em>\"The wisdom is in the timing. Plant your need flowers first - make sure you have what's essential. Then, when you've taken care of the basics, plant some want flowers to make life colorful and fun.\"</em></p><p>Aisha raised her hand. \"What about things that are kind of in between? Like, I need clothes, but I want the cool sneakers, not the plain ones.\"</p><p><em>\"Ah, the difference between meeting a need and upgrading a want! You need shoes. You want THOSE shoes. The wise gardener buys shoes that meet the need first, then saves separately for the upgrade. Sometimes you can find a middle path - shoes that are both practical and stylish without breaking your budget.\"</em></p><p>The tree's flowers swayed gently. <em>\"Practice the 24-hour rule: when you want to buy something that isn't a basic need, wait a full day. Often, the want-flowers fade, and you realize you didn't need them after all.\"</em></p>"
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>Alex’s money kept disappearing through small purchases: snacks, phone games, trading cards, and drinks. He had spent twenty-three dollars without buying anything large.</p><p>Renee showed him the problem. “Stop saving whatever is left. Save first.”</p><p>At the Money Tree, they saw a bucket with a hole. Money entered at the top and leaked out through unplanned spending.</p><p>Three glowing jars appeared: SPEND, SAVE, and GROW.</p><p class=\"mt-pull\">“Give every dollar a job,” said the tree. “Saving is not what happens after spending. Saving is part of the plan.”</p><p>Renee brought Alex three jars. He divided twenty-nine dollars among spending, saving, and growing. At the store, he almost used four of his five spending dollars on a sports drink, but realized he already had water.</p><p>Over the next two weeks, he saved first each time he earned money. He later divided savings into SHOE GOAL and JUST IN CASE.</p><p>Renee wanted an art class without touching the thirty-five dollars in her drawing-tablet fund. She sold ten custom bookmarks and earned the class money separately.</p><p>The SAVING branch grew stronger.</p><p class=\"mt-pull\">“A little saved once is helpful,” the tree said. “A little saved often is powerful.”</p><p>Alex’s shoe fund reached forty-six dollars. The goal no longer felt impossible. It felt like a path made one choice at a time.</p>"
       }
     ],
-    "quizId": "qz-05"
+    "quizId": "qz-05",
+    "printedPage": 21,
+    "kit": {
+      "lesson": "Saving means keeping money for later. Save first, not last.",
+      "words": [
+        "Save",
+        "Goal",
+        "Emergency",
+        "Emergency savings",
+        "Habit"
+      ],
+      "reneeTip": "Choose the savings amount before spending.",
+      "alexTip": "Keep different goals separate so each dollar has a clear job.",
+      "challenge": "Create Spend, Save, and Grow containers or trackers. Plan how to divide your next ten dollars.",
+      "conversation": "What is one thing our family is saving for?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
   },
   {
     "id": "ch-06",
-    "slug": "seeds-of-investing",
-    "title": "Seeds of Investing",
-    "order": 6, 
-    "estReadMinutes": 18,
+    "slug": "give-every-dollar-a-job",
+    "label": "Chapter 6",
+    "title": "Give Every Dollar a Job",
+    "summary": "A budget is a plan for money coming in and going out.",
+    "order": 6,
+    "estReadMinutes": 3,
     "sections": [
       {
         "id": "s1",
-        "htmlBody": "<p>The next time the kids arrived at the clearing, they noticed something new. Beneath the Money Tree lay small round fruits, each containing what looked like tiny golden seeds.</p><p><em>\"Ah, you've discovered my greatest secret,\"</em> the tree said warmly. <em>\"These are [[investment]] seeds. Each one contains the potential to grow into its own money tree.\"</em></p><p>Mateo picked up one of the fruits carefully. \"But how do they work?\"</p><p><em>\"Let me tell you the story of the Patient Gardener,\"</em> the tree began. <em>\"Once, there were two children. Both found a magic seed. The first child planted it and then dug it up every day to see if it was growing. The second child planted it, watered it regularly, and waited patiently.\"</em></p><p><em>\"Whose seed do you think grew into a mighty tree?\"</em></p><div class=\"bg-slate-900/50 border border-slate-700 rounded-xl p-6 my-8\"><h3 class=\"text-xl font-semibold text-slate-100 mb-4\">The Magic of Compound Growth</h3><p className=\"mb-4\">Imagine you plant a seed worth $1. Here's how it might grow:</p><div class=\"grid grid-cols-3 gap-3 text-sm\"><div class=\"text-center p-2 bg-slate-800 rounded\"><div class=\"font-semibold text-brand\">Year 1</div><div class=\"text-slate-300\">$1.10</div></div><div class=\"text-center p-2 bg-slate-800 rounded\"><div class=\"font-semibold text-brand\">Year 5</div><div class=\"text-slate-300\">$1.61</div></div><div class=\"text-center p-2 bg-slate-800 rounded\"><div class=\"font-semibold text-brand\">Year 10</div><div class=\"text-slate-300\">$2.59</div></div></div><p class=\"mt-3 text-slate-400 text-sm\">The seed doesn't just grow - its growth grows! That's the magic of [[compound interest]].</p></div><p><em>\"But here's what makes investing different from just saving,\"</em> the tree continued. <em>\"When you save, your money sits still like a rock. When you invest, your money works for you, growing and multiplying even while you sleep.\"</em></p><p>Emma looked worried. \"But what if the seed doesn't grow? What if it dies?\"</p><p><em>\"Ah, you've discovered the most important lesson of all! Every investment carries risk. Some seeds grow into mighty trees. Others sprout and then wither. A few never grow at all.\"</em></p><p><em>\"That's why wise gardeners never plant just one seed. They plant many different types in different places. If one fails, the others keep growing. This is called [[diversification]].\"</em></p><p>The tree's branches rustled thoughtfully. <em>\"You're young, which gives you the greatest investment power of all: time. Start small, start simple, and let time work its magic. Even $1 planted in the right soil and given enough time can grow into a forest.\"</em></p><p><em>\"Your assignment: research three different ways to plant money seeds. Talk to adults you trust about savings accounts, education funds, and simple investments. Remember, the best time to plant a tree was 20 years ago. The second best time is today.\"</em></p>"
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>Alex had twenty dollars and eight different jobs for it. Renee told him he needed a budget.</p><p>At school, Ms. Lewis gave the class sixty dollars to plan a celebration. Students wanted pizza, cupcakes, drinks, balloons, and prizes, but the total reached ninety-five dollars.</p><p>Renee and Alex asked what the class needed, wanted, and valued most. They chose a sandwich tray, fruit, water, music, and paper decorations. Their plan served more students and totaled exactly sixty dollars.</p><p>At the Money Tree, glowing tags read FOOD, HOME, SAVING, GIVING, FUN, and GROWING.</p><p class=\"mt-pull\">“Money without a plan can wander,” said the tree. “A budget gives direction.”</p><p>Income was money coming in. Expenses were money going out. A budget planned both.</p><p>Alex made a weekly budget for his own twenty dollars: shoe goal, savings, grow, cousin’s gift, and fun. When he wanted a ten-dollar movie ticket, he did not steal from another goal. He earned seven dollars helping Mrs. Carter label yard-sale items.</p><p>The BUDGETING branch grew. Three tags appeared: PLAN, CHOOSE, and ADJUST.</p><p class=\"mt-pull\">“A budget is a guide, not a cage,” the tree said. “Make each choice on purpose.”</p><p>Alex went to the movie and still put money toward his emergency savings and shoe goal. A budget was not punishment. It was a map.</p>"
       }
     ],
-    "quizId": "qz-06"
+    "quizId": "qz-06",
+    "printedPage": 24,
+    "kit": {
+      "lesson": "A budget is a plan for money coming in and going out.",
+      "words": [
+        "Budget",
+        "Income",
+        "Expense",
+        "Category",
+        "Limit",
+        "Adjust"
+      ],
+      "reneeTip": "Put saving in the budget from the beginning.",
+      "alexTip": "A budget sends money toward goals instead of letting it wander.",
+      "challenge": "Make a ten-dollar budget. Make sure every dollar has a job.",
+      "conversation": "What is one thing our family plans for each month?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
   },
   {
     "id": "ch-07",
-    "slug": "protecting-the-tree",
-    "title": "Protecting the Tree",
+    "slug": "where-does-the-money-go",
+    "label": "Chapter 7",
+    "title": "Where Does the Money Go?",
+    "summary": "Banks and credit unions can help people store, move, track, and protect money.",
     "order": 7,
-    "estReadMinutes": 15,
+    "estReadMinutes": 3,
     "sections": [
       {
-        "id": "s1", 
-        "htmlBody": "<p>The following week, the kids returned to the clearing with their jars and notebooks. But as soon as they stepped into the open space, they froze. The Money Tree looked different - some of its leaves were brown, and there were strange dark spots on its trunk.</p><p><em>\"Don't worry,\"</em> the tree said, sensing their alarm. <em>\"I'm not sick. I'm showing you something important. Look closer.\"</em></p><p>Around the base of the tree, they could see evidence of threats: patches where insects had tried to eat the bark, scorch marks from lightning, and places where disease had started to take hold.</p><p><em>\"Every tree faces dangers,\"</em> the tree explained. <em>\"Storms, diseases, insects, fires - they're part of life. But a wise tree learns to protect itself.\"</em></p><div class=\"bg-slate-900/50 border border-slate-700 rounded-xl p-6 my-8\"><h3 class=\"text-xl font-semibold text-slate-100 mb-4\">The Four Shields of Protection</h3><div class=\"space-y-3\"><div class=\"flex items-start gap-3\"><div class=\"w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold\">1</div><div><h4 class=\"font-semibold text-slate-200\">Emergency Fund Shield</h4><p class=\"text-slate-300 text-sm\">Money set aside for unexpected problems (car breaks, lose job, medical bills).</p></div></div><div class=\"flex items-start gap-3\"><div class=\"w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold\">2</div><div><h4 class=\"font-semibold text-slate-200\">Insurance Shield</h4><p class=\"text-slate-300 text-sm\">Protection against big disasters (health insurance, car insurance, home insurance).</p></div></div><div class=\"flex items-start gap-3\"><div class=\"w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center text-sm font-bold\">3</div><div><h4 class=\"font-semibold text-slate-200\">Knowledge Shield</h4><p class=\"text-slate-300 text-sm\">Learning about scams, understanding contracts, knowing your rights.</p></div></div><div class=\"flex items-start gap-3\"><div class=\"w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center text-sm font-bold\">4</div><div><h4 class=\"font-semibold text-slate-200\">Diversification Shield</h4><p class=\"text-slate-300 text-sm\">Not putting all your money in one place or one type of investment.</p></div></div></div></div><p>Liam looked confused. \"But we're just kids. Why do we need to worry about this stuff?\"</p><p><em>\"Because protection habits built young become armor when you're older,\"</em> the tree replied. <em>\"Start with small things now. Keep some money separate for emergencies - even if it's just $5. Learn to spot too-good-to-be-true offers. Practice saying 'let me think about it' before making big decisions.\"</em></p><p>The tree's damaged leaves began to heal before their eyes. <em>\"See? When you're prepared, damage becomes temporary. When you're not, it can destroy everything you've built.\"</em></p><p>Aisha raised her hand. \"What about online scams? My cousin lost money buying something that never came.\"</p><p><em>\"Excellent question! The digital world has created new predators, but the old rules still apply: if it sounds too good to be true, it probably is. Never give personal information to strangers. Always verify before you trust. And remember - legitimate businesses don't pressure you to decide immediately.\"</em></p><p><em>\"Your assignment: create your first emergency fund. Put aside just $1 this week in a separate container labeled 'Emergency Only.' Practice saying no to something you want, and explain to someone else why saving for emergencies is important.\"</em></p>"
+        "id": "s1",
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>Alex kept fifty-eight dollars in an old sneaker. Renee asked what would happen if the shoe was lost, thrown away, or damaged.</p><p>With Renee’s mother, they visited a Houston credit union. Mr. Brooks explained that financial institutions help people keep, move, track, and sometimes grow money.</p><p>A checking account was often used for spending. A savings account was used for later. Deposits added money, withdrawals removed it, and the balance showed what remained.</p><p>Mr. Brooks also taught them to protect debit cards, PINs, passwords, and account information. He showed them a fake message that tried to scare them into clicking a link.</p><p>The four safety steps were STOP, CHECK, ASK, and REPORT.</p><p>At the Money Tree, a shield, arrows, and a sprout glowed. A BANKING branch grew.</p><p>“A tool is useful when you understand how it works,” said the tree.</p><p>Alex and his father compared youth accounts by fees, interest, minimum balance, access, and safety. They chose an account with no monthly fee and deposited the fifty-eight dollars.</p><p>Renee also opened a supervised youth savings account for her drawing-tablet goal.</p><p>Later, Alex received a fake bank email asking for his password. He stopped, checked the official app, asked his father, and reported the scam.</p><p>The bank account did not make him wise by itself. He still had to track, protect, and choose.</p>"
       }
     ],
-    "quizId": "qz-07"
+    "quizId": "qz-07",
+    "printedPage": 27,
+    "kit": {
+      "lesson": "Banks and credit unions can help people store, move, track, and protect money.",
+      "words": [
+        "Bank",
+        "Credit union",
+        "Deposit",
+        "Withdrawal",
+        "Balance",
+        "Interest",
+        "PIN",
+        "Scam"
+      ],
+      "reneeTip": "Compare fees and rules before choosing an account.",
+      "alexTip": "Protect account information. Stop, Check, Ask, Report.",
+      "challenge": "Practice a bank record with deposits, purchases, and withdrawals. Recalculate the balance each time.",
+      "conversation": "How do you keep track of money in an account?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
   },
   {
     "id": "ch-08",
-    "slug": "sharing-the-shade",
-    "title": "Sharing the Shade",
+    "slug": "credit-is-borrowed-trust",
+    "label": "Chapter 8",
+    "title": "Credit Is Borrowed Trust",
+    "summary": "Credit is borrowed trust. Debt is money owed. Borrowing has a total cost.",
     "order": 8,
-    "estReadMinutes": 14,
+    "estReadMinutes": 3,
     "sections": [
       {
         "id": "s1",
-        "htmlBody": "<p>Summer arrived in Maplewood Park, and the Money Tree had grown taller than ever. Its branches stretched wide, creating a cool, welcoming shade that seemed to invite everyone to rest beneath it.</p><p><em>\"Do you see what has happened?\"</em> the tree asked proudly. <em>\"I have grown large enough to give back. My shade doesn't just protect me - it protects everyone who needs shelter from the sun.\"</em></p><p>As if to prove the point, a family of rabbits hopped into the clearing and settled down in the cool shade. A tired bird landed on one of the branches to rest.</p><p><em>\"This is the most important lesson of all,\"</em> the tree continued. <em>\"Money isn't meant to be hoarded like a dragon's treasure. It's meant to flow, to grow, and to help create more shade for everyone.\"</em></p><div class=\"bg-slate-900/50 border border-slate-700 rounded-xl p-6 my-8\"><h3 class=\"text-xl font-semibold text-slate-100 mb-4\">The Circle of Sharing</h3><p class=\"mb-3\">Money grows stronger when it moves with purpose:</p><div class=\"space-y-3\"><div class=\"flex items-center gap-3\"><div class=\"w-3 h-3 rounded-full bg-green-400\"></div><span class=\"text-slate-300\"><strong>Give to those in need</strong> - Help people who are struggling</span></div><div class=\"flex items-center gap-3\"><div class=\"w-3 h-3 rounded-full bg-blue-400\"></div><span class=\"text-slate-300\"><strong>Support causes you believe in</strong> - Environment, education, community</span></div><div class=\"flex items-center gap-3\"><div class=\"w-3 h-3 rounded-full bg-yellow-400\"></div><span class=\"text-slate-300\"><strong>Invest in others' dreams</strong> - Help friends and family achieve goals</span></div><div class=\"flex items-center gap-3\"><div class=\"w-3 h-3 rounded-full bg-purple-400\"></div><span class=\"text-slate-300\"><strong>Create opportunities</strong> - Start projects that help your community</span></div></div></div><p>Emma looked thoughtful. \"But how do we know we're giving to the right places?\"</p><p><em>\"Wise question! Just as you research before investing, research before giving. Look for organizations that use money effectively. Ask questions: How much goes to programs vs. administration? What specific results do they achieve? Can you see the impact of their work?\"</em></p><p>Mateo nodded. \"My family volunteers at the food bank sometimes. We can actually see the families we're helping.\"</p><p><em>\"Perfect! [[Charitable giving]] isn't just about money - it's about time, skills, and attention too. Sometimes the most valuable thing you can give is your presence and care.\"</em></p><p>The tree's shade seemed to grow even wider. <em>\"Here's a secret: the more you share wisely, the more comes back to you. Not always as money, but as connections, opportunities, and the deep satisfaction of making a difference.\"</em></p><p>Aisha smiled. \"It's like the tree - the bigger you grow, the more shade you can give.\"</p><p><em>\"Exactly! And here's the beautiful part: when you help others grow their own money trees, the whole forest becomes stronger. A forest of money trees creates more shade, more oxygen, and more life than any single tree ever could.\"</em></p><p><em>\"Your assignment: choose one way to share this week. It could be money, time, or skills. Pay attention to how it feels to give, and notice how it affects both you and the person you helped.\"</em></p>"
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>Alex’s cousin Marcus received a new phone without paying the full price that day. Renee noticed the important word: today.</p><p>At the Money Tree, the children saw one borrower return a bicycle on time and another return it late and broken.</p><p class=\"mt-pull\">“Credit is borrowed trust,” said the tree. “Debt is money you owe. Interest is the cost of borrowing.”</p><p>They learned to read an agreement for the amount borrowed, interest rate, due date, payment, fees, and total cost.</p><p>Marcus’s phone cost eight hundred dollars, but his payments totaled eight hundred forty dollars. Missing a payment would add a fee.</p><p>At school, Ms. Lewis explained that lenders look at payment history, ability to repay, and risk. A credit report records how borrowed money has been handled. A credit score is a number based on that record.</p><p>Alex then saw a financing offer for his shoes: twenty dollars now and eight monthly payments. The total was one hundred sixty dollars before late fees.</p><p>He decided to keep saving instead.</p><p>The CREDIT branch grew with four leaves: ON TIME, HONESTY, LIMITS, and PLANNING.</p><p class=\"mt-pull\">“Credit lets you use tomorrow’s money today,” said the tree. “Use it only when tomorrow can afford it.”</p><p>Alex’s shoe fund later reached sixty-eight dollars. He had not turned a want into a bill.</p>"
       }
     ],
-    "quizId": "qz-08"
+    "quizId": "qz-08",
+    "printedPage": 30,
+    "kit": {
+      "lesson": "Credit is borrowed trust. Debt is money owed. Borrowing has a total cost.",
+      "words": [
+        "Credit",
+        "Debt",
+        "Borrower",
+        "Lender",
+        "Interest",
+        "Due date",
+        "Late fee"
+      ],
+      "reneeTip": "Before borrowing for a want, compare it with waiting and saving.",
+      "alexTip": "Always calculate the total cost, not only the monthly payment.",
+      "challenge": "Compare saving one hundred dollars with a payment plan that totals one hundred ten dollars.",
+      "conversation": "What is one rule you follow when using credit?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
   },
   {
     "id": "ch-09",
-    "slug": "the-tree-for-life", 
-    "title": "The Tree for Life",
+    "slug": "make-your-money-work",
+    "label": "Chapter 9",
+    "title": "Make Your Money Work",
+    "summary": "Investing may help long-term goals, but all investments include risk.",
     "order": 9,
-    "estReadMinutes": 16,
+    "estReadMinutes": 3,
     "sections": [
       {
         "id": "s1",
-        "htmlBody": "<p>The sun set slowly over Maplewood Park as the four friends walked back into the clearing for what they somehow knew would be their final lesson. The Money Tree stood taller than ever, its golden glow now soft and steady like the warmth of a campfire.</p><p><em>\"You have learned well, my young gardeners,\"</em> the tree said with deep satisfaction. <em>\"Look at what you have grown.\"</em></p><p>Each friend looked down at their collection of jars, now organized and labeled: Save, Spend Wisely, Emergency Fund, Give, Invest. What had started as empty containers were now filled with coins, bills, and most importantly, knowledge.</p><p><em>\"But the real growth,\"</em> the tree continued, <em>\"is not in your jars. It's in your minds and hearts. You now understand that money is a tool - not a master. It's a seed - not a fruit. It's a responsibility - not just a privilege.\"</em></p><div class=\"bg-slate-900/50 border border-slate-700 rounded-xl p-6 my-8\"><h3 class=\"text-xl font-semibold text-slate-100 mb-4\">The Money Tree Promise</h3><p class=\"mb-3\">As guardians of your own Money Tree, remember:</p><div class=\"space-y-2 text-slate-300\"><p><strong>I will plant seeds of saving</strong> before I spend on wants</p><p><strong>I will grow branches of budgeting</strong> to give every dollar a purpose</p><p><strong>I will nurture leaves of earning</strong> through hard work and creativity</p><p><strong>I will distinguish between needs and wants</strong> like flowers in my garden</p><p><strong>I will plant investment seeds</strong> for future growth</p><p><strong>I will protect my tree</strong> from storms and predators</p><p><strong>I will share my shade</strong> with those who need it</p><p><strong>I will teach others</strong> to grow their own Money Trees</p></div></div><p>Liam raised his hand one last time. \"But what if we mess up? What if we make bad money choices?\"</p><p>The tree chuckled warmly. <em>\"Even the mightiest trees lose branches in storms, young one. The key is to learn from the break and grow stronger. Every mistake is just information about what doesn't work. Every failure is fertilizer for future success.\"</em></p><p><em>\"Remember the most important truth of all: you don't need to be perfect. You just need to be intentional. Every small choice compounds over time, just like interest.\"</em></p><p>As the stars appeared overhead, the tree began to shimmer more brightly. <em>\"I must go now, but I will never truly leave you. Every time you make a wise money choice, every time you help someone else understand these principles, every time you choose long-term growth over short-term pleasure - I will be there.\"</em></p><p>The tree's golden light began to fade, but instead of disappearing, it seemed to flow into each of the children. They felt a warm glow in their chests, as if they had each planted their own money tree seed inside their hearts.</p><p><em>\"Your journey is just beginning,\"</em> came the tree's voice, now speaking from within them. <em>\"Go forward and grow. The world needs more people who understand that true wealth isn't about having money - it's about using money wisely to create the life you want and help others do the same.\"</em></p><p>The friends walked home together in comfortable silence, their jars in their hands and a lifetime of wisdom in their hearts. The Money Tree of Life lived on - not as magic, but as principles they would carry forever.</p>"
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>When Alex’s shoe fund reached ninety-two dollars, he began thinking beyond the shoes.</p><p>At school, Ms. Lewis planted a bean. It needed water, light, care, and time before it could grow more beans.</p><p>“Investing means putting money into something that may grow in value or produce income over time,” she said.</p><p>Saving was safer and useful for short-term goals. Investing involved more risk and usually worked better with long-term goals.</p><p>At the Money Tree, four pots appeared: SAVINGS, BUSINESS, STOCKS, and CRYPTO. The savings plant grew slowly. The business plant grew but bent in a storm. The stock plant moved up and down. The crypto plant rose fast and fell fast.</p><p class=\"mt-pull\">“Some investments change more than others,” said the tree. “Fast growth can bring fast loss. Never confuse possibility with a promise.”</p><p>A scale balanced RISK and REWARD. A mixed fruit basket taught diversification: do not place every seed in one field.</p><p>They also saw compounding. One dollar earned growth, and later that growth earned more growth.</p><p>With their parents, Renee and Alex used a pretend portfolio. Alex chose more growth and risk. Renee chose more safety. Both plans had reasons and spread the risk.</p><p>Alex kept his shoe money safe because he needed it soon. His separate GROW money was for long-term learning.</p><p>The INVESTING branch grew with four rules: KNOW THE GOAL, KNOW THE RISK, SPREAD THE SEEDS, and GIVE THEM TIME.</p>"
       }
     ],
-    "quizId": "qz-09"
+    "quizId": "qz-09",
+    "printedPage": 33,
+    "kit": {
+      "lesson": "Investing may help long-term goals, but all investments include risk.",
+      "words": [
+        "Invest",
+        "Risk",
+        "Reward",
+        "Stock",
+        "Dividend",
+        "Volatility",
+        "Diversification",
+        "Compounding"
+      ],
+      "reneeTip": "Do not invest money you will need soon.",
+      "alexTip": "Know the goal, know the risk, spread the seeds, and give them time.",
+      "challenge": "Create a pretend one-hundred-dollar portfolio and explain the risk of each choice.",
+      "conversation": "What long-term goal might investing help with?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
+  },
+  {
+    "id": "ch-10",
+    "slug": "turn-an-idea-into-a-business",
+    "label": "Chapter 10",
+    "title": "Turn an Idea Into a Business",
+    "summary": "A business solves a problem and creates value for a customer.",
+    "order": 10,
+    "estReadMinutes": 3,
+    "sections": [
+      {
+        "id": "s1",
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>At Discovery Green, Renee and Alex noticed families waiting in long food lines. They imagined sealed snack packs with water, crackers, fruit, and a money puzzle.</p><p>Their parents helped them check safety and local rules. They could not simply sell food in the park, so Mrs. Carter allowed them to set up at a community yard sale with adult supervision.</p><p>They compared prices and found each pack cost one dollar and sixty cents. They set the price at three dollars and invested sixteen dollars each in twenty packs.</p><p>They wrote an agreement: equal startup money and equal profit.</p><p>At the sale, customers liked the packs. One customer wanted to pay digitally, so the parents helped set up a supervised payment option.</p><p>They sold fifteen packs at three dollars and three packs at two dollars. Two remaining packs were donated to a family center.</p><p>Revenue was fifty-one dollars. The cost of the eighteen sold packs was twenty-eight dollars and eighty cents. Profit was twenty-two dollars and twenty cents.</p><p>They reinvested twelve dollars and split the rest.</p><p>At the Money Tree, a new ENTREPRENEURSHIP branch grew. Six steps appeared: NOTICE, PLAN, START, SERVE, LEARN, and IMPROVE.</p><p>The tree also showed a dishonest seller who lost customer trust.</p><p class=\"mt-pull\">“Profit without honesty weakens the roots,” it said.</p><p class=\"mt-pull\">“Your name is part of everything you sell.”</p><p>Renee and Alex gathered customer feedback and created two price levels. Their small business was becoming a larger idea: fun products that helped families learn money together.</p>"
+      }
+    ],
+    "quizId": "qz-10",
+    "printedPage": 36,
+    "kit": {
+      "lesson": "A business solves a problem and creates value for a customer.",
+      "words": [
+        "Entrepreneur",
+        "Customer",
+        "Startup money",
+        "Revenue",
+        "Profit",
+        "Inventory",
+        "Reinvest"
+      ],
+      "reneeTip": "Keep business money separate from personal money.",
+      "alexTip": "Begin with a problem to solve, then test the smallest useful idea.",
+      "challenge": "Create a one-page business plan: problem, customer, product, cost, price, safety, and adult help.",
+      "conversation": "What business would you have liked to start as a child?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
+  },
+  {
+    "id": "ch-11",
+    "slug": "when-wealth-grows-roots",
+    "label": "Chapter 11",
+    "title": "When Wealth Grows Roots",
+    "summary": "Giving can include money, time, work, and knowledge. Wise giving protects dignity.",
+    "order": 11,
+    "estReadMinutes": 3,
+    "sections": [
+      {
+        "id": "s1",
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>After another Market Pack sale, Renee and Alex earned forty-two dollars in profit. They planned to reinvest twenty dollars, then discussed whether the business should give part of what remained.</p><p>At a community food pantry, Ms. Green explained that the best gift matches a real need. Expired or unlabeled food could not be used. Money sometimes stretched farther because the pantry could buy in bulk.</p><p class=\"mt-pull\">“Good giving does not shame people,” she said. “A gift should respect the person receiving it.”</p><p>At the Money Tree, the plants around the tree were dry. When the tree shared seeds and water, the garden grew.</p><p class=\"mt-pull\">“A tree that keeps every drop weakens the garden,”</p><p class=\"mt-pull\">the tree said. “Wealth is not only what you keep.</p><p class=\"mt-pull\">Wealth is also what you strengthen.”</p><p>Four symbols appeared: MONEY, TIME, WORK, and KNOWLEDGE.</p><p>Renee and Alex donated six dollars, volunteered for one hour, sorted supplies, and made money activity sheets for children.</p><p>When Alex saw a classmate at the pantry, he did not embarrass him or ask personal questions. He treated him normally and invited him to help sort cereal.</p><p>The GIVING branch grew. The tree showed help passing from one person to another across many years.</p><p class=\"mt-pull\">“That is legacy,” it said. “What continues after you.”</p><p>Renee and Alex added a COMMUNITY category to their business: ten cents from every future pack. They would ask what was needed and give with respect.</p><p>Giving did not erase their own goals. It placed those goals beside something larger.</p>"
+      }
+    ],
+    "quizId": "qz-11",
+    "printedPage": 39,
+    "kit": {
+      "lesson": "Giving can include money, time, work, and knowledge. Wise giving protects dignity.",
+      "words": [
+        "Giving",
+        "Donation",
+        "Volunteer",
+        "Impact",
+        "Community",
+        "Legacy"
+      ],
+      "reneeTip": "Plan giving so it does not replace basic needs or safety.",
+      "alexTip": "Wealth is stronger when it creates opportunity for others.",
+      "challenge": "Choose one safe way to give money, time, work, or knowledge this week.",
+      "conversation": "Who helped you at an important time, and what kind of help mattered most?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
+  },
+  {
+    "id": "ch-12",
+    "slug": "build-something-that-lasts",
+    "label": "Chapter 12",
+    "title": "Build Something That Lasts",
+    "summary": "Generational wealth includes money, ownership, knowledge, habits, and opportunity passed forward.",
+    "order": 12,
+    "estReadMinutes": 4,
+    "sections": [
+      {
+        "id": "s1",
+        "htmlBody": "<p class=\"mt-place\">Houston, Texas</p><p>A golden fruit fell from the Money Tree and showed Renee and Alex a family story.</p><p>A woman worked two jobs, cared for her children, and saved one dollar each week. Her savings helped her take a class and earn more. Years later, one child attended college and another started a repair business. They passed skills and money lessons to their own children.</p><p class=\"mt-pull\">“The first seed may look small,” said the tree. “But the future may grow from it.”</p><p>The fruit held six seeds: MONEY, PROPERTY, BUSINESS, KNOWLEDGE, VALUES, and OPPORTUNITY.</p><p>Generational wealth was more than cash. It was safety, ownership, access, knowledge, and the chance for the next person to begin farther ahead.</p><p>Renee and Alex wrote a mission for their growing project:</p><p>We help kids and families learn how money works through fun products, real practice, and shared lessons.</p><p>Their Market Packs could grow into books, games, classroom kits, digital lessons, and safe learning tools.</p><p>Alex asked his father what their family had passed down. His father named repair skills, trust, discipline, and the hope of giving Alex more choices than he had.</p><p>Renee’s mother wanted to pass down confidence—the ability to understand money without fear, pressure, or confusion.</p><p>At school, Renee and Alex drew Future Trees. Roots were habits and values. The trunk was skill and discipline. Branches were goals. Fruit was what those goals could produce. Seeds were what they wanted to pass forward.</p><p>At the Money Tree, every branch glowed. At the top, the final branch appeared:</p><p class=\"mt-sign\">GENERATIONAL WEALTH</p><p>“We made it,” Alex said.</p><p>“You began,” the tree answered.</p><p>Lessons must become habits. Habits become systems. Systems create opportunity. Opportunity passed forward becomes legacy.</p><p>A wooden box rose from the roots. Inside was a blank Family Wealth Book with pages for family stories, goals, skills, businesses, property, investments, records, mistakes, and lessons to pass forward.</p><p>The Money Tree released golden seeds over Houston toward homes, schools, apartments, businesses, and community centers.</p><p>It had chosen Renee and Alex not because they already knew everything, but because they were willing to learn and willing to share.</p><p>Weeks later, Alex reached his one-hundred-forty-dollar shoe goal. He found the shoes on sale for one hundred twelve dollars, bought them without debt, and kept twenty-eight dollars.</p><p>Renee also completed her art class, kept saving, compared models, waited for a discount, and bought her drawing tablet.</p><p>Her first drawing showed Renee and Alex beneath the golden tree.</p><p>Money does not grow on trees. Knowledge does. And knowledge grows into wealth.</p>"
+      }
+    ],
+    "quizId": "qz-12",
+    "printedPage": 42,
+    "kit": {
+      "lesson": "Generational wealth includes money, ownership, knowledge, habits, and opportunity passed forward.",
+      "words": [
+        "Generation",
+        "Generational wealth",
+        "Ownership",
+        "Asset",
+        "Legacy",
+        "Opportunity"
+      ],
+      "reneeTip": "Save for choices, not only things.",
+      "alexTip": "Build ownership and pass forward both assets and knowledge.",
+      "challenge": "Draw a Future Tree with roots, trunk, branches, fruit, and seeds.",
+      "conversation": "What money lesson do you wish someone had taught you earlier, and what should our family pass forward?",
+      "review": "Explain the chapter lesson in your own words. Name one choice the characters made, one risk they faced, and one action you can practice this week.",
+      "parentNote": "Keep the conversation honest and shame-free. Use pretend numbers when family finances are private. Children do not need perfect answers; they need a trusted adult willing to learn beside them."
+    }
+  },
+  {
+    "id": "ch-13",
+    "slug": "the-seed-in-your-hands",
+    "label": "Epilogue",
+    "title": "The Seed in Your Hands",
+    "summary": "A lesson practiced becomes a habit. A habit repeated becomes a system.",
+    "order": 13,
+    "estReadMinutes": 3,
+    "sections": [
+      {
+        "id": "s1",
+        "htmlBody": "<p>Renee and Alex thought their journey was over, but the Money Tree left one small seed on the ground.</p><p>“Every great tree begins small,” the tree said. “Knowledge is only the beginning. A lesson practiced becomes a habit. A habit repeated becomes a system. A system protected becomes opportunity. Opportunity shared becomes legacy.”</p><p>They carried the Family Wealth Book to school and later held a family money night. Parents and children made savings jars, planned small businesses, shared mistakes, spotted scams, and asked questions together.</p><p>No one needed to be a banker or an expert. They only needed a place to begin.</p><p>The seed did not grow in the ground. It grew each time a child asked a question and an adult sat down to answer.</p><p>Your future tree begins with what you plant today.</p><h3>A Letter to Young Readers</h3><p>Money can feel confusing. Sometimes adults do not talk about it because no one taught them either. Begin with one step: save one dollar, make one plan, ask one question, learn one word, solve one problem, or share one lesson. Every good choice is a seed.</p><h3>A Letter to Parents and Caregivers</h3><p>You do not need to be a banker, investor, accountant, or financial expert. You only need to be willing to begin. Say honestly, “No one taught me this either, but we can learn together.” That sentence can change a family.</p><h3>The Money Tree Family Pledge</h3><ul><li>Talk about money without shame</li><li>Ask questions when we do not understand</li><li>Learn from mistakes</li><li>Take care of needs before wants</li><li>Save before we spend</li><li>Give every dollar a job</li><li>Protect our money and information</li><li>Borrow carefully</li><li>Invest with patience and knowledge</li><li>Build value through honest work</li><li>Give with purpose and respect</li><li>Teach what we learn</li><li>Create opportunities for the next generation</li></ul>"
+      }
+    ],
+    "quizId": "qz-13",
+    "printedPage": 46,
+    "kit": null
   }
 ]
