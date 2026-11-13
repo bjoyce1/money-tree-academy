@@ -5,7 +5,7 @@ import { useSyncExternalStore } from 'react';
 import { GLOSSARY, type GlossaryTerm } from '@/data/content';
 import { earnCoins } from './rewards';
 
-export type GameId = 'every-dollar' | 'how-long' | 'class-party' | 'money-words';
+export type GameId = 'every-dollar' | 'how-long' | 'class-party' | 'money-words' | 'grow-the-tree';
 
 export const GAMES: { id: GameId; name: string; about: string; chapter: string }[] = [
   { id: 'every-dollar', name: 'Give every dollar a job', about: 'Sort each choice: need, want, save or give.', chapter: 'save-first-spend-second' },
