@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Link } from 'wouter';
 import * as Dialog from '@radix-ui/react-dialog';
 import { ArrowRight, X } from 'lucide-react';
@@ -8,6 +8,10 @@ import { SortGame } from './games/SortGame';
 import { SavingsGame } from './games/SavingsGame';
 import { PartyGame } from './games/PartyGame';
 import { MatchGame } from './games/MatchGame';
+import { LinkButton } from '@/components/site/GoldButton';
+
+// The live tree is only drawn once this section is on the page.
+const TreeScene = lazy(() => import('@/play/TreeScene').then((m) => ({ default: m.TreeScene })));
 
 const BOARDS: Partial<Record<GameId, (p: { onClose: () => void }) => JSX.Element>> = {
   'every-dollar': SortGame,
@@ -16,17 +20,40 @@ const BOARDS: Partial<Record<GameId, (p: { onClose: () => void }) => JSX.Element
   'money-words': MatchGame,
 };
 
-/** The four money games, each opened in its own dialog. */
+/** Grow the Tree has a page of its own; the four quick games each open in a dialog. */
 export function MoneyGames() {
   const best = useBestScores();
   const [open, setOpen] = useState<GameId | null>(null);
   const game = GAMES.find((g) => g.id === open);
   const Board = open ? BOARDS[open] : null;
+  const featured = GAMES.filter((g) => g.href);
 
   return (
     <>
+      {featured.map((g) => (
+        <div key={g.id} className="mb-10 grid items-center gap-6 sm:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] sm:gap-10">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-plate bg-night shadow-plate">
+            <Suspense fallback={null}>
+              <TreeScene size={0.82} gold={0.28} weather="calm" className="absolute inset-0 h-full w-full" />
+            </Suspense>
+          </div>
+          <div>
+            <h3 className="font-display text-[clamp(1.4rem,2.4vw,1.8rem)] font-bold leading-tight text-cream">{g.name}</h3>
+            <p className="mt-2 max-w-measure text-cream-2">{g.about}</p>
+            <p className="mt-1.5 text-[0.875rem] text-cream-3">
+              {best[g.id] !== undefined ? `Best: ${best[g.id]}%` : 'Not played yet'} · Goes with Chapters 5 and 9
+            </p>
+            <div className="mt-5">
+              <LinkButton href={g.href!} variant="outline" data-testid={`game-${g.id}`}>
+                Play {g.name} <ArrowRight size={18} aria-hidden />
+              </LinkButton>
+            </div>
+          </div>
+        </div>
+      ))}
+
       <ul className="grid gap-x-10 border-b border-hairline sm:grid-cols-2 sm:border-b-0">
-        {GAMES.map((g) => {
+        {GAMES.filter((g) => !g.href).map((g) => {
           const chapter = CHAPTERS.find((c) => c.slug === g.chapter);
           return (
             <li key={g.id} className="border-t border-hairline sm:border-b">

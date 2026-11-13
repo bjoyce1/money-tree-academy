@@ -14,6 +14,7 @@ const CharacterSelectionPage = lazy(() => import("@/pages/CharacterSelectionPage
 const CharacterProfilePage = lazy(() => import("@/pages/CharacterProfilePage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const FlipBookPage = lazy(() => import("@/pages/FlipBookPage"));
+const GrowTheTreePage = lazy(() => import("@/pages/GrowTheTreePage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Notifications = lazy(() => import("@/components/Notifications"));
 
@@ -41,6 +42,7 @@ const routes = {
   character: page(CharacterProfilePage),
   dashboard: page(DashboardPage),
   flipbook: page(FlipBookPage),
+  growTheTree: page(GrowTheTreePage),
   notFound: page(NotFound),
 };
 
@@ -63,6 +65,7 @@ function Router() {
       <Route path="/characters/:characterId" component={routes.character} />
       <Route path="/dashboard" component={routes.dashboard} />
       <Route path="/flipbook" component={routes.flipbook} />
+      <Route path="/play/grow-the-tree" component={routes.growTheTree} />
       <Route component={routes.notFound} />
     </Switch>
   );
