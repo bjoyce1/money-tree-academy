@@ -10,8 +10,16 @@ import { PartyGame } from './games/PartyGame';
 import { MatchGame } from './games/MatchGame';
 import { LinkButton } from '@/components/site/GoldButton';
 
-// The live tree is only drawn once this section is on the page.
+// The live pictures are only drawn once this section is on the page.
 const TreeScene = lazy(() => import('@/play/TreeScene').then((m) => ({ default: m.TreeScene })));
+const MarketScene = lazy(() => import('@/play/MarketScene').then((m) => ({ default: m.MarketScene })));
+
+const scene = 'absolute inset-0 h-full w-full';
+/** A living picture for each game that has a page of its own. */
+const PICTURES: Partial<Record<GameId, () => JSX.Element>> = {
+  'grow-the-tree': () => <TreeScene size={0.82} gold={0.28} weather="calm" className={scene} />,
+  'market-day': () => <MarketScene price={2} stock={14} jar={0.45} sign sample crowd={0.6} className={scene} />,
+};
 
 const BOARDS: Partial<Record<GameId, (p: { onClose: () => void }) => JSX.Element>> = {
   'every-dollar': SortGame,
@@ -20,7 +28,7 @@ const BOARDS: Partial<Record<GameId, (p: { onClose: () => void }) => JSX.Element
   'money-words': MatchGame,
 };
 
-/** Grow the Tree has a page of its own; the four quick games each open in a dialog. */
+/** The big games have pages of their own; the four quick games each open in a dialog. */
 export function MoneyGames() {
   const best = useBestScores();
   const [open, setOpen] = useState<GameId | null>(null);
@@ -30,27 +38,29 @@ export function MoneyGames() {
 
   return (
     <>
-      {featured.map((g) => (
-        <div key={g.id} className="mb-10 grid items-center gap-6 sm:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] sm:gap-10">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-plate bg-night shadow-plate">
-            <Suspense fallback={null}>
-              <TreeScene size={0.82} gold={0.28} weather="calm" className="absolute inset-0 h-full w-full" />
-            </Suspense>
-          </div>
-          <div>
-            <h3 className="font-display text-[clamp(1.4rem,2.4vw,1.8rem)] font-bold leading-tight text-cream">{g.name}</h3>
-            <p className="mt-2 max-w-measure text-cream-2">{g.about}</p>
-            <p className="mt-1.5 text-[0.875rem] text-cream-3">
-              {best[g.id] !== undefined ? `Best: ${best[g.id]}%` : 'Not played yet'} · Goes with Chapters 5 and 9
-            </p>
-            <div className="mt-5">
-              <LinkButton href={g.href!} variant="outline" data-testid={`game-${g.id}`}>
-                Play {g.name} <ArrowRight size={18} aria-hidden />
-              </LinkButton>
-            </div>
-          </div>
-        </div>
-      ))}
+      <ul className="mb-12 grid gap-x-10 gap-y-12 sm:grid-cols-2">
+        {featured.map((g) => {
+          const Picture = PICTURES[g.id];
+          return (
+            <li key={g.id}>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-plate bg-night shadow-plate">
+                <Suspense fallback={null}>{Picture && <Picture />}</Suspense>
+              </div>
+              <h3 className="mt-6 font-display text-[clamp(1.4rem,2.4vw,1.8rem)] font-bold leading-tight text-cream">{g.name}</h3>
+              <p className="mt-2 max-w-measure text-cream-2">{g.about}</p>
+              <p className="mt-1.5 text-[0.875rem] text-cream-3">
+                {best[g.id] !== undefined ? `Best: ${best[g.id]}%` : 'Not played yet'}
+                {g.goesWith && ` · Goes with ${g.goesWith}`}
+              </p>
+              <div className="mt-5">
+                <LinkButton href={g.href!} variant="outline" data-testid={`game-${g.id}`}>
+                  Play {g.name} <ArrowRight size={18} aria-hidden />
+                </LinkButton>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
 
       <ul className="grid gap-x-10 border-b border-hairline sm:grid-cols-2 sm:border-b-0">
         {GAMES.filter((g) => !g.href).map((g) => {

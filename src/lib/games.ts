@@ -5,11 +5,12 @@ import { useSyncExternalStore } from 'react';
 import { GLOSSARY, type GlossaryTerm } from '@/data/content';
 import { earnCoins } from './rewards';
 
-export type GameId = 'grow-the-tree' | 'every-dollar' | 'how-long' | 'class-party' | 'money-words';
+export type GameId = 'grow-the-tree' | 'market-day' | 'every-dollar' | 'how-long' | 'class-party' | 'money-words';
 
-/** `href` marks a game with a page of its own; the others open in a dialog. */
-export const GAMES: { id: GameId; name: string; about: string; chapter: string; href?: string }[] = [
-  { id: 'grow-the-tree', name: 'Grow the Tree', about: 'Eight seasons, three jars. Save for a goal and watch your tree grow.', chapter: 'save-first-spend-second', href: '/play/grow-the-tree' },
+/** `href` marks a game with a page of its own (and `goesWith` names its chapters); the others open in a dialog. */
+export const GAMES: { id: GameId; name: string; about: string; chapter: string; href?: string; goesWith?: string }[] = [
+  { id: 'grow-the-tree', name: 'Grow the Tree', about: 'Eight seasons, three jars. Save for a goal and watch your tree grow.', chapter: 'save-first-spend-second', href: '/play/grow-the-tree', goesWith: 'Chapters 5 and 9' },
+  { id: 'market-day', name: 'Market Day', about: 'Run the Fun Pack stand for five days. Set a price, make your packs, and count the profit.', chapter: 'what-is-money-really', href: '/play/market-day', goesWith: 'Chapters 2 and 10' },
   { id: 'every-dollar', name: 'Give every dollar a job', about: 'Sort each choice: need, want, save or give.', chapter: 'save-first-spend-second' },
   { id: 'how-long', name: 'How long to save?', about: 'Work out how many weeks, days or months a goal takes.', chapter: 'save-first-spend-second' },
   { id: 'class-party', name: 'Plan the class party', about: 'Spend $50 to help the most classmates.', chapter: 'turn-an-idea-into-a-business' },

@@ -15,6 +15,7 @@ const CharacterProfilePage = lazy(() => import("@/pages/CharacterProfilePage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const FlipBookPage = lazy(() => import("@/pages/FlipBookPage"));
 const GrowTheTreePage = lazy(() => import("@/pages/GrowTheTreePage"));
+const MarketDayPage = lazy(() => import("@/pages/MarketDayPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Notifications = lazy(() => import("@/components/Notifications"));
 
@@ -43,6 +44,7 @@ const routes = {
   dashboard: page(DashboardPage),
   flipbook: page(FlipBookPage),
   growTheTree: page(GrowTheTreePage),
+  marketDay: page(MarketDayPage),
   notFound: page(NotFound),
 };
 
@@ -66,6 +68,7 @@ function Router() {
       <Route path="/dashboard" component={routes.dashboard} />
       <Route path="/flipbook" component={routes.flipbook} />
       <Route path="/play/grow-the-tree" component={routes.growTheTree} />
+      <Route path="/play/market-day" component={routes.marketDay} />
       <Route component={routes.notFound} />
     </Switch>
   );
