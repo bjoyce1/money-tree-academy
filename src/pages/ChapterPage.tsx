@@ -5,6 +5,7 @@ import ReaderShell from '@/components/ReaderShell';
 import { StoryBody } from '@/components/reader/StoryBody';
 import { ChapterKit } from '@/components/reader/ChapterKit';
 import { ChapterQuiz } from '@/components/reader/ChapterQuiz';
+import { ChapterGame } from '@/components/reader/ChapterGame';
 import { ToolsDrawer, type ToolId } from '@/components/reader/ToolsDrawer';
 import { useSpeech } from '@/components/reader/ListenTool';
 import {
@@ -185,6 +186,8 @@ function ChapterView({ chapter }: { chapter: Chapter }) {
         <div className="mt-16 border-t border-reader-rule pt-12">
           <ChapterQuiz quizId={chapter.quizId} />
         </div>
+
+        <ChapterGame slug={chapter.slug} />
 
         <nav aria-label="Chapters" className="mt-20 grid gap-3 border-t border-reader-rule pt-8 sm:grid-cols-2">
           {prev ? (

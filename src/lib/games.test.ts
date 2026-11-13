@@ -1,10 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
+  GAMES,
   PARTY_BUDGET,
   PARTY_ITEMS,
   SAVINGS_QUESTIONS,
   bestPartyHelp,
   bestScores,
+  gamesForChapter,
   partyScore,
   periodsToSave,
   pickMatchTerms,
@@ -12,6 +14,7 @@ import {
   resetGamesCache,
 } from './games';
 import { getCoins, resetRewardsCache } from './rewards';
+import { CHAPTERS } from '@/data/content';
 
 beforeEach(() => {
   localStorage.clear();
@@ -48,6 +51,22 @@ describe('money words', () => {
   it('picks distinct terms', () => {
     const terms = pickMatchTerms(5);
     expect(new Set(terms.map((t) => t.id)).size).toBe(5);
+  });
+});
+
+describe('games in the reader', () => {
+  it('offers each big game from the two chapters it practises, and nowhere else', () => {
+    const names = (slug: string) => gamesForChapter(slug).map((g) => g.id);
+    expect(names('what-is-money-really')).toEqual(['market-day']);
+    expect(names('turn-an-idea-into-a-business')).toEqual(['market-day']);
+    expect(names('save-first-spend-second')).toEqual(['grow-the-tree']);
+    expect(names('make-your-money-work')).toEqual(['grow-the-tree']);
+    const withGames = CHAPTERS.filter((c) => gamesForChapter(c.slug).length > 0);
+    expect(withGames).toHaveLength(4);
+    // Only games with a page of their own are linked, and each has two chapters.
+    for (const g of GAMES.filter((g) => g.href)) {
+      expect(CHAPTERS.filter((c) => gamesForChapter(c.slug).includes(g))).toHaveLength(2);
+    }
   });
 });
 

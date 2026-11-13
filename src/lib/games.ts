@@ -17,6 +17,15 @@ export const GAMES: { id: GameId; name: string; about: string; chapter: string; 
   { id: 'money-words', name: 'Match the money words', about: 'Pair five words from the book with what they mean.', chapter: 'what-is-money-really' },
 ];
 
+/** The chapters each big game practises, for the reader's "Play this chapter". */
+const PLAYS_WITH: Partial<Record<GameId, string[]>> = {
+  'grow-the-tree': ['save-first-spend-second', 'make-your-money-work'],
+  'market-day': ['what-is-money-really', 'turn-an-idea-into-a-business'],
+};
+
+/** The games with a page of their own that go with a chapter. */
+export const gamesForChapter = (slug: string) => GAMES.filter((g) => g.href && PLAYS_WITH[g.id]?.includes(slug));
+
 // ------------------------------------------------------------ every dollar
 
 export type Job = 'need' | 'want' | 'save' | 'give';
