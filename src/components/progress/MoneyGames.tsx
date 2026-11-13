@@ -9,7 +9,7 @@ import { SavingsGame } from './games/SavingsGame';
 import { PartyGame } from './games/PartyGame';
 import { MatchGame } from './games/MatchGame';
 
-const BOARDS: Record<GameId, (p: { onClose: () => void }) => JSX.Element> = {
+const BOARDS: Partial<Record<GameId, (p: { onClose: () => void }) => JSX.Element>> = {
   'every-dollar': SortGame,
   'how-long': SavingsGame,
   'class-party': PartyGame,
