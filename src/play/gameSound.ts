@@ -97,6 +97,12 @@ export const sound = {
     if (!a) return;
     ping(a, a.currentTime + 0.005, 520, 0.05, 0.09, 'triangle');
   },
+  /** Someone walked on without buying: a soft, low step. */
+  pass() {
+    const a = audio();
+    if (!a) return;
+    ping(a, a.currentTime + 0.005, 196, 0.035, 0.12, 'triangle');
+  },
   /** The season turns. */
   turn() {
     const a = audio();
