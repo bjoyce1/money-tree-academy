@@ -590,24 +590,6 @@ html:has(.home) body {
   background: #f0c869;
 }
 
-/* --------------------------------------------------------- the paper page */
-
-.home-paper {
-  position: relative;
-  aspect-ratio: 1000 / 1500;
-  background: var(--paper);
-  border-radius: 3px;
-  box-shadow:
-    0 2px 3px rgba(5, 8, 20, 0.35),
-    0 30px 60px -18px rgba(5, 8, 20, 0.75);
-}
-.home-paper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 3px;
-}
-
 /* ------------------------------------------------------------- journey */
 /* The rest of the story, travelled sideways on a warm cocoa ground (not the
    night's navy), with the golden path drawing itself under the chapters. */
@@ -870,11 +852,6 @@ html:has(.home) body {
   --cream-3: rgba(246, 239, 223, 0.76);
   background: #1d4a33;
 }
-.fam .home-paper {
-  box-shadow:
-    0 2px 3px rgba(4, 20, 10, 0.35),
-    0 30px 60px -18px rgba(4, 20, 10, 0.75);
-}
 .fam-kicker {
   display: flex;
   align-items: center;
@@ -894,6 +871,161 @@ html:has(.home) body {
   color: var(--cream);
 }
 
+/* ------------------------------------------------------ keepsake paper */
+/* One paper card for everything the book hands to families: the end of a
+   chapter, the back-of-book pages and the pledge. Real text in the site's
+   own type; no screenshots of printed pages. */
+
+.kit,
+.keep,
+.pg-pledge {
+  --ink: #1c1610;
+  --ink-soft: #4a3e2e;
+  --gold-ink: #8a5a12;
+  --rule: #d8c7a2;
+  position: relative;
+  display: block;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 6px;
+}
+.kit-tab,
+.keep-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  padding: 4px 12px 4px 7px;
+  border-radius: 999px;
+  background: #f1e3c4;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--gold-ink);
+}
+
+/* The end of a chapter, on the green. */
+.kit {
+  rotate: -1.2deg;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 22px 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  box-shadow:
+    0 2px 3px rgba(4, 20, 10, 0.35),
+    0 30px 60px -18px rgba(4, 20, 10, 0.75);
+}
+.kit-tab {
+  margin: 0 0 10px 12px;
+}
+.kit-part {
+  position: relative;
+  padding: 12px 14px;
+  border-radius: 6px;
+}
+.kit-part + .kit-part::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  border-top: 1px solid var(--rule);
+}
+.kit-part > :not(.kit-marker) {
+  position: relative;
+}
+.kit-marker {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 6px;
+  background: rgba(230, 185, 85, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(196, 144, 47, 0.55);
+}
+@media (min-width: 1024px) {
+  .kit-marker {
+    display: block;
+  }
+}
+.kit-label {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold-ink);
+}
+.kit-lesson,
+.kit-question {
+  font-family: "Young Serif", Georgia, serif;
+  font-size: 20px;
+  line-height: 1.32;
+  text-wrap: balance;
+}
+.kit-question {
+  font-size: 18px;
+}
+.kit-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.kit-words li {
+  padding: 2px 11px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: #f6ecd6;
+  font-size: 15px;
+}
+.kit-tips {
+  display: grid;
+  gap: 10px;
+}
+@media (min-width: 520px) {
+  .kit-tips {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+}
+.kit-who {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+}
+.kit-who-alex {
+  color: #a4430f;
+}
+.kit-who-renee {
+  color: #1f5a3c;
+}
+.kit-open {
+  display: inline-flex;
+  gap: 6px;
+  margin: 12px 14px 0;
+  font-weight: 700;
+  color: var(--gold-ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(138, 90, 18, 0.4);
+  text-underline-offset: 0.25em;
+}
+.kit-open:hover {
+  text-decoration-color: var(--gold-ink);
+}
+@media (min-width: 640px) {
+  .kit {
+    padding: 26px 22px 24px;
+  }
+  .kit-lesson {
+    font-size: 23px;
+  }
+  .kit-question {
+    font-size: 20px;
+  }
+}
+
 /* --------------------------------------------------------------- pages */
 /* The back of the book, on its paper again. */
 
@@ -908,8 +1040,8 @@ html:has(.home) body {
 }
 .pg-inner {
   display: grid;
-  gap: 28px;
-  max-width: 1180px;
+  gap: 32px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 .pg-kicker {
@@ -938,68 +1070,155 @@ html:has(.home) body {
   text-wrap: pretty;
 }
 
+/* Phones: the three cards stacked, each a little askew. */
 .pg-fan {
-  position: relative;
+  display: grid;
+  gap: 18px;
   width: 100%;
-  max-width: 600px;
-  margin: 12px auto 0;
+  max-width: 400px;
+  margin: 0 auto;
   padding: 0;
-  aspect-ratio: 1 / 0.84;
   list-style: none;
-}
-.pg-sheet {
-  position: absolute;
-  top: 6%;
-  left: 28%;
-  width: 44%;
-}
-@media (min-width: 900px) {
-  .pg-sheet {
-    left: 31%;
-    width: 38%;
-  }
 }
 .pg-sheet-link {
   display: block;
-  border-radius: 3px;
+  height: 100%;
+  border-radius: 6px;
 }
-.pg-paper {
-  display: block;
-  overflow: hidden;
-  border-radius: 3px;
-  background: #fbf6ea;
-  box-shadow:
-    0 2px 3px rgba(60, 40, 10, 0.22),
-    0 26px 44px -22px rgba(60, 40, 10, 0.6);
-}
-.pg-paper img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.pg-legend {
+.keep {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2px 18px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 18px 18px 16px;
+  border: 1px solid var(--rule);
+  box-shadow:
+    0 2px 3px rgba(60, 40, 10, 0.16),
+    0 24px 40px -24px rgba(60, 40, 10, 0.55);
+}
+.keep-title {
+  margin-top: 4px;
+  font-family: "Young Serif", Georgia, serif;
+  font-size: 21px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.keep-line {
   font-size: 15px;
-  font-weight: 700;
+  line-height: 1.45;
   color: var(--ink-soft);
-  text-align: center;
+}
+.keep-art {
+  display: block;
+  margin: 8px 0 4px;
+}
+.keep-open {
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold-ink);
+}
+.pg-sheet-link:hover .keep-open {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
 }
 
-.pg-pledge {
+.art-sign {
+  display: grid;
+  gap: 4px;
+}
+.art-sign > span {
+  padding-top: 12px;
+  border-bottom: 1.5px solid var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+.art-days {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 3px;
+}
+.art-days > span {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
   border: 1px solid var(--rule);
-  border-radius: 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.art-days > span[data-first] {
+  border-color: #c4902f;
+  background: var(--gold);
+  color: var(--ink);
+}
+.art-cert {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 3px;
+  padding: 12px 8px 8px;
+  border: 1.5px solid #c4902f;
+  border-radius: 4px;
+  outline: 1px solid #c4902f;
+  outline-offset: 3px;
+}
+.art-cert-small {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.art-cert-name {
+  width: 78%;
+  margin-top: 14px;
+  border-bottom: 2px solid #b8862a;
+}
+.art-cert-seal {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-top: 4px;
+  border: 2px solid #c4902f;
+  border-radius: 50%;
+  background: #f6ecd6;
+}
+
+/* Wide screens: the cards are dealt into a fan as the section scrolls in. */
+.pg-fan-wide {
+  position: relative;
+  display: block;
+  max-width: 960px;
+  aspect-ratio: 2.05 / 1;
+}
+.pg-fan-wide .pg-sheet {
+  position: absolute;
+  top: 5%;
+  left: 35%;
+  width: 30%;
+}
+.pg-fan-wide .keep {
+  aspect-ratio: 3 / 4;
+}
+
+/* The pledge: the same paper, lines to tap, and a branch that grows. */
+.pg-pledge {
+  width: 100%;
+  max-width: 880px;
+  margin: 12px auto 0;
+  padding: 24px 20px 22px;
+  border: 1px solid var(--rule);
   background: #fffaf0;
-  padding: 26px 22px 24px;
+  box-shadow: 0 24px 40px -28px rgba(60, 40, 10, 0.5);
 }
 .pg-pledge-title {
+  margin-top: 12px;
   font-family: "Young Serif", Georgia, serif;
-  font-size: 26px;
+  font-size: 28px;
   line-height: 1.15;
 }
 .pg-pledge-how {
@@ -1010,6 +1229,9 @@ html:has(.home) body {
   margin: 16px 0 0;
   padding: 0;
   list-style: none;
+}
+.pg-lines li {
+  break-inside: avoid;
 }
 .pg-line {
   display: flex;
@@ -1048,8 +1270,54 @@ html:has(.home) body {
   display: grid;
   place-items: center;
 }
-.pg-count {
-  margin-top: 18px;
+
+.pg-branch {
+  position: relative;
+  height: 76px;
+  margin: 28px 14px 0;
+}
+.pg-stem {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.pg-stem path {
+  fill: none;
+  stroke: #8a6a3a;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.pg-bud {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+.pg-bud::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: #b99a62;
+}
+.pg-bud-leaf {
+  position: absolute;
+  left: -3px;
+  bottom: -3px;
+  display: block;
+  line-height: 0;
+  transform-origin: 12% 88%;
+}
+.pg-bud-leaf svg {
+  width: clamp(20px, 5.6vw, 30px);
+  height: clamp(20px, 5.6vw, 30px);
+}
+.pg-done {
+  margin-top: 14px;
+  text-align: center;
   font-weight: 700;
   color: var(--ink-soft);
 }
@@ -1058,42 +1326,22 @@ html:has(.home) body {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.pg-meter {
-  display: block;
-  height: 4px;
-  margin-top: 10px;
-  border-radius: 2px;
-  background: #c4902f;
-  transform-origin: left center;
-}
 
+@media (min-width: 760px) {
+  .pg-pledge {
+    padding: 34px 40px 30px;
+  }
+  .pg-lines {
+    columns: 2;
+    column-gap: 40px;
+  }
+}
 @media (min-width: 900px) {
   .pg {
     padding: clamp(110px, 11vw, 160px) 40px;
   }
   .pg-inner {
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    column-gap: 6vw;
-    row-gap: 16px;
-  }
-  .pg-head {
-    grid-column: 1;
-    grid-row: 1;
-  }
-  .pg-fan {
-    grid-column: 1;
-    grid-row: 2;
-    margin-top: 28px;
-  }
-  .pg-legend {
-    grid-column: 1;
-    grid-row: 3;
-  }
-  .pg-pledge {
-    grid-column: 2;
-    grid-row: 1 / span 3;
-    align-self: center;
-    padding: 34px 34px 30px;
+    gap: 40px;
   }
 }
 

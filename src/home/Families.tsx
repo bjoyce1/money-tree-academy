@@ -1,21 +1,39 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
-import { KIT, flipbookHref } from "./content";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
+import { CHAPTER_TWO_END as END, KIT, flipbookHref, type KitPart } from "./content";
 import { GoldLeaf } from "./Art";
 import { prefetchFlipbook } from "./Nav";
 
 const follow = { type: "spring" as const, visualDuration: 0.45, bounce: 0.12 };
 
-/** Printed page 13, the end of Chapter 2, with the active part spotlit. */
-function KitPage({ active }: { active: number }) {
+/** One part of the chapter's ending. The gold marker slides to whichever part is chosen in the list. */
+function Part({ id, active, label, children }: { id: KitPart["id"]; active: KitPart["id"]; label: string; children: React.ReactNode }) {
   const reduce = useReducedMotion();
-  const box = KIT[active].box;
-  // The page leans toward the pointer a little, like paper held in a hand.
+  return (
+    <div className="kit-part">
+      {id === active && (
+        <motion.span
+          layoutId="kit-marker"
+          className="kit-marker"
+          aria-hidden
+          transition={reduce ? { duration: 0 } : follow}
+        />
+      )}
+      <h3 className="kit-label">{label}</h3>
+      {children}
+    </div>
+  );
+}
+
+/** The end of Chapter 2, set in the site's own type, word for word from the book. */
+function ChapterEnd({ active }: { active: KitPart["id"] }) {
+  const reduce = useReducedMotion();
+  // The card leans toward the pointer a little, like paper held in a hand.
   const px = useMotionValue(0);
   const py = useMotionValue(0);
-  const rotateY = useSpring(useTransform(px, [-1, 1], [-6, 6]), { stiffness: 140, damping: 18 });
-  const rotateX = useSpring(useTransform(py, [-1, 1], [5, -5]), { stiffness: 140, damping: 18 });
+  const rotateY = useSpring(useTransform(px, [-1, 1], [-5, 5]), { stiffness: 140, damping: 18 });
+  const rotateX = useSpring(useTransform(py, [-1, 1], [4, -4]), { stiffness: 140, damping: 18 });
 
   return (
     <div
@@ -31,59 +49,60 @@ function KitPage({ active }: { active: number }) {
         py.set(0);
       }}
     >
-      <motion.div className="home-paper mx-auto w-full max-w-[440px]" style={{ rotateX, rotateY, rotate: -1.5 }}>
-        <img
-          src="/flipbook/pages/012-md.webp"
-          alt="Page 13 of the book: the end of Chapter 2, with its Money Tree Lesson, New Money Words, Renee's and Alex's tips, a Money Tree Challenge, and a Family Conversation question."
-          loading="lazy"
-          decoding="async"
-        />
-        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[3px]" aria-hidden>
-          {/* A highlighter stroke on the paper itself: the page stays cream. */}
-          <motion.div
-            className="absolute left-[9%] right-[8%] rounded-md"
-            initial={false}
-            animate={{ top: `${box.top}%`, height: `${box.height}%` }}
-            transition={reduce ? { duration: 0 } : follow}
-            style={{
-              background: "rgba(230,185,85,0.26)",
-              mixBlendMode: "multiply",
-              boxShadow: "0 0 0 2px rgba(127,83,16,0.7)",
-            }}
-          />
-        </div>
-      </motion.div>
-    </div>
-  );
-}
+      <motion.article className="kit" style={{ rotateX, rotateY }} aria-labelledby="kit-title">
+        <p className="kit-tab">
+          <GoldLeaf size={18} />
+          <span id="kit-title">The end of Chapter 2</span>
+        </p>
 
-/** Phones: the tapped part, cut straight from printed page 13. */
-function KitCrop({ box, label }: { box: { top: number; height: number }; label: string }) {
-  // Page is 1000 x 1502; the crop spans x 8%..92% (840px) and the box's band.
-  const aspect = 840 / (15.02 * box.height);
-  return (
-    <div
-      className="relative mx-1 mb-3 mt-1 overflow-hidden rounded-md bg-[var(--paper)] shadow-[0_10px_24px_-10px_rgba(5,8,20,0.8)]"
-      style={{ aspectRatio: aspect }}
-    >
-      <img
-        src="/flipbook/pages/012-md.webp"
-        alt={`${label}, as printed on page 13 of the book.`}
-        loading="lazy"
-        decoding="async"
-        className="absolute max-w-none"
-        style={{
-          width: `${100 / 0.84}%`,
-          left: `${-8 / 0.84}%`,
-          top: `${(-100 * box.top) / box.height}%`,
-        }}
-      />
+        <Part id="lesson" active={active} label="Money Tree Lessons">
+          <p className="kit-lesson">{END.lesson}</p>
+        </Part>
+
+        <Part id="words" active={active} label="New Money Words">
+          <ul className="kit-words">
+            {END.words.map((w) => (
+              <li key={w}>{w}</li>
+            ))}
+          </ul>
+        </Part>
+
+        <Part id="tips" active={active} label="Renee’s and Alex’s tips">
+          <div className="kit-tips">
+            <p>
+              <span className="kit-who kit-who-renee">Renee’s Saving Tip</span>
+              {END.renee}
+            </p>
+            <p>
+              <span className="kit-who kit-who-alex">Alex’s Wealth Builder Tip</span>
+              {END.alex}
+            </p>
+          </div>
+        </Part>
+
+        <Part id="challenge" active={active} label="Money Tree Challenge">
+          <p>{END.challenge}</p>
+        </Part>
+
+        <Part id="conversation" active={active} label="Family Conversation">
+          <p className="kit-question">{END.conversation}</p>
+        </Part>
+
+        <Link
+          href={flipbookHref(END.page)}
+          className="kit-open"
+          onPointerEnter={prefetchFlipbook}
+          onFocus={prefetchFlipbook}
+        >
+          Read it in the book <span aria-hidden>→</span>
+        </Link>
+      </motion.article>
     </div>
   );
 }
 
 export function Families() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState<KitPart["id"]>("lesson");
 
   return (
     <section
@@ -93,11 +112,6 @@ export function Families() {
     >
       <div className="mx-auto max-w-[1200px]">
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-20">
-          {/* Below lg each part shows its own crop of the page inline instead. */}
-          <div className="hidden lg:block">
-            <KitPage active={active} />
-          </div>
-
           <div>
             <p className="fam-kicker">
               <GoldLeaf size={20} />
@@ -110,20 +124,21 @@ export function Families() {
               Every chapter ends with something to do together
             </h2>
             <p className="home-measure mt-4 text-[clamp(1.05rem,1.4vw,1.2rem)] text-[var(--cream-2)]">
-              The story stops, and the book hands the lesson to your family. This is the real end of Chapter 2.
+              The story stops, and the book hands the lesson to your family. Here is how Chapter 2 ends.
             </p>
 
-            <ul className="mt-8 space-y-1" aria-label="What each chapter ends with">
-              {KIT.map((part, i) => {
-                const on = i === active;
+            {/* Wide screens: pick a part and the marker on the card follows. */}
+            <ul className="mt-8 hidden space-y-1 lg:block" aria-label="What each chapter ends with">
+              {KIT.map((part) => {
+                const on = part.id === active;
                 return (
                   <li key={part.id}>
                     <button
                       type="button"
                       aria-pressed={on}
-                      onPointerEnter={() => setActive(i)}
-                      onFocus={() => setActive(i)}
-                      onClick={() => setActive(i)}
+                      onPointerEnter={() => setActive(part.id)}
+                      onFocus={() => setActive(part.id)}
+                      onClick={() => setActive(part.id)}
                       className={`relative w-full rounded-xl px-4 py-3 text-left ${
                         on ? "bg-[rgba(230,185,85,0.09)]" : "hover:bg-[rgba(255,255,255,0.03)]"
                       }`}
@@ -137,24 +152,14 @@ export function Families() {
                       </span>
                       <span className="mt-0.5 block text-[var(--cream-2)]">{part.detail}</span>
                     </button>
-                    <AnimatePresence initial={false}>
-                      {on && (
-                        <motion.div
-                          key="crop"
-                          className="overflow-hidden lg:hidden"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ type: "spring", visualDuration: 0.35, bounce: 0 }}
-                        >
-                          <KitCrop box={part.box} label={part.name} />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </li>
                 );
               })}
             </ul>
+          </div>
+
+          <div className="lg:order-first">
+            <ChapterEnd active={active} />
           </div>
         </div>
 

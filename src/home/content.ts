@@ -124,45 +124,30 @@ export const INDEX: IndexEntry[] = [
   },
 ];
 
-/** The end-of-chapter kit. Boxes are measured from the ink on printed page 13 (012-md.webp), in % of page height, padded ~1%. */
+/** The end-of-chapter kit. Every chapter of the book ends with these five parts. */
 export interface KitPart {
-  id: string;
+  id: "lesson" | "words" | "tips" | "challenge" | "conversation";
   name: string;
   detail: string;
-  box: { top: number; height: number };
 }
 
 export const KIT: KitPart[] = [
-  {
-    id: "lesson",
-    name: "Money Tree Lessons",
-    detail: "The chapter's idea in a sentence a child can repeat.",
-    box: { top: 24.2, height: 9.0 },
-  },
-  {
-    id: "words",
-    name: "New Money Words",
-    detail: "The vocabulary from the story, from barter to profit.",
-    box: { top: 33.8, height: 18.1 },
-  },
-  {
-    id: "tips",
-    name: "Renee’s and Alex’s tips",
-    detail: "Two ways to use the lesson: the saver’s and the builder’s.",
-    box: { top: 52.7, height: 12.2 },
-  },
-  {
-    id: "challenge",
-    name: "Money Tree Challenge",
-    detail: "One small, safe thing to try this week.",
-    box: { top: 65.6, height: 8.6 },
-  },
-  {
-    id: "conversation",
-    name: "Family Conversation",
-    detail: "A question for the adults to answer too.",
-    box: { top: 74.6, height: 8.2 },
-  },
+  { id: "lesson", name: "Money Tree Lessons", detail: "The chapter's idea in a sentence a child can repeat." },
+  { id: "words", name: "New Money Words", detail: "The vocabulary from the story, from barter to profit." },
+  { id: "tips", name: "Renee’s and Alex’s tips", detail: "Two ways to use the lesson: the saver’s and the builder’s." },
+  { id: "challenge", name: "Money Tree Challenge", detail: "One small, safe thing to try this week." },
+  { id: "conversation", name: "Family Conversation", detail: "A question for the adults to answer too." },
 ];
+
+/** The end of Chapter 2, word for word as printed on page 13. */
+export const CHAPTER_TWO_END = {
+  page: 13,
+  lesson: "Money helps people trade value. Revenue minus costs equals profit.",
+  words: ["Money", "Value", "Barter", "Revenue", "Cost", "Profit"],
+  renee: "Replace supply money before spending business income.",
+  alex: "Start with a real problem you can solve.",
+  challenge: "Design one safe product or service. List the customer, cost, price, and possible profit.",
+  conversation: "What skill have you used to create value, and who taught it to you?",
+};
 
 export { flipbookHref };
