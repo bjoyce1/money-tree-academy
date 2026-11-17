@@ -1,7 +1,6 @@
 import { PageShell, PageIntro } from '@/components/site/PageShell';
 import { LinkButton } from '@/components/site/GoldButton';
 import { Achievements, ChapterProgress, CoinsLedger, StatsRow } from '@/components/progress/ProgressParts';
-import { MoneyGames } from '@/components/progress/MoneyGames';
 import { Keepsakes } from '@/components/progress/Keepsakes';
 import { CHAPTERS, getChapter } from '@/data/content';
 import { useRewards } from '@/lib/rewards';
@@ -17,7 +16,7 @@ function resumeChapter() {
 
 const sectionTitle = 'font-display text-[clamp(1.5rem,2.4vw,2rem)] font-bold text-gold';
 
-/** "Your progress": everything the reader has earned, and the games and shop to use it in. */
+/** "Your progress": everything the reader has earned, and the keepsake shop to spend it in. */
 export default function DashboardPage() {
   const r = useRewards();
   const next = resumeChapter() ?? CHAPTERS.find((c) => !r.completed.includes(c.id)) ?? CHAPTERS[0];
@@ -40,15 +39,7 @@ export default function DashboardPage() {
         </div>
         <Achievements r={r} />
 
-        <section aria-labelledby="games-title">
-          <h2 id="games-title" className={`${sectionTitle} scroll-mt-24`}>
-            Money games
-          </h2>
-          <p className="mt-3 max-w-measure text-cream-2">Practise the book's ideas. Each game earns coins once a day.</p>
-          <div className="mt-6">
-            <MoneyGames />
-          </div>
-        </section>
+        {/* The money games are hidden until the new ones are ready; MoneyGames still exists. */}
 
         <section aria-labelledby="shop-title">
           <h2 id="shop-title" className={sectionTitle}>

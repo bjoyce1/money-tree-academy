@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { prefetchFlipbook } from "./Nav";
 import { GoldLeaf, Skyline } from "./Art";
 
@@ -41,12 +41,6 @@ export function Closing() {
               <motion.span className="home-btn home-btn-gold op-btn" whileHover={{ y: -2 }} whileTap={{ scale: 0.97, y: 0 }} transition={press}>
                 <BookOpen size={19} strokeWidth={2} aria-hidden />
                 Read the book
-              </motion.span>
-            </Link>
-            <Link href="/dashboard#games-title" className="op-btn-wrap">
-              <motion.span className="home-btn op-btn op-btn-quiet" whileHover={{ y: -2 }} whileTap={{ scale: 0.97, y: 0 }} transition={press}>
-                Play money games
-                <ArrowRight size={18} aria-hidden />
               </motion.span>
             </Link>
           </div>

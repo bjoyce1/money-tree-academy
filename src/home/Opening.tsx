@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { flipbookHref } from "@/flipbook/chapters";
 import { prefetchFlipbook } from "./Nav";
 import { ENDPAPER_PATTERN, GoldLeaf, Skyline } from "./Art";
@@ -85,12 +85,6 @@ export function Opening() {
               <motion.span className="home-btn home-btn-gold op-btn" whileHover={{ y: -2 }} whileTap={{ scale: 0.97, y: 0 }} transition={press}>
                 <BookOpen size={19} strokeWidth={2} aria-hidden />
                 Read the book
-              </motion.span>
-            </Link>
-            <Link href="/dashboard#games-title" className="op-btn-wrap" data-testid="hero-games">
-              <motion.span className="home-btn op-btn op-btn-quiet" whileHover={{ y: -2 }} whileTap={{ scale: 0.97, y: 0 }} transition={press}>
-                Play money games
-                <ArrowRight size={18} aria-hidden />
               </motion.span>
             </Link>
           </div>

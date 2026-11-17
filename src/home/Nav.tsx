@@ -67,9 +67,6 @@ export function HomeNav() {
           <a href="#families" className={`${navLink} hidden md:inline-flex`}>
             For families
           </a>
-          <Link href="/dashboard#games-title" className={`${navLink} hidden lg:inline-flex`}>
-            Games
-          </Link>
           <Link href="/read/glossary" className={`${navLink} hidden lg:inline-flex`}>
             Glossary
           </Link>

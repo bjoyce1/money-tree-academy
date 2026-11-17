@@ -139,7 +139,7 @@ export function CoinsLedger({ r }: { r: RewardsSnapshot }) {
         Coins
       </h2>
       <p className="mt-3 max-w-measure text-cream-2">
-        You earn coins by finishing chapters, taking quizzes, playing the money games and reading on more days in a
+        You earn coins by finishing chapters, taking quizzes and reading on more days in a
         row. Spend them on keepsakes from the story, below.
       </p>
       {recent.length === 0 ? (

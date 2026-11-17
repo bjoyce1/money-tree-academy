@@ -21,7 +21,7 @@ export function Keepsakes() {
   const buy = (id: string, name: string) => {
     const r = buyKeepsake(id);
     if (r === 'bought') setMessage(`${name} is on your shelf.`);
-    if (r === 'short') setMessage(`You need more coins for ${name}. Finish a chapter or play a game to earn some.`);
+    if (r === 'short') setMessage(`You need more coins for ${name}. Finish a chapter or take a quiz to earn some.`);
   };
 
   return (
