@@ -41,7 +41,7 @@ export default function DashboardPage() {
         <Achievements r={r} />
 
         <section aria-labelledby="games-title">
-          <h2 id="games-title" className={sectionTitle}>
+          <h2 id="games-title" className={`${sectionTitle} scroll-mt-24`}>
             Money games
           </h2>
           <p className="mt-3 max-w-measure text-cream-2">Practise the book's ideas. Each game earns coins once a day.</p>

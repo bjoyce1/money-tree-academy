@@ -14,8 +14,6 @@ const CharacterSelectionPage = lazy(() => import("@/pages/CharacterSelectionPage
 const CharacterProfilePage = lazy(() => import("@/pages/CharacterProfilePage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const FlipBookPage = lazy(() => import("@/pages/FlipBookPage"));
-const GrowTheTreePage = lazy(() => import("@/pages/GrowTheTreePage"));
-const MarketDayPage = lazy(() => import("@/pages/MarketDayPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Notifications = lazy(() => import("@/components/Notifications"));
 
@@ -43,17 +41,27 @@ const routes = {
   character: page(CharacterProfilePage),
   dashboard: page(DashboardPage),
   flipbook: page(FlipBookPage),
-  growTheTree: page(GrowTheTreePage),
-  marketDay: page(MarketDayPage),
   notFound: page(NotFound),
 };
 
 function Router() {
   const [location] = useLocation();
 
-  // New pages start at the top, unless the link points at a spot on the page.
+  // New pages start at the top. A link to a spot on the page (/dashboard#games-title)
+  // goes there instead, once that page has loaded and drawn it.
   useEffect(() => {
-    if (!window.location.hash) window.scrollTo(0, 0);
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    let tries = 0;
+    const timer = window.setInterval(() => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView();
+      if (el || ++tries > 30) window.clearInterval(timer);
+    }, 60);
+    return () => window.clearInterval(timer);
   }, [location]);
 
   return (
@@ -67,8 +75,6 @@ function Router() {
       <Route path="/characters/:characterId" component={routes.character} />
       <Route path="/dashboard" component={routes.dashboard} />
       <Route path="/flipbook" component={routes.flipbook} />
-      <Route path="/play/grow-the-tree" component={routes.growTheTree} />
-      <Route path="/play/market-day" component={routes.marketDay} />
       <Route component={routes.notFound} />
     </Switch>
   );

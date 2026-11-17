@@ -66,7 +66,7 @@ export function OpenBookButton({ href = '/flipbook', size }: { href?: string; si
     <span onPointerEnter={prefetchFlipbook} onFocus={prefetchFlipbook} className="inline-flex">
       <LinkButton href={href} size={size} data-testid="button-open-flipbook">
         <BookOpen size={compact ? 17 : 19} strokeWidth={2} aria-hidden />
-        Open the book
+        Read the book
       </LinkButton>
     </span>
   );

@@ -12,7 +12,7 @@ export const prefetchFlipbook = () => {
 
 const press = { type: "spring" as const, visualDuration: 0.18, bounce: 0 };
 
-/** The one primary action on the page: open the flip book. */
+/** The one primary action on the page: read the book (it opens the flip book). */
 export function OpenBookButton({ href = "/flipbook", compact = false }: { href?: string; compact?: boolean }) {
   return (
     <Link
@@ -29,7 +29,7 @@ export function OpenBookButton({ href = "/flipbook", compact = false }: { href?:
         transition={press}
       >
         <BookOpen size={compact ? 17 : 19} strokeWidth={2} aria-hidden />
-        Open the book
+        Read the book
       </motion.span>
     </Link>
   );
@@ -41,14 +41,17 @@ const navLink =
 export function HomeNav() {
   const { scrollY } = useScroll();
   // The bar materialises as content starts to pass beneath it.
-  const backgroundColor = useTransform(scrollY, [0, 220], ["rgba(11,18,36,0)", "rgba(11,18,36,0.8)"]);
-  const borderBottomColor = useTransform(scrollY, [0, 220], ["rgba(230,185,85,0)", "rgba(230,185,85,0.14)"]);
-  const backdropFilter = useTransform(scrollY, [0, 220], ["blur(0px) saturate(100%)", "blur(16px) saturate(140%)"]);
+  const backgroundColor = useTransform(scrollY, [0, 160], ["rgba(11,18,36,0)", "rgba(11,18,36,1)"]);
+  const borderBottomColor = useTransform(scrollY, [0, 160], ["rgba(230,185,85,0)", "rgba(230,185,85,0.14)"]);
+  // On a phone the hero has its own Read the book button right below, so the
+  // bar offers one only once that has scrolled away. Wider screens always show it.
+  const ctaOpacity = useTransform(scrollY, [380, 520], [0, 1]);
+  const ctaVisibility = useTransform(() => (ctaOpacity.get() < 0.02 ? "hidden" : "visible"));
 
   return (
     <motion.header
       className="home-nav-solid fixed inset-x-0 top-0 z-40 border-b"
-      style={{ backgroundColor, borderBottomColor, backdropFilter, WebkitBackdropFilter: backdropFilter }}
+      style={{ backgroundColor, borderBottomColor }}
     >
       <nav
         aria-label="Main"
@@ -64,12 +67,15 @@ export function HomeNav() {
           <a href="#families" className={`${navLink} hidden md:inline-flex`}>
             For families
           </a>
+          <Link href="/dashboard#games-title" className={`${navLink} hidden lg:inline-flex`}>
+            Games
+          </Link>
           <Link href="/read/glossary" className={`${navLink} hidden lg:inline-flex`}>
             Glossary
           </Link>
-          <span className="ml-2">
+          <motion.span className="ml-2 md:!visible md:!opacity-100" style={{ opacity: ctaOpacity, visibility: ctaVisibility }}>
             <OpenBookButton compact />
-          </span>
+          </motion.span>
         </div>
       </nav>
     </motion.header>

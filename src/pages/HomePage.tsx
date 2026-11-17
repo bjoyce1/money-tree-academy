@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { MotionConfig } from "motion/react";
 import { HomeNav } from "@/home/Nav";
-import { Hero } from "@/home/Hero";
-import { Premise } from "@/home/Premise";
-import { ChapterIndex } from "@/home/ChapterIndex";
+import { Opening } from "@/home/Opening";
+import { ChapterOne } from "@/home/ChapterOne";
+import { Journey } from "@/home/Journey";
+import { Pages } from "@/home/Pages";
 import { Families } from "@/home/Families";
 import { Closing, HomeFooter } from "@/home/Closing";
 import "@/home/home.css";
@@ -24,10 +25,11 @@ export default function HomePage() {
         </a>
         <HomeNav />
         <main>
-          <Hero />
-          <Premise />
-          <ChapterIndex />
+          <Opening />
+          <ChapterOne />
+          <Journey />
           <Families />
+          <Pages />
           <Closing />
         </main>
         <HomeFooter />

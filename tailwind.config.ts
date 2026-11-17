@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       borderRadius: {
@@ -21,7 +21,7 @@ export default {
         plate: "0 30px 60px -20px rgba(0,0,0,0.65), 0 0 0 1px rgba(230,185,85,0.22)",
         paper: "0 2px 3px rgba(5,8,20,0.35), 0 30px 60px -18px rgba(5,8,20,0.75)",
         "paper-thumb": "0 18px 36px -14px rgba(5,8,20,0.8)",
-        gold: "0 1px 0 rgba(255,255,255,0.35) inset, 0 10px 24px -8px rgba(230,185,85,0.55)",
+        gold: "0 1px 0 rgba(255,255,255,0.35) inset",
         sheet: "0 -20px 60px -10px rgba(5,8,20,0.7)",
       },
       maxWidth: {
@@ -103,7 +103,7 @@ export default {
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
-        display: ["Cinzel", "Times New Roman", "serif"],
+        display: ["Young Serif", "Georgia", "serif"],
       },
       keyframes: {
         "accordion-down": {

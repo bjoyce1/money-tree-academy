@@ -28,7 +28,7 @@ export function PageShell({ title, children }: { title: string; children: ReactN
   );
 }
 
-/** A page heading block: Cinzel headline and an optional lead paragraph. */
+/** A page heading block: Young Serif headline and an optional lead paragraph. */
 export function PageIntro({ title, lead, children }: { title: string; lead?: ReactNode; children?: ReactNode }) {
   return (
     <div className="mx-auto max-w-container px-5 pb-10 pt-14 sm:px-8 sm:pt-20">

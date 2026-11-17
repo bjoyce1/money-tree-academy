@@ -40,7 +40,7 @@ function TreeEmblem() {
           <circle key={i} cx={cx} cy={cy} r={r} opacity={0.55 + (i % 3) * 0.15} />
         ))}
       </g>
-      <g fill="#0f1a3f" fontFamily="Cinzel, Times New Roman, serif" fontSize="7" fontWeight="700" textAnchor="middle">
+      <g fill="#0f1a3f" fontFamily="'Young Serif', Georgia, serif" fontSize="7" fontWeight="700" textAnchor="middle">
         <text x="60" y="47">$</text>
         <text x="44" y="39">$</text>
         <text x="76" y="39">$</text>

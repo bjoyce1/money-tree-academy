@@ -14,7 +14,7 @@
   flex-direction: column;
   overflow: hidden;
   color: var(--fb-cream);
-  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
   background:
     radial-gradient(120% 85% at 50% 38%, #15214a 0%, #0d1534 46%, #050817 100%);
   -webkit-user-select: none;
@@ -235,7 +235,7 @@
   justify-content: center;
   background: radial-gradient(ellipse at 50% 40%, #15214a 0%, #101a36 55%, #0b1224 100%);
   color: var(--fb-cream);
-  font-family: "Cinzel", "Times New Roman", serif;
+  font-family: "Young Serif", Georgia, serif;
 }
 .fb-endpaper-pattern {
   position: absolute;
@@ -267,7 +267,7 @@
   filter: drop-shadow(0 0.15em 0.5em rgba(230, 185, 85, 0.35));
 }
 .fb-ep-kicker {
-  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
   font-size: 0.5em;
   letter-spacing: 0.32em;
   text-transform: uppercase;
@@ -281,7 +281,7 @@
   color: #fbf3df;
 }
 .fb-ep-quote {
-  /* Cinzel has no italic; the quote stands upright like the cover's title. */
+  /* The quote stands upright, like the cover's title. */
   font-weight: 700;
 }
 .fb-ep-line {
@@ -290,7 +290,7 @@
   background: linear-gradient(to right, transparent, rgba(230, 185, 85, 0.8), transparent);
 }
 .fb-ep-small {
-  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
   font-size: 0.6em;
   font-style: italic;
   line-height: 1.5;
@@ -408,7 +408,7 @@
   line-height: 1.25;
 }
 .fb-title-book {
-  font-family: "Cinzel", "Times New Roman", serif;
+  font-family: "Young Serif", Georgia, serif;
   font-weight: 700;
   font-size: 1.0625rem;
   color: var(--fb-gold);
@@ -581,7 +581,7 @@
   color: rgba(246, 239, 223, 0.85);
 }
 .fb-scrub-ch {
-  font-family: "Cinzel", "Times New Roman", serif;
+  font-family: "Young Serif", Georgia, serif;
   color: var(--fb-gold);
   font-size: 0.875rem;
 }
@@ -633,7 +633,7 @@
   padding: 18px 16px 14px 22px;
 }
 .fb-drawer-head h2 {
-  font-family: "Cinzel", "Times New Roman", serif;
+  font-family: "Young Serif", Georgia, serif;
   font-weight: 700;
   font-size: clamp(1.15rem, 1.6vw, 1.45rem);
   font-weight: 400;
@@ -680,7 +680,7 @@
   color: var(--fb-gold);
 }
 .fb-toc-title {
-  font-family: "Cinzel", "Times New Roman", serif;
+  font-family: "Young Serif", Georgia, serif;
   font-weight: 600;
   font-size: 14px;
   line-height: 1.35;

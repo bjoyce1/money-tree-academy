@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
-import { EXTRAS, KIT, flipbookHref } from "./content";
+import { KIT, flipbookHref } from "./content";
+import { GoldLeaf } from "./Art";
 import { prefetchFlipbook } from "./Nav";
 
 const follow = { type: "spring" as const, visualDuration: 0.45, bounce: 0.12 };
@@ -88,7 +89,7 @@ export function Families() {
     <section
       id="families"
       aria-labelledby="families-title"
-      className="scroll-mt-20 bg-[var(--night-2)] px-5 py-[clamp(5rem,10vw,8rem)] sm:px-8"
+      className="fam scroll-mt-20 px-5 py-[clamp(5rem,10vw,8rem)] sm:px-8"
     >
       <div className="mx-auto max-w-[1200px]">
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-20">
@@ -98,6 +99,10 @@ export function Families() {
           </div>
 
           <div>
+            <p className="fam-kicker">
+              <GoldLeaf size={20} />
+              For families and teachers
+            </p>
             <h2
               id="families-title"
               className="home-display text-[clamp(2rem,4vw,3.25rem)] leading-[1.1] text-[var(--gold)]"
@@ -124,7 +129,7 @@ export function Families() {
                       }`}
                     >
                       <span
-                        className={`block font-[Cinzel] text-[1.12rem] font-semibold ${
+                        className={`block font-display text-[1.12rem] font-semibold ${
                           on ? "text-[var(--gold)]" : "text-[var(--cream)]"
                         }`}
                       >
@@ -165,40 +170,13 @@ export function Families() {
           debt, or hardship.
         </p>
 
-        <div className="mt-[clamp(4rem,8vw,6rem)]">
-          <h3 className="home-display text-[clamp(1.4rem,2.2vw,1.75rem)] text-[var(--cream)]">Also in the book</h3>
-          <ul className="home-strip -mx-5 mt-6 flex gap-5 overflow-x-auto px-5 pb-4 sm:-mx-8 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0">
-            {EXTRAS.map((x) => (
-              <li key={x.page} className="w-[42vw] max-w-[200px] flex-none lg:w-auto lg:max-w-none">
-                <Link
-                  href={flipbookHref(x.page)}
-                  className="group block rounded-lg"
-                  onPointerEnter={prefetchFlipbook}
-                  onFocus={prefetchFlipbook}
-                >
-                  <motion.span
-                    className="block overflow-hidden rounded-[3px] bg-[var(--paper)] shadow-[0_18px_36px_-14px_rgba(5,8,20,0.8)]"
-                    whileHover={{ y: -6, rotate: -1 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ type: "spring", visualDuration: 0.3, bounce: 0.25 }}
-                  >
-                    <img
-                      src={x.image}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      className="aspect-[2/3] w-full object-cover"
-                    />
-                  </motion.span>
-                  <span className="mt-3 block font-bold leading-snug text-[var(--cream)] group-hover:text-[var(--gold)]">
-                    {x.title}
-                  </span>
-                  <span className="text-[0.9rem] text-[var(--cream-3)]">Page {x.page}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <p className="fam-teach">
+          <span>Teaching with the book?</span>{" "}
+          <Link href={flipbookHref(53)} className="home-link" onPointerEnter={prefetchFlipbook} onFocus={prefetchFlipbook}>
+            The answer key and educator notes start on page 53
+          </Link>
+          .
+        </p>
       </div>
     </section>
   );

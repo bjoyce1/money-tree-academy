@@ -165,24 +165,4 @@ export const KIT: KitPart[] = [
   },
 ];
 
-export const EXTRAS = [
-  { title: "Letter & Family Pledge", page: 47, image: "/home/page-47.webp" },
-  { title: "Money Tree Glossary", page: 48, image: "/home/page-48.webp" },
-  { title: "30-Day Money Tree Challenge", page: 51, image: "/home/page-51.webp" },
-  { title: "Answer Key & Educator Notes", page: 53, image: "/home/page-53.webp" },
-  { title: "Certificate of Financial Growth", page: 55, image: "/home/page-55.webp" },
-] as const;
-
-export const VERBS = [
-  "earn",
-  "save",
-  "budget",
-  "bank",
-  "borrow carefully",
-  "invest with patience",
-  "build a business",
-  "give with purpose",
-  "pass knowledge forward",
-];
-
 export { flipbookHref };

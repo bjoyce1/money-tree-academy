@@ -41,8 +41,8 @@
   --sidebar-accent-foreground: #f6efdf;
   --sidebar-border: rgba(230, 185, 85, 0.18);
   --sidebar-ring: #e6b955;
-  --font-sans: 'Atkinson Hyperlegible', system-ui, sans-serif;
-  --font-serif: Cinzel, 'Times New Roman', serif;
+  --font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --font-serif: "Young Serif", Georgia, serif;
   --font-mono: Menlo, monospace;
   --radius: 12px;
   /* Legacy accents still referenced by older components: both are gold now. */
@@ -76,7 +76,10 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    /* Young Serif has one weight. Never let the browser fake a bold or an
+       italic of it: a smeared faux-bold is what makes a page look cheap. */
+    font-synthesis: none;
+    font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
   }
 
   ::selection {
@@ -192,7 +195,7 @@ textarea {
 }
 .reader-prose h3 {
   margin: 2.2em 0 0.6em;
-  font-family: Cinzel, 'Times New Roman', serif;
+  font-family: "Young Serif", Georgia, serif;
   font-size: 1.3em;
   font-weight: 700;
   line-height: 1.25;
