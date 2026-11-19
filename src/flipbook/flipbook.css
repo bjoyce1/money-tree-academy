@@ -57,6 +57,8 @@
   min-width: 0;
   overflow: hidden;
   touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   cursor: grab;
   perspective: 2200px;
 }
@@ -115,8 +117,17 @@
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
+.fb-face {
+  /* Own GPU layer per face: stops mobile Safari/Chrome repainting (flashing) mid-turn. */
+  transform: translateZ(0);
+}
 .fb-face-back {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(0);
+}
+.fb-sheet,
+.fb-strip {
+  -webkit-transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .fb-fill {

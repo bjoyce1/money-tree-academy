@@ -47,6 +47,9 @@ export function useBookSize(ref: RefObject<HTMLElement | null>): BookSize | null
       const r = el.getBoundingClientRect();
       setSize((prev) => {
         const next = measure(r.width, r.height);
+        // Phones resize the viewport as the address bar slides in and out.
+        // Ignore those small height-only changes so the book doesn't jump.
+        if (prev && prev.stageW === next.stageW && Math.abs(prev.stageH - next.stageH) < 140) return prev;
         if (
           prev &&
           prev.boardH === next.boardH &&
